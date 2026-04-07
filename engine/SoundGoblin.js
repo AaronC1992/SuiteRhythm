@@ -318,6 +318,9 @@ class SoundGoblin {
         this.setupStoryCreator();
         this.setupDndAutoDetect();
         this.populateStoriesSection();
+
+        // Show dashboard on startup so users don't see a blank screen
+        this.navigateToSection('dashboardPanel');
         
 
         
@@ -3033,8 +3036,8 @@ class SoundGoblin {
                 this.updateStatus('I hear you. Keep talking...');
             };
 
-            // Start measuring mic loudness for voice-intensity volume scaling
-            this._setupMicIntensityAnalyser().catch(() => {});
+            // Mic intensity analyser is deferred to startListeningWithContext()
+            // to avoid requesting getUserMedia before a user gesture (fails on mobile).
         } catch (error) {
             console.error('Failed to initialize speech recognition:', error);
             this.updateStatus('⚠️ Failed to initialize speech recognition. Check console for details.', 'error');
@@ -5617,6 +5620,11 @@ class SoundGoblin {
             } catch (error) {
                 console.error('Failed to resume audio context:', error);
             }
+        }
+
+        // Start mic intensity analyser now (deferred from init for mobile compatibility)
+        if (!this._micAnalyser) {
+            this._setupMicIntensityAnalyser().catch(() => {});
         }
         
         // Update UI first

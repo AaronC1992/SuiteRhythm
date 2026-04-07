@@ -1525,9 +1525,10 @@ body {
 
 /* ===== MAIN APP ===== */
 #appContainer {
-    max-width: var(--container);
+    width: 100%;
     margin: 0 auto;
-    padding-bottom: var(--space-6);
+    padding-bottom: 0;
+    overflow-x: hidden;
 }
 
 .hidden {
