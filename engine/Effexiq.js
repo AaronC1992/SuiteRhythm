@@ -240,6 +240,78 @@ class Effexiq {
         this.proceduralTimer = null;
         this.lastProceduralUpdate = 0;
 
+        // ===== ADAPTIVE AMBIENT SCENE BED =====
+        // Persistent layered ambient sounds that stack and fade with the narrative
+        this._sceneBedLayers = new Map(); // category -> { howl, url, volume, fadeTimer }
+        this._sceneBedMaxLayers = 4;
+        this._sceneBedCategories = new Set(); // currently active bed categories
+        this._lastSceneBedUpdate = 0;
+
+        // ===== DIALOGUE VS NARRATION DETECTION =====
+        this._dialogueMode = false;
+        this._dialoguePatterns = /\b(he said|she said|they said|he whispered|she whispered|he shouted|she shouted|he asked|she asked|he replied|she replied|he muttered|she muttered|he exclaimed|she exclaimed|he growled|she growled|he hissed|she hissed|said softly|spoke quietly|voice trembled)\b/i;
+        this._narrativePatterns = /\b(the room|the forest|the sky|they walked|they ran|the ground|the air|outside|inside|above|below|around them|in the distance|the path|the road|the walls)\b/i;
+        this._dialogueDuckLevel = 0.35; // soften SFX/ambient during dialogue
+
+        // ===== PACING / TEMPO AWARENESS =====
+        this._wordTimestamps = []; // rolling array of { time, count } for WPM calc
+        this._currentWPM = 0;
+        this._pacingState = 'normal'; // slow | normal | fast | frantic
+        this._pacingStateChangedAt = 0;
+
+        // ===== SCENE MEMORY & PAUSE RESUME =====
+        this._lastSpeechTimestamp = Date.now();
+        this._pauseResumeTimer = null;
+        this._pauseResumeThresholdMs = 10000; // 10 seconds of silence
+        this._lastActiveSceneBedSnapshot = null; // snapshot of playing ambient for resume
+
+        // ===== PREDICTIVE PER-SCENE PRELOADING =====
+        this._scenePreloadCache = new Map(); // sceneCategory -> Set of preloaded URLs
+        this._lastPreloadedScene = null;
+
+        // ===== SOUND INTENSITY CURVES =====
+        this._intensityModifiers = new Map(); // keyword -> { ramp, targetVol }
+        this._buildupPatterns = /\b(slowly|gradually|growing louder|louder and louder|intensified|intensifying|building|swelling|approaching|closer and closer|getting louder|mounting|rising|crescendo)\b/i;
+        this._softenPatterns = /\b(fading|faded|dying down|growing quiet|quieter|dimming|receding|distant|far away|whisper|barely audible|softly|gently|silence fell)\b/i;
+        this._currentIntensityCurve = null; // null | 'buildup' | 'soften'
+        this._intensityCurveStart = null;
+
+        // ===== PREVIOUSLY-ON AMBIENT RESTORE =====
+        // Saved to localStorage on scene bed changes, restored on session start
+        this._savedSceneBedState = null;
+
+        // ===== KEYWORD SYNONYM EXPANSION =====
+        // Auto-expands keywords so "blade" also matches sword/dagger/knife etc.
+        this._synonymGroups = [
+            ['sword', 'blade', 'saber', 'rapier', 'broadsword', 'longsword', 'greatsword', 'cutlass', 'scimitar', 'katana'],
+            ['dagger', 'knife', 'stiletto', 'shiv', 'dirk'],
+            ['axe', 'hatchet', 'cleaver', 'tomahawk'],
+            ['bow', 'longbow', 'shortbow', 'crossbow'],
+            ['shield', 'buckler', 'barrier'],
+            ['horse', 'steed', 'mount', 'stallion', 'mare', 'charger', 'pony', 'destrier'],
+            ['wolf', 'wolves', 'hound', 'hounds', 'warg'],
+            ['dragon', 'drake', 'wyrm', 'wyvern', 'serpent'],
+            ['fire', 'blaze', 'inferno', 'flame', 'flames', 'pyre'],
+            ['forest', 'woods', 'woodland', 'grove', 'thicket', 'glade'],
+            ['cave', 'cavern', 'grotto', 'den', 'burrow', 'tunnel'],
+            ['ocean', 'sea', 'waters', 'deep', 'abyss'],
+            ['rain', 'downpour', 'drizzle', 'shower', 'deluge'],
+            ['thunder', 'thunderclap', 'thunderbolt'],
+            ['magic', 'sorcery', 'wizardry', 'enchantment', 'arcana'],
+            ['ghost', 'phantom', 'specter', 'spectre', 'wraith', 'apparition', 'spirit'],
+            ['crowd', 'mob', 'throng', 'horde', 'mass'],
+            ['tavern', 'inn', 'pub', 'alehouse', 'saloon', 'bar'],
+            ['castle', 'fortress', 'citadel', 'stronghold', 'keep', 'bastion'],
+            ['ship', 'vessel', 'galleon', 'frigate', 'schooner', 'brigantine', 'barque'],
+        ];
+        this._synonymMap = this._buildSynonymMap();
+
+        // ===== BEAT SILENCE SFX =====
+        this._beatSilenceTimer = null;
+        this._beatSilenceThresholdMs = 3500; // 3.5 seconds of silence during intense scene
+        this._beatSilencePlaying = false;
+        this._intenseSceneStates = new Set(['combat', 'occult', 'creature']);
+
         // User-defined phrase triggers (persisted to localStorage)
         try {
             this._customPhraseEntries = JSON.parse(localStorage.getItem('Effexiq_custom_phrases') || '[]');
@@ -340,6 +412,11 @@ class Effexiq {
         setTimeout(() => this.preloadInstantKeywords().catch(e => console.warn('Preload keywords failed:', e.message)), 2000);
         // Pre-warm CDN cache for common sounds
         setTimeout(() => this.prewarmCDN().catch(e => console.warn('CDN prewarm failed:', e.message)), 3000);
+
+        // Start pause-resume silence watcher (ambient restore + beat silence)
+        this._startPauseResumeWatcher();
+        // Restore previous session's ambient scene bed (soft fade-in)
+        setTimeout(() => this._restorePreviousSessionAmbient().catch(e => debugLog('Session ambient restore skipped:', e.message)), 4000);
     }
     
     getBackendUrl() {
@@ -1665,6 +1742,434 @@ class Effexiq {
         }
     }
 
+    // =====================================================================
+    // FEATURE: KEYWORD SYNONYM EXPANSION
+    // Build a reverse map: synonym → canonical keyword in the cue map
+    // =====================================================================
+    _buildSynonymMap() {
+        const map = new Map();
+        const cueMap = this.getStoryCueMap ? this.getStoryCueMap() : {};
+        for (const group of this._synonymGroups) {
+            // Find the canonical word (one that's already in the cue map)
+            let canonical = null;
+            for (const w of group) {
+                if (w in cueMap) { canonical = w; break; }
+            }
+            if (!canonical) continue;
+            for (const w of group) {
+                if (w === canonical) continue;
+                if (!(w in cueMap)) { // don't overwrite existing cue map entries
+                    map.set(w, canonical);
+                }
+            }
+        }
+        return map;
+    }
+
+    // Expand a word through synonym map — returns the canonical cue keyword or the original
+    _expandSynonym(word) {
+        return this._synonymMap.get(word) || word;
+    }
+
+    // =====================================================================
+    // FEATURE: ADAPTIVE AMBIENT SCENE BED
+    // Layers persistent ambient sounds that stack and fade with narrative
+    // =====================================================================
+    _sceneBedQueries = {
+        weather:    ['wind howling', 'rain ambient', 'thunder distant rumble'],
+        fire:       ['fire crackling professional', 'torch crackle'],
+        water:      ['stream water trickle gentle', 'ocean waves'],
+        atmosphere: ['eerie dark ambience', 'cave dripping echo'],
+        forest:     ['forest birds ambient', 'wind through trees'],
+        nautical:   ['ocean harbor ambience', 'ship creaking waves'],
+        dungeon:    ['dungeon dripping echo', 'chains rattling distant'],
+        combat:     ['battle distant drums', 'tension drone'],
+        celebration:['crowd murmur tavern', 'tavern ambience'],
+    };
+
+    async _updateSceneBed(detectedCategories) {
+        if (!this.ambienceEnabled || !this.sfxEnabled) return;
+        const now = Date.now();
+        if (now - this._lastSceneBedUpdate < 5000) return; // throttle updates
+        this._lastSceneBedUpdate = now;
+
+        const ambientCategories = new Set(['weather', 'fire', 'water', 'atmosphere', 'forest', 'nautical', 'dungeon', 'celebration']);
+        const relevantCats = detectedCategories.filter(c => ambientCategories.has(c));
+
+        // Fade out layers whose category is no longer relevant
+        for (const [cat, layer] of this._sceneBedLayers) {
+            if (!relevantCats.includes(cat)) {
+                this._fadeOutSceneBedLayer(cat);
+            }
+        }
+
+        // Add new layers (up to max)
+        for (const cat of relevantCats) {
+            if (this._sceneBedLayers.has(cat)) continue;
+            if (this._sceneBedLayers.size >= this._sceneBedMaxLayers) break;
+
+            const queries = this._sceneBedQueries[cat];
+            if (!queries || queries.length === 0) continue;
+            const q = queries[Math.floor(Math.random() * queries.length)];
+            try {
+                const url = await this.searchAudio(q, 'sfx');
+                if (!url) continue;
+                const vol = this._dialogueMode ? this.ambientBedGain * this._dialogueDuckLevel : this.ambientBedGain;
+                await this.playAudio(url, { type: 'sfx', name: `bed:${cat}`, volume: this.calculateVolume(vol), loop: true });
+                const id = this._findLatestActiveSoundId();
+                this._sceneBedLayers.set(cat, { id, url, volume: vol, category: cat });
+                this._sceneBedCategories.add(cat);
+                debugLog(`Scene bed layer added: ${cat} -> ${q}`);
+                this.logActivity(`Ambient bed: +${cat}`, 'info');
+            } catch (_) {}
+        }
+
+        // Snapshot for pause-resume
+        this._snapshotSceneBed();
+    }
+
+    _fadeOutSceneBedLayer(category, fadeMs = 1500) {
+        const layer = this._sceneBedLayers.get(category);
+        if (!layer) return;
+        this._sceneBedLayers.delete(category);
+        this._sceneBedCategories.delete(category);
+        const snd = this.activeSounds.get(layer.id);
+        if (!snd) return;
+        try {
+            if (snd._howl) {
+                snd._howl.fade(snd._howl.volume(), 0, fadeMs);
+                setTimeout(() => { try { snd._howl.stop(); snd._howl.unload(); } catch(_){} this.activeSounds.delete(layer.id); }, fadeMs + 50);
+            } else if (snd.gainNode) {
+                snd.gainNode.gain.setValueAtTime(snd.gainNode.gain.value, this.audioContext.currentTime);
+                snd.gainNode.gain.linearRampToValueAtTime(0, this.audioContext.currentTime + fadeMs / 1000);
+                setTimeout(() => { try { snd.source?.stop(); } catch(_){} this.activeSounds.delete(layer.id); }, fadeMs + 50);
+            }
+        } catch (_) {}
+        debugLog(`Scene bed layer faded: ${category}`);
+    }
+
+    _fadeAllSceneBedLayers(fadeMs = 1500) {
+        for (const cat of [...this._sceneBedLayers.keys()]) {
+            this._fadeOutSceneBedLayer(cat, fadeMs);
+        }
+    }
+
+    // =====================================================================
+    // FEATURE: DIALOGUE VS NARRATION DETECTION
+    // Detects speech patterns to soften/restore ambient levels
+    // =====================================================================
+    _detectDialogueMode(transcript) {
+        const lower = transcript.toLowerCase();
+        const isDialogue = this._dialoguePatterns.test(lower);
+        const isNarrative = this._narrativePatterns.test(lower);
+
+        if (isDialogue && !isNarrative) {
+            if (!this._dialogueMode) {
+                this._dialogueMode = true;
+                this._applyDialogueDucking();
+                debugLog('Dialogue mode: ON — softening ambient');
+                this.logActivity('Dialogue detected — ambient softened', 'info');
+            }
+        } else if (isNarrative && !isDialogue) {
+            if (this._dialogueMode) {
+                this._dialogueMode = false;
+                this._restoreDialogueDucking();
+                debugLog('Dialogue mode: OFF — restoring ambient');
+            }
+        }
+        // If both or neither, keep current state
+    }
+
+    _applyDialogueDucking() {
+        // Soften scene bed layers
+        for (const [cat, layer] of this._sceneBedLayers) {
+            const snd = this.activeSounds.get(layer.id);
+            if (snd?._howl) {
+                snd._howl.fade(snd._howl.volume(), layer.volume * this._dialogueDuckLevel, 300);
+            }
+        }
+        // Soften ambient bed
+        if (this.ambientBed) {
+            this.ambientBed.fade(this.ambientBed.volume(), this.ambientBedGain * this._dialogueDuckLevel, 300);
+        }
+    }
+
+    _restoreDialogueDucking() {
+        for (const [cat, layer] of this._sceneBedLayers) {
+            const snd = this.activeSounds.get(layer.id);
+            if (snd?._howl) {
+                snd._howl.fade(snd._howl.volume(), layer.volume, 500);
+            }
+        }
+        if (this.ambientBed) {
+            this.ambientBed.fade(this.ambientBed.volume(), this.ambientBedGain, 500);
+        }
+    }
+
+    // =====================================================================
+    // FEATURE: PACING / TEMPO AWARENESS
+    // Track WPM and adjust sound behavior accordingly
+    // =====================================================================
+    _updatePacing(wordCount) {
+        const now = Date.now();
+        this._wordTimestamps.push({ time: now, count: wordCount });
+        // Keep only last 15 seconds of data
+        const cutoff = now - 15000;
+        this._wordTimestamps = this._wordTimestamps.filter(e => e.time >= cutoff);
+
+        if (this._wordTimestamps.length < 2) return;
+        const elapsed = (this._wordTimestamps[this._wordTimestamps.length - 1].time - this._wordTimestamps[0].time) / 60000;
+        if (elapsed <= 0) return;
+        const totalWords = this._wordTimestamps.reduce((sum, e) => sum + e.count, 0);
+        this._currentWPM = Math.round(totalWords / elapsed);
+
+        // Classify pacing
+        let newState = 'normal';
+        if (this._currentWPM < 80) newState = 'slow';
+        else if (this._currentWPM > 180) newState = 'frantic';
+        else if (this._currentWPM > 140) newState = 'fast';
+
+        if (newState !== this._pacingState) {
+            this._pacingState = newState;
+            this._pacingStateChangedAt = now;
+            debugLog(`Pacing: ${this._currentWPM} WPM -> ${newState}`);
+            this.logActivity(`Pacing: ${newState} (${this._currentWPM} WPM)`, 'info');
+        }
+    }
+
+    // Returns a volume multiplier based on current pacing
+    _getPacingVolumeMultiplier() {
+        switch (this._pacingState) {
+            case 'slow': return 0.7;      // quieter, suspenseful
+            case 'fast': return 1.1;      // slightly louder, more energy
+            case 'frantic': return 1.25;  // intense action
+            default: return 1.0;
+        }
+    }
+
+    // Returns shortened SFX duration for fast pacing
+    _getPacingDurationMultiplier() {
+        switch (this._pacingState) {
+            case 'slow': return 1.4;      // longer, more atmospheric
+            case 'fast': return 0.7;      // shorter, snappier
+            case 'frantic': return 0.5;   // very short, rapid-fire
+            default: return 1.0;
+        }
+    }
+
+    // =====================================================================
+    // FEATURE: SCENE MEMORY & PAUSE RESUME
+    // Snapshot ambient state, restore after long silence
+    // =====================================================================
+    _snapshotSceneBed() {
+        if (this._sceneBedLayers.size === 0) {
+            this._lastActiveSceneBedSnapshot = null;
+            return;
+        }
+        const snapshot = [];
+        for (const [cat, layer] of this._sceneBedLayers) {
+            snapshot.push({ category: cat, url: layer.url, volume: layer.volume });
+        }
+        this._lastActiveSceneBedSnapshot = snapshot;
+        // Also persist to localStorage for previously-on restore
+        try {
+            localStorage.setItem('Effexiq_scene_bed_snapshot', JSON.stringify(snapshot));
+        } catch (_) {}
+    }
+
+    _onSpeechActivity() {
+        this._lastSpeechTimestamp = Date.now();
+        // Cancel any pending pause-resume
+        if (this._pauseResumeTimer) {
+            clearTimeout(this._pauseResumeTimer);
+            this._pauseResumeTimer = null;
+        }
+        // Cancel beat silence if playing
+        this._cancelBeatSilence();
+    }
+
+    _startPauseResumeWatcher() {
+        // Called once from init — polls for speech silence
+        if (this._pauseResumeInterval) return;
+        this._pauseResumeInterval = setInterval(() => {
+            if (!this.isListening) return;
+            const silence = Date.now() - this._lastSpeechTimestamp;
+            // After 10s silence, restore ambient bed
+            if (silence >= this._pauseResumeThresholdMs && this._lastActiveSceneBedSnapshot && this._sceneBedLayers.size === 0) {
+                debugLog('Long pause detected — restoring ambient scene bed');
+                this.logActivity('Pause detected — restoring ambient', 'info');
+                this._restoreSceneBedFromSnapshot(this._lastActiveSceneBedSnapshot);
+                this._lastActiveSceneBedSnapshot = null; // only restore once
+            }
+            // Beat silence: trigger heartbeat/drone during intense scene silence
+            if (silence >= this._beatSilenceThresholdMs && !this._beatSilencePlaying) {
+                this._tryBeatSilence();
+            }
+        }, 2000);
+    }
+
+    async _restoreSceneBedFromSnapshot(snapshot) {
+        if (!snapshot || !Array.isArray(snapshot)) return;
+        for (const entry of snapshot) {
+            if (this._sceneBedLayers.size >= this._sceneBedMaxLayers) break;
+            if (this._sceneBedLayers.has(entry.category)) continue;
+            try {
+                const vol = entry.volume || this.ambientBedGain;
+                await this.playAudio(entry.url, { type: 'sfx', name: `bed:${entry.category}`, volume: this.calculateVolume(vol * 0.5), loop: true });
+                const id = this._findLatestActiveSoundId();
+                this._sceneBedLayers.set(entry.category, { id, url: entry.url, volume: vol, category: entry.category });
+                this._sceneBedCategories.add(entry.category);
+                // Fade in from half-volume to full over 2 seconds
+                const snd = this.activeSounds.get(id);
+                if (snd?._howl) {
+                    snd._howl.fade(snd._howl.volume(), this.calculateVolume(vol), 2000);
+                }
+            } catch (_) {}
+        }
+    }
+
+    // =====================================================================
+    // FEATURE: PREDICTIVE PER-SCENE PRELOADING
+    // Preload sound bundles when scene category changes
+    // =====================================================================
+    static _scenePreloadBundles = {
+        combat:      ['sword clash metal', 'shield block', 'arrow whoosh', 'battle cry', 'armor clank', 'sword draw'],
+        weather:     ['wind howling', 'thunder rumble', 'rain ambient', 'lightning strike'],
+        fire:        ['fire crackling professional', 'torch crackle', 'match strike ignite'],
+        creature:    ['dragon growl', 'wolf howl', 'creature screech', 'owl hoot'],
+        water:       ['ocean waves', 'stream water trickle gentle', 'water drip', 'splash'],
+        magic:       ['magic spell cast', 'magic shimmer sparkle', 'dark magic', 'healing magic'],
+        atmosphere:  ['eerie dark ambience', 'cave dripping echo', 'dungeon dripping echo'],
+        nautical:    ['ocean harbor ambience', 'cannon blast', 'ship creaking waves', 'anchor chain drop'],
+        celebration: ['crowd cheering', 'tavern ambience', 'victory fanfare triumph'],
+        dungeon:     ['dungeon dripping echo', 'chains rattling', 'floorboard creak'],
+        vocal:       ['female scream terror', 'man bellow rage', 'evil laugh'],
+    };
+
+    async _preloadForScene(sceneCategory) {
+        if (sceneCategory === this._lastPreloadedScene) return;
+        this._lastPreloadedScene = sceneCategory;
+        const bundle = Effexiq._scenePreloadBundles[sceneCategory];
+        if (!bundle) return;
+
+        debugLog(`Preloading sounds for scene: ${sceneCategory}`);
+        const tasks = bundle.map(query => async () => {
+            try {
+                const url = await this.searchAudio(query, 'sfx');
+                if (!url) return;
+                if (this.getFromBufferCache(url)) return; // already cached
+                const resp = await fetch(url);
+                const ab = await resp.arrayBuffer();
+                if (this.audioContext) {
+                    const buf = await this.audioContext.decodeAudioData(ab);
+                    this.addToBufferCache(url, buf);
+                }
+            } catch (_) {}
+        });
+        // Run with concurrency limit
+        await this.runWithConcurrency(tasks, 3);
+        debugLog(`Scene preload complete: ${sceneCategory} (${bundle.length} sounds)`);
+    }
+
+    // =====================================================================
+    // FEATURE: SOUND INTENSITY CURVES
+    // Ramp volume based on buildup/soften words in transcript
+    // =====================================================================
+    _detectIntensityCurve(transcript) {
+        const lower = transcript.toLowerCase();
+        if (this._buildupPatterns.test(lower)) {
+            this._currentIntensityCurve = 'buildup';
+            this._intensityCurveStart = Date.now();
+            debugLog('Intensity curve: BUILDUP detected');
+            return 'buildup';
+        }
+        if (this._softenPatterns.test(lower)) {
+            this._currentIntensityCurve = 'soften';
+            this._intensityCurveStart = Date.now();
+            debugLog('Intensity curve: SOFTEN detected');
+            return 'soften';
+        }
+        // Decay curve after 8 seconds
+        if (this._intensityCurveStart && Date.now() - this._intensityCurveStart > 8000) {
+            this._currentIntensityCurve = null;
+        }
+        return this._currentIntensityCurve || null;
+    }
+
+    // Returns a volume multiplier based on active intensity curve
+    _getIntensityCurveMultiplier() {
+        if (!this._currentIntensityCurve || !this._intensityCurveStart) return 1.0;
+        const elapsed = (Date.now() - this._intensityCurveStart) / 1000;
+        const progress = Math.min(elapsed / 4, 1); // ramp over 4 seconds
+
+        if (this._currentIntensityCurve === 'buildup') {
+            return 0.4 + (progress * 0.8); // 0.4 → 1.2
+        }
+        if (this._currentIntensityCurve === 'soften') {
+            return 1.0 - (progress * 0.5); // 1.0 → 0.5
+        }
+        return 1.0;
+    }
+
+    // =====================================================================
+    // FEATURE: PREVIOUSLY-ON AMBIENT RESTORE
+    // On session start, fade in last session's ambient bed
+    // =====================================================================
+    async _restorePreviousSessionAmbient() {
+        try {
+            const raw = localStorage.getItem('Effexiq_scene_bed_snapshot');
+            if (!raw) return;
+            const snapshot = JSON.parse(raw);
+            if (!Array.isArray(snapshot) || snapshot.length === 0) return;
+            debugLog('Restoring previous session ambient bed:', snapshot.map(s => s.category));
+            this.logActivity('Restoring ambient from last session', 'info');
+            await this._restoreSceneBedFromSnapshot(snapshot);
+        } catch (_) {}
+    }
+
+    // =====================================================================
+    // FEATURE: BEAT SILENCE SFX
+    // Play heartbeat/tension drone during extended silence in intense scenes
+    // =====================================================================
+    async _tryBeatSilence() {
+        if (this._beatSilencePlaying) return;
+        if (!this.sfxEnabled || !this.isListening) return;
+
+        // Only during intense scene states or if mood is tense/dark
+        const isIntense = this._intenseSceneStates.has(this.sceneState) ||
+            (this.currentMood?.primary && ['tense', 'dark', 'fearful', 'suspenseful', 'ominous'].includes(this.currentMood.primary));
+        if (!isIntense) return;
+
+        this._beatSilencePlaying = true;
+        debugLog('Beat silence: playing tension heartbeat');
+        this.logActivity('Tension: heartbeat...', 'trigger');
+
+        try {
+            const query = Math.random() < 0.6 ? 'heartbeat slow tension' : 'tension drone dark';
+            const url = await this.searchAudio(query, 'sfx');
+            if (url) {
+                await this.playAudio(url, {
+                    type: 'sfx', name: 'beat-silence',
+                    volume: this.calculateVolume(0.3),
+                    loop: false
+                });
+            }
+        } catch (_) {}
+
+        // Auto-stop after 8 seconds if speech doesn't resume
+        this._beatSilenceStopTimer = setTimeout(() => {
+            this._beatSilencePlaying = false;
+        }, 8000);
+    }
+
+    _cancelBeatSilence() {
+        if (this._beatSilenceStopTimer) {
+            clearTimeout(this._beatSilenceStopTimer);
+            this._beatSilenceStopTimer = null;
+        }
+        this._beatSilencePlaying = false;
+    }
+
     prefetchStoryWindow() {
         if (!this.sfxEnabled) return;
         const cueMap = this.getStoryCueMap();
@@ -1824,10 +2329,12 @@ class Effexiq {
         if (isAmbient && !this.ambienceEnabled) return;
         const baseVol = isAmbient ? 0.45 : 0.7;
         // Scale non-ambient cues by voice intensity so a loud "BOO!" = louder sound
-        const vol = isAmbient ? baseVol : Math.min(1.0, baseVol * Math.max(0.5, this.voiceIntensity));
+        const rawVol = isAmbient ? baseVol : Math.min(1.0, baseVol * Math.max(0.5, this.voiceIntensity));
+        // Apply pacing + intensity curve multipliers
+        const vol = Math.min(1.0, rawVol * this._getPacingVolumeMultiplier() * this._getIntensityCurveMultiplier());
         // Apply user's ambient duration multiplier to non-looping SFX timers
         const baseDur = this._storySfxMaxDuration(category) * 1000;
-        const maxDur = isAmbient ? null : baseDur * this.ambientDurationMultiplier;
+        const maxDur = isAmbient ? null : baseDur * this.ambientDurationMultiplier * this._getPacingDurationMultiplier();
 
         // In demo mode, use pre-resolved URLs + buffer cache for instant playback
         // (context overrides don't apply to demo cache since URLs are pre-resolved)
@@ -3567,6 +4074,13 @@ class Effexiq {
             this.updateTranscriptDisplay();
             // Advance story highlighting on finalized phrases
             this.advanceStoryWithTranscript(finalTranscript);
+
+            // --- Feature hooks: pacing, dialogue, intensity, pause-resume ---
+            this._onSpeechActivity(); // reset pause-resume timer & cancel beat silence
+            const wordCount = trimmed.split(/\s+/).length;
+            this._updatePacing(wordCount);
+            this._detectDialogueMode(trimmed);
+            this._detectIntensityCurve(trimmed);
             
                 // Voice commands & instant triggers (skip instant keywords in demo - story cue map handles it)
                 this.handleVoiceCommands(finalTranscript);
@@ -3697,6 +4211,15 @@ class Effexiq {
             const maxTriggers = 2;
             const now = Date.now();
             const KEYWORD_COOLDOWN = this.keywordCooldownMs || 3000;
+
+            // Synonym expansion: also check if any transcript word maps to a known keyword
+            const expandedHits = new Set();
+            for (const w of lowerText.split(/\s+/)) {
+                const canonical = this._expandSynonym(w.replace(/[^a-z'-]/g, ''));
+                if (canonical !== w.replace(/[^a-z'-]/g, '') && this.instantKeywords[canonical]) {
+                    expandedHits.add(canonical);
+                }
+            }
         
             for (const [keyword, config] of Object.entries(this.instantKeywords)) {
                 if (triggered >= maxTriggers) break;
@@ -3705,15 +4228,16 @@ class Effexiq {
                 if (now - lastTrigger < KEYWORD_COOLDOWN) continue;
                 const escapedKw = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(`\\b${escapedKw}\\b`, 'i');
-                // Check primary transcript AND any alternative transcriptions
-                if (regex.test(lowerText) || lowerAlts.some(alt => regex.test(alt))) {
+                // Check primary transcript, alternative transcriptions, AND synonym expansions
+                if (regex.test(lowerText) || lowerAlts.some(alt => regex.test(alt)) || expandedHits.has(keyword)) {
                     this.instantKeywordCooldowns.set(keyword, now);
                     debugLog(`Instant trigger detected: "${keyword}"`);
                     this.bumpStat('keywords');
                     this.bumpStat('triggers');
                     config._triggerStart = performance.now();
                     this.logActivity(`Keyword: "${keyword}" -> ${config.query || config.file || '?'}`, 'trigger');
-                    const intensityMul = Math.max(0.4, Math.min(1.5, this.voiceIntensity));
+                    const intensityMul = Math.max(0.4, Math.min(1.5, this.voiceIntensity))
+                        * this._getPacingVolumeMultiplier() * this._getIntensityCurveMultiplier();
                     this.playInstantSound(config, keyword, intensityMul);
                     triggered++;
                 }
@@ -4167,6 +4691,23 @@ class Effexiq {
                 this._analysisCountSinceLastSummary = 0;
                 this._updateRollingSceneSummary(decisions.scene);
             }
+
+            // --- Adaptive ambient scene bed: derive categories from scene + SFX tags ---
+            const bedCats = [];
+            const sceneStr = (decisions.scene || '').toLowerCase();
+            if (/forest|wood|grove|jungle/i.test(sceneStr)) bedCats.push('forest');
+            if (/cave|dungeon|underground|crypt/i.test(sceneStr)) bedCats.push('dungeon');
+            if (/ocean|sea|ship|harbor|nautical|sail/i.test(sceneStr)) bedCats.push('nautical');
+            if (/fire|volcano|inferno|forge/i.test(sceneStr)) bedCats.push('fire');
+            if (/rain|storm|tempest|blizzard/i.test(sceneStr)) bedCats.push('weather');
+            if (/tavern|inn|celebration|feast/i.test(sceneStr)) bedCats.push('celebration');
+            if (/cave|cavern|grotto/i.test(sceneStr)) bedCats.push('atmosphere');
+            if (/river|lake|waterfall|stream/i.test(sceneStr)) bedCats.push('water');
+            if (/battle|combat|fight|war/i.test(sceneStr)) bedCats.push('combat');
+            this._updateSceneBed(bedCats).catch(e => debugLog('Scene bed update failed:', e.message));
+
+            // --- Predictive preloading for current scene category ---
+            this._preloadForScene(this.sceneState).catch(e => debugLog('Scene preload failed:', e.message));
         }
 
         // Log with confidence if available
@@ -4575,8 +5116,10 @@ class Effexiq {
         // Build URL (relative paths resolved by browser, buildSrcCandidates adds backend fallback)
         const soundUrl = encodeURI(sound.src);
         
-        // Apply volume with SFX level
-        const effectiveVol = Math.max(0, Math.min(1, (sfxData.volume || 0.7) * this.sfxLevel));
+        // Apply volume with SFX level, pacing + intensity curve multipliers
+        const effectiveVol = Math.max(0, Math.min(1,
+            (sfxData.volume || 0.7) * this.sfxLevel * this._getPacingVolumeMultiplier() * this._getIntensityCurveMultiplier()
+        ));
         
         const played = await this.playAudio(soundUrl, {
             type: 'sfx',
