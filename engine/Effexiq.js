@@ -718,9 +718,9 @@ class Effexiq {
         // Build the text from current position
         const textFromHere = this.storyTokens.slice(this.storyIndex).join('');
 
-        // Try AI TTS first (OpenAI via backend)
+        // Try AI TTS first (ElevenLabs via /api/tts)
         const backendUrl = typeof getBackendUrl === 'function' ? getBackendUrl() : '';
-        if (backendUrl) {
+        {
             try {
                 if (demoStatus) demoStatus.textContent = 'Generating AI narration...';
                 const ttsUrl = `${backendUrl}/api/tts`;
