@@ -533,7 +533,20 @@ class Effexiq {
     }
 
     normalizeWord(tok) {
-        return String(tok).toLowerCase().replace(/[^a-z0-9']+/g, '');
+        let w = String(tok).toLowerCase().replace(/[^a-z0-9']+/g, '');
+        // Collapse repeated letters for onomatopoeia: WOOOOSH → woosh, CRAAASH → crash
+        w = w.replace(/(.)\1{2,}/g, '$1$1');
+        // Common stretched-letter reductions to base forms
+        const collapseMap = {
+            'wooosh': 'woosh', 'whoosh': 'whoosh', 'whooosh': 'whoosh',
+            'craash': 'crash', 'smaash': 'smash', 'baang': 'bang',
+            'booom': 'boom', 'thhud': 'thud', 'sllam': 'slam',
+            'roaar': 'roar', 'hisss': 'hiss', 'buuzz': 'buzz',
+            'crraash': 'crash', 'poow': 'pow', 'cllang': 'clang',
+            'rruumble': 'rumble', 'ruumble': 'rumble',
+        };
+        if (collapseMap[w]) w = collapseMap[w];
+        return w;
     }
 
     advanceStoryWithTranscript(text) {
@@ -1501,6 +1514,37 @@ class Effexiq {
             'bandit': 'bandit ambush music',
             'bandits': 'bandit ambush music',
             'outlaw': 'bandit ambush music',
+
+            // Onomatopoeia
+            'woosh': 'wind howling',
+            'whoosh': 'wind howling',
+            'thud': 'heavy impact thud',
+            'thump': 'heavy impact thud',
+            'crash': 'glass shattered',
+            'smash': 'glass shattered',
+            'bang': 'cannon blast',
+            'boom': 'cannon blast',
+            'pow': 'punch hit impact',
+            'clang': 'sword clash metal',
+            'clank': 'sword clash metal',
+            'slam': 'door slam',
+            'crack': 'thunder rumble',
+            'hiss': 'snake hiss',
+            'roar': 'dragon roar',
+            'growl': 'wolf growl',
+            'screech': 'creature screech',
+            'rumble': 'thunder rumble',
+            'creak': 'door creaked',
+            'snap': 'twig snap forest',
+            'buzz': 'insect buzzing swarm',
+            'sizzle': 'cooking sizzle fire',
+            'whistle': 'wind howling',
+            'clatter': 'sword clash metal',
+            'crunch': 'footsteps gravel',
+            'splat': 'splash water dive',
+            'pop': 'cork pop bottle',
+            'squelch': 'swamp marsh',
+            'shriek': 'creature screech',
         };
     }
 
@@ -1524,17 +1568,17 @@ class Effexiq {
     // Scene categories for story cues -- used to fade out stale SFX on scene change
     getStoryCueCategory(word) {
         const categories = {
-            combat:      ['sword','swords','arrow','arrows','shield','strike','clashed','clash','cannon','cannons','shouted','dagger','knife','blade','axe','chopped','hacked','whip','brawl','pierced','impaled','shielded','gunshot','revolver','pistol','laser','blaster','armor','armored','crossbow','mace','volley','cavalry','horsemen','catapult','trebuchet','battering','flail','bowstring','warhorn','broadside','dragonfire'],
-            weather:     ['wind','howled','rain','storm','thunder','thundering','lightning','blizzard','snowstorm','avalanche','sandstorm','waterfall','foghorn','snapped','volcano','volcanic','eruption','downpour','monsoon','hail','rockslide','landslide'],
+            combat:      ['sword','swords','arrow','arrows','shield','strike','clashed','clash','cannon','cannons','shouted','dagger','knife','blade','axe','chopped','hacked','whip','brawl','pierced','impaled','shielded','gunshot','revolver','pistol','laser','blaster','armor','armored','crossbow','mace','volley','cavalry','horsemen','catapult','trebuchet','battering','flail','bowstring','warhorn','broadside','dragonfire','pow','clang','clank','clatter'],
+            weather:     ['wind','howled','rain','storm','thunder','thundering','lightning','blizzard','snowstorm','avalanche','sandstorm','waterfall','foghorn','snapped','volcano','volcanic','eruption','downpour','monsoon','hail','rockslide','landslide','woosh','whoosh','rumble','crack'],
             fire:        ['fire','crackled','flames','flame','embers','candle','candles','match','torch','torches','extinguished','campfire','fireplace','hearth','bonfire','wildfire','inferno','lighter','zippo','kindled','kindle','lamp','lantern','lava','magma','cooking','sizzled'],
-            creature:    ['dragon','growl','wolf','owl','hooted','rat','horse','horses','goblin','goblins','snake','serpent','viper','bat','bats','vampire','bear','eagle','hawk','wolves','raven','crow','crows','pig','neigh','neighing','alien','demon','demonic','insect','buzzing','bee','wasp','frog','toad','falcon','whale','seagull','gull','elephant','monkey','ape','deer','stag','elk','cricket','werewolf'],
-            movement:    ['footsteps','step','steps','crept','door','creaked','knocked','knock','boards','slammed','portcullis','gate','lever','drawbridge','trap','trapped','lockpick','lock','passage','spurs','stealth','sneaking','sneaked','bridge','wagon','cart','splash','splashed','rowing','rowed','oars','plunged','dived'],
+            creature:    ['dragon','growl','wolf','owl','hooted','rat','horse','horses','goblin','goblins','snake','serpent','viper','bat','bats','vampire','bear','eagle','hawk','wolves','raven','crow','crows','pig','neigh','neighing','alien','demon','demonic','insect','buzzing','bee','wasp','frog','toad','falcon','whale','seagull','gull','elephant','monkey','ape','deer','stag','elk','cricket','werewolf','hiss','roar','screech','shriek','buzz','growl'],
+            movement:    ['footsteps','step','steps','crept','door','creaked','knocked','knock','boards','slammed','portcullis','gate','lever','drawbridge','trap','trapped','lockpick','lock','passage','spurs','stealth','sneaking','sneaked','bridge','wagon','cart','splash','splashed','rowing','rowed','oars','plunged','dived','creak','crunch','squelch','splat'],
             magic:       ['magic','spell','wizard','arcane','crystal','healing','chanted','incantation','portal','rift','fizzled','dispelled','counterspell','frost','frozen','ice','vanished','disappeared','invisible','gust','summoning','summoned','rune','runes','brew','brewing','cauldron','resurrection','revived','resurrected','shapeshifted','transformed','telekinesis','enchantment','enchanted','ward','barrier','scroll'],
             water:       ['dripped','waves','waterfall','underwater','submerged','sewer','sewers','swamp','marsh','brook','stream','creek','quicksand'],
             celebration: ['bell','bells','music','celebrated','clock','midnight','crowd','applause','clapping','chimed','coach','victory','triumph','discovered','revealed','treasure','chest','gasp','gasped','holy','divine','sacred','dice','gambled','coin','toast','cheers','toasted'],
             nautical:    ['ship','sailed','anchor','foghorn','harbor','seagull','gull','sail','unfurled','shanty','shanties'],
             atmosphere:  ['shadow','shadows','whispered','heartbeat','silence','tavern','inn','jungle','cathedral','church','graveyard','cemetery','saloon','cave','cavern','library','market','marketplace','spaceship','spacecraft','funeral','mourning','gallows','hanged','execution','prayer','prayed','forest','woods','woodland','mountain','dungeon','village','winter','snow','desert','feast','banquet','monastery','breeze','temple','lair','bayou','tundra','arctic','throne','royal','coronation','bazaar','romantic','kissed','serenade','dawn','sunrise','chimes','caravan','tribal','cosmic','galaxy','jig','drunk','drunken','bandit','bandits','outlaw','quill','wrote'],
-            impact:      ['glass','shattered','exploded','trembled','collapsed','earthquake','avalanche','bones','skeleton','brawl','mob','riot','mirror','boulder'],
+            impact:      ['glass','shattered','exploded','trembled','collapsed','earthquake','avalanche','bones','skeleton','brawl','mob','riot','mirror','boulder','crash','smash','thud','thump','bang','boom','slam','snap','crunch'],
             vocal:       ['scream','screamed','shrieked','shriek','screeched','wailed','wail','sobbed','whimpered','bellowed','yelled','roared','gasp','gasped','laughed','cackled','cackling','cackle','grunted','groaned','dying','baby','infant','cried','children','kids','murmur','murmured','drinking','gulped','ale','tankard','snoring','snored','coughing','coughed'],
             occult:      ['demon','demonic','ritual','cult','possessed','blood','undead','zombie','chains','shackled','prison','summoning','summoned','curse','cursed','hex','soul','drained'],
             dungeon:     ['trap','trapped','portcullis','gate','lever','drawbridge','lockpick','lock','cave','cavern','sewer','sewers','chains','prison','gallows','pickaxe','mining','barrel','dart','rusty'],
