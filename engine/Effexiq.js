@@ -1817,6 +1817,7 @@ class Effexiq {
                 const vol = this._dialogueMode ? this.ambientBedGain * this._dialogueDuckLevel : this.ambientBedGain;
                 await this.playAudio(url, { type: 'sfx', name: `bed:${cat}`, volume: this.calculateVolume(vol), loop: true });
                 const id = this._findLatestActiveSoundId();
+                if (!id) continue; // playAudio failed silently
                 this._sceneBedLayers.set(cat, { id, url, volume: vol, category: cat });
                 this._sceneBedCategories.add(cat);
                 debugLog(`Scene bed layer added: ${cat} -> ${q}`);
@@ -1919,7 +1920,7 @@ class Effexiq {
 
         if (this._wordTimestamps.length < 2) return;
         const elapsed = (this._wordTimestamps[this._wordTimestamps.length - 1].time - this._wordTimestamps[0].time) / 60000;
-        if (elapsed <= 0) return;
+        if (elapsed < 0.05) return; // require at least ~3 seconds of data
         const totalWords = this._wordTimestamps.reduce((sum, e) => sum + e.count, 0);
         this._currentWPM = Math.round(totalWords / elapsed);
 
@@ -1974,7 +1975,7 @@ class Effexiq {
         // Also persist to localStorage for previously-on restore
         try {
             localStorage.setItem('Effexiq_scene_bed_snapshot', JSON.stringify(snapshot));
-        } catch (_) {}
+        } catch (e) { debugLog('Snapshot save failed:', e.message); }
     }
 
     _onSpeechActivity() {
@@ -2017,6 +2018,7 @@ class Effexiq {
                 const vol = entry.volume || this.ambientBedGain;
                 await this.playAudio(entry.url, { type: 'sfx', name: `bed:${entry.category}`, volume: this.calculateVolume(vol * 0.5), loop: true });
                 const id = this._findLatestActiveSoundId();
+                if (!id) continue; // playAudio failed silently
                 this._sceneBedLayers.set(entry.category, { id, url: entry.url, volume: vol, category: entry.category });
                 this._sceneBedCategories.add(entry.category);
                 // Fade in from half-volume to full over 2 seconds
@@ -2092,6 +2094,7 @@ class Effexiq {
         // Decay curve after 8 seconds
         if (this._intensityCurveStart && Date.now() - this._intensityCurveStart > 8000) {
             this._currentIntensityCurve = null;
+            this._intensityCurveStart = null;
         }
         return this._currentIntensityCurve || null;
     }
@@ -2157,6 +2160,7 @@ class Effexiq {
         } catch (_) {}
 
         // Auto-stop after 8 seconds if speech doesn't resume
+        if (this._beatSilenceStopTimer) clearTimeout(this._beatSilenceStopTimer);
         this._beatSilenceStopTimer = setTimeout(() => {
             this._beatSilencePlaying = false;
         }, 8000);
@@ -2166,6 +2170,16 @@ class Effexiq {
         if (this._beatSilenceStopTimer) {
             clearTimeout(this._beatSilenceStopTimer);
             this._beatSilenceStopTimer = null;
+        }
+        if (this._beatSilencePlaying) {
+            // Stop the active beat-silence sound
+            this.activeSounds.forEach((snd, id) => {
+                if (snd.name === 'beat-silence') {
+                    try {
+                        if (snd._howl) { snd._howl.fade(snd._howl.volume(), 0, 300); setTimeout(() => { try { snd._howl.stop(); snd._howl.unload(); } catch(_){} this.activeSounds.delete(id); }, 350); }
+                    } catch (_) {}
+                }
+            });
         }
         this._beatSilencePlaying = false;
     }
@@ -3910,9 +3924,9 @@ class Effexiq {
             const sample = () => {
                 if (!this._micAnalyser) return;
                 if (!this.isListening) {
-                    // Decay back to neutral when not actively listening
+                    // Decay back to neutral and stop the loop
                     this.voiceIntensity = 0.5;
-                    requestAnimationFrame(sample);
+                    this._micSampleRAF = null;
                     return;
                 }
                 this._micAnalyser.getByteTimeDomainData(buf);
@@ -3927,9 +3941,10 @@ class Effexiq {
                 this.voiceIntensity = 0.4 + raw * 1.1;
                 // Voice ducking: lower music/ambience when voice detected
                 this._processVoiceDuck(rms);
-                requestAnimationFrame(sample);
+                this._micSampleRAF = requestAnimationFrame(sample);
             };
-            sample();
+            this._micSampleFn = sample; // store for restart after stopListening
+            this._micSampleRAF = requestAnimationFrame(sample);
             debugLog('Mic intensity analyser started');
         } catch (e) {
             debugLog('Mic intensity analyser unavailable:', e.message);
@@ -4389,6 +4404,7 @@ class Effexiq {
                 
                 // Create gain node for volume control
                 const gainNode = this.audioContext.createGain();
+                if (!Number.isFinite(volume)) volume = 0.7;
                 const effective = Math.max(0, Math.min(1, volume * this.sfxLevel));
                 gainNode.gain.value = effective;
                 
@@ -6681,7 +6697,13 @@ class Effexiq {
         // Start mic intensity analyser now (deferred from init for mobile compatibility)
         if (!this._micAnalyser) {
             this._setupMicIntensityAnalyser().catch(() => {});
+        } else if (!this._micSampleRAF && this._micSampleFn) {
+            // RAF loop stopped on previous stopListening — restart it
+            this._micSampleRAF = requestAnimationFrame(this._micSampleFn);
         }
+
+        // (Re)start pause-resume watcher for ambient restore & beat silence
+        this._startPauseResumeWatcher();
         
         // Update UI first
         const startBtn = document.getElementById('startBtn');
@@ -6753,6 +6775,19 @@ class Effexiq {
             clearInterval(this._cacheCleanupInterval);
             this._cacheCleanupInterval = null;
         }
+        // Clean up pause-resume watcher & beat silence
+        if (this._pauseResumeInterval) {
+            clearInterval(this._pauseResumeInterval);
+            this._pauseResumeInterval = null;
+        }
+        this._cancelBeatSilence();
+        // Clean up mic intensity RAF loop
+        if (this._micSampleRAF) {
+            cancelAnimationFrame(this._micSampleRAF);
+            this._micSampleRAF = null;
+        }
+        // Fade out scene bed layers
+        this._fadeAllSceneBedLayers(800);
         
         // Stop procedural ambient
         this.stopProceduralAmbient();
