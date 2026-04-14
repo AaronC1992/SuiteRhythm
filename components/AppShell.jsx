@@ -31,6 +31,7 @@ import ControlBoardSection from './sections/ControlBoardSection';
 import SoundLibrarySection from './sections/SoundLibrarySection';
 import SettingsSection from './sections/SettingsSection';
 import {
+  SubscribeModal,
   TutorialModal,
   FeedbackModal,
   LoadingOverlay,
@@ -197,6 +198,7 @@ export default function AppShell() {
       </div>
 
       {/* Body-level modals and overlays */}
+      <SubscribeModal />
       <TutorialModal />
       <FeedbackModal />
       <LoadingOverlay />

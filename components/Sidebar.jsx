@@ -78,6 +78,7 @@ export default function Sidebar() {
       <div className="sidebar-footer">
         <div className="sidebar-api-row">
           <span id="openaiStatus" className="api-status" aria-label="Subscription status" />
+          <span id="pixabayStatus" className="api-status" aria-label="Pixabay API status" />
           <button id="manageSubscriptionBtn" className="sidebar-reset-key">Manage</button>
         </div>
         <div className="sidebar-footer-actions">

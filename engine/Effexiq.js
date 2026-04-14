@@ -2829,7 +2829,7 @@ class Effexiq {
             
             // Force reload from server (bypass cache)
             if (this._autosaveInterval) { clearInterval(this._autosaveInterval); this._autosaveInterval = null; }
-            window.location.reload(true);
+            window.location.reload();
         } catch (err) {
             console.error('Refresh error:', err);
             this.updateStatus('⚠️ Refresh failed. Try closing and reopening the app.', 'error');
@@ -2856,6 +2856,7 @@ class Effexiq {
         // Subscribe / Token management
         document.getElementById('subscribeBtn')?.addEventListener('click', () => this.startCheckout());
         document.getElementById('subscribeBtn2')?.addEventListener('click', () => this.startCheckout());
+        document.getElementById('showSubscribeModal')?.addEventListener('click', () => this.startCheckout());
         document.getElementById('saveTokenBtn')?.addEventListener('click', () => this.saveToken());
         document.getElementById('refreshTokenBtn')?.addEventListener('click', () => this.refreshToken());
         document.getElementById('enterTokenBtn')?.addEventListener('click', () => {
@@ -9260,6 +9261,48 @@ class Effexiq {
         }
     }
 
+    // ===== CLEANUP =====
+    destroy() {
+        try {
+            // Stop listening
+            if (this.isListening) {
+                this.recognition?.abort();
+                this.isListening = false;
+            }
+
+            // Clear all intervals
+            if (this._cacheCleanupInterval) clearInterval(this._cacheCleanupInterval);
+            if (this.analysisTimer) clearInterval(this.analysisTimer);
+            if (this._autosaveInterval) clearInterval(this._autosaveInterval);
+            if (this.proceduralTimer) clearInterval(this.proceduralTimer);
+            if (this._browserTTSSyncTimer) clearInterval(this._browserTTSSyncTimer);
+            if (this._pauseResumeInterval) clearInterval(this._pauseResumeInterval);
+
+            // Cancel animation frames
+            if (this.visualizerAnimationId) cancelAnimationFrame(this.visualizerAnimationId);
+            if (this._micSampleRAF) cancelAnimationFrame(this._micSampleRAF);
+
+            // Stop all Howler sounds
+            if (typeof Howler !== 'undefined') {
+                Howler.unload();
+            }
+
+            // OBS bridge
+            if (this.obsBridge) {
+                this.obsBridge.disconnect();
+            }
+
+            // Remove visibility listener
+            if (this._visibilityHandler) {
+                document.removeEventListener('visibilitychange', this._visibilityHandler);
+            }
+
+            debugLog('Effexiq destroyed');
+        } catch (e) {
+            console.warn('[Effexiq] Cleanup error:', e);
+        }
+    }
+
     // ===== OBS WEBSOCKET BRIDGE =====
     _setupObsBridge() {
         import('../lib/modules/obs-bridge.js').then(({ obsBridge }) => {
@@ -9395,6 +9438,16 @@ function initializeMenuToggles() {
         obsSettingsToggle.addEventListener('click', () => {
             obsSettingsToggle.classList.toggle('active');
             obsSettingsContent.classList.toggle('hidden');
+        });
+    }
+
+    // Audio Source subsection toggle
+    const audioSourceToggle = document.getElementById('audioSourceMenuToggle');
+    const audioSourceContent = document.getElementById('audioSourceMenuContent');
+    if (audioSourceToggle && audioSourceContent) {
+        audioSourceToggle.addEventListener('click', () => {
+            audioSourceToggle.classList.toggle('active');
+            audioSourceContent.classList.toggle('hidden');
         });
     }
 }

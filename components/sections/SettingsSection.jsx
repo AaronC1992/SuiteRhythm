@@ -43,6 +43,31 @@ export default function SettingsSection() {
           </div>
         </section>
 
+        {/* Audio Source (Pixabay) */}
+        <section className="menu-section">
+          <button className="menu-toggle" id="audioSourceMenuToggle">
+            Audio Source
+            <span className="toggle-indicator">&#9660;</span>
+          </button>
+          <div className="menu-content hidden" id="audioSourceMenuContent">
+            <p className="info-text" style={{ marginBottom: 8, fontSize: '0.85rem' }}>
+              Add a <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener noreferrer">Pixabay API key</a> for additional high-quality sounds beyond the built-in library.
+            </p>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <input
+                id="pixabayKeyInput"
+                type="password"
+                placeholder="Pixabay API key"
+                className="input-field"
+                style={{ flex: 1 }}
+                autoComplete="off"
+              />
+              <button id="saveAudioKeys" className="btn-secondary">Save</button>
+            </div>
+            <div id="pixabayKeyStatus" className="info-text" style={{ marginTop: 6, fontSize: '0.8rem' }} />
+          </div>
+        </section>
+
         {/* Volume Control */}
         <section className="menu-section">
           <button className="menu-toggle" id="volumeMenuToggle">

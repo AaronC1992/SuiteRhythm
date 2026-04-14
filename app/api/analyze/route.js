@@ -30,19 +30,18 @@ function checkRateLimit(ip) {
   entry.count++;
   rateLimitMap.set(ip, entry);
   const remaining = Math.max(0, RATE_LIMIT_MAX - entry.count);
+  // Inline cleanup: cap map size and prune stale entries
+  if (rateLimitMap.size > 10000) {
+    for (const [k, v] of rateLimitMap) {
+      if (now >= v.resetAt) rateLimitMap.delete(k);
+    }
+  }
   return { allowed: entry.count <= RATE_LIMIT_MAX, remaining, resetAt: entry.resetAt };
 }
 
-// Periodically clean up stale entries (every 5 min)
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, entry] of rateLimitMap) {
-    if (now >= entry.resetAt) rateLimitMap.delete(ip);
-  }
-}, 300_000);
-
 // --- Response cache (hash-based dedup for identical transcripts) ---
 const CACHE_TTL_MS = 30_000; // 30 seconds
+const MAX_CACHE_SIZE = 500;
 const responseCache = new Map(); // hash -> { data, expiresAt }
 
 function getCacheKey(transcript, mode, context) {
@@ -50,13 +49,24 @@ function getCacheKey(transcript, mode, context) {
   return crypto.createHash('sha256').update(raw).digest('hex').slice(0, 16);
 }
 
-// Clean cache periodically
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, entry] of responseCache) {
-    if (now >= entry.expiresAt) responseCache.delete(key);
+function getCache(key) {
+  const entry = responseCache.get(key);
+  if (!entry) return null;
+  if (Date.now() >= entry.expiresAt) {
+    responseCache.delete(key);
+    return null;
   }
-}, 60_000);
+  return entry.data;
+}
+
+function setCache(key, data) {
+  // Evict oldest entries if over limit
+  if (responseCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = responseCache.keys().next().value;
+    responseCache.delete(firstKey);
+  }
+  responseCache.set(key, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+}
 
 const SYSTEM_PROMPT = `You are Effexiq, an AI sound director for tabletop RPG sessions.
 Given a transcript of what's happening in the story, respond with a JSON object describing
@@ -100,9 +110,9 @@ export async function POST(request) {
 
   // Check response cache for identical recent requests
   const cacheKey = getCacheKey(transcript, mode, context);
-  const cached = responseCache.get(cacheKey);
-  if (cached && Date.now() < cached.expiresAt) {
-    const res = NextResponse.json(cached.data);
+  const cached = getCache(cacheKey);
+  if (cached) {
+    const res = NextResponse.json(cached);
     res.headers.set('X-RateLimit-Remaining', String(remaining));
     res.headers.set('X-Cache', 'HIT');
     return res;
@@ -130,7 +140,7 @@ export async function POST(request) {
     const data = JSON.parse(raw);
 
     // Cache the response for dedup
-    responseCache.set(cacheKey, { data, expiresAt: Date.now() + CACHE_TTL_MS });
+    setCache(cacheKey, data);
 
     const res = NextResponse.json(data);
     res.headers.set('X-RateLimit-Remaining', String(remaining));
