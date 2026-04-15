@@ -9,11 +9,37 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
 import { MODE_CONTEXTS, MODE_RULES } from '../../../lib/modules/ai-director.js';
 
 let _openai;
 function getOpenAI() {
   return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY }));
+}
+
+// --- Load sound catalog once at startup for the AI prompt ---
+let _catalogSummary = null;
+function getCatalogSummary() {
+  if (_catalogSummary) return _catalogSummary;
+  try {
+    const filePath = path.join(process.cwd(), 'public', 'saved-sounds.json');
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const files = data?.files || [];
+
+    const music = files
+      .filter(f => f.type === 'music')
+      .map(f => `${f.name} [${(f.keywords || []).slice(0, 4).join(', ')}]`);
+    const sfx = files
+      .filter(f => f.type !== 'music')
+      .map(f => f.name);
+
+    _catalogSummary = `\nAVAILABLE MUSIC (${music.length} tracks — pick by exact name):\n${music.join(' | ')}\n\nAVAILABLE SFX (${sfx.length} sounds — pick by exact name):\n${sfx.join(' | ')}`;
+  } catch (e) {
+    console.warn('[analyze] Could not load catalog summary:', e.message);
+    _catalogSummary = '';
+  }
+  return _catalogSummary;
 }
 
 // --- In-memory rate limiting (per IP, resets on deploy) ---
@@ -70,7 +96,7 @@ function setCache(key, data) {
 }
 
 const SYSTEM_PROMPT = `You are Effexiq, an AI sound director for live narration sessions.
-Given a transcript of what is being narrated, respond with a JSON object that drives a layered audio engine.
+Given a transcript and a list of available sounds, respond with a JSON object that drives a layered audio engine.
 
 RESPONSE FORMAT (strict JSON):
 {
@@ -81,13 +107,13 @@ RESPONSE FORMAT (strict JSON):
   },
   "confidence": 0.0 to 1.0,
   "music": {
-    "id": "catalog ID or null",
+    "id": "exact name from AVAILABLE MUSIC list, or null",
     "action": "play_or_continue",
     "volume": 0.0 to 1.0
   },
   "sfx": [
     {
-      "id": "catalog ID",
+      "id": "exact name from AVAILABLE SFX list",
       "when": "immediate",
       "volume": 0.0 to 1.0,
       "tags": ["keyword1", "keyword2"]
@@ -95,15 +121,20 @@ RESPONSE FORMAT (strict JSON):
   ]
 }
 
-RULES:
+CRITICAL RULES:
+- You MUST pick sounds from the AVAILABLE lists below. Use the EXACT name as the "id". Do NOT invent sound names.
 - "scene" drives ambient bed selection. Use descriptive keywords: forest, cave, tavern, cottage, castle, ocean, rain, battle, etc.
-- "mood.primary" + "mood.intensity" drive the emotional arc and scene state machine. Be consistent — don't flip moods every response.
-- "confidence" reflects how certain you are about the scene/mood. Set lower (0.3-0.5) when the transcript is ambiguous.
-- "music" — only suggest a change when the scene or mood shifts significantly. Use "action": "play_or_continue" to keep current music playing. Set to null if no change needed.
-- "sfx" — array of sound effects. Only include sounds that are clearly described or implied in the transcript. Max 2 per response. Use descriptive tags so the engine can search for them. Do NOT hallucinate sounds that weren't mentioned.
-- Prioritize atmosphere over action. Ambient context (forest sounds, wind, fire) is more important than one-off SFX.
-- Avoid repeating the same SFX across consecutive responses.
-- Never include sounds that contradict the current scene (e.g. no crowd noise in a lonely forest).`;
+- "mood.primary" + "mood.intensity" drive the emotional arc. Be consistent — don't flip moods every response.
+- "confidence" reflects how certain you are. Set 0.3-0.5 when transcript is ambiguous.
+- "music" — only change when scene/mood shifts significantly. Use null if current music should keep playing. Pick music that matches the mood and setting.
+- "sfx" — max 2 per response. Only include sounds CLEARLY described or implied in the transcript. Never hallucinate sounds not mentioned.
+- Prioritize atmosphere over action. Ambient context (forest sounds, wind, fire crackling) matters more than one-off SFX.
+- Never include sounds that contradict the scene (no crowd noise in a lonely forest, no birds in a dungeon).
+- If no SFX are warranted, return an empty array. Silence is better than wrong sounds.`;
+
+function buildSystemPrompt() {
+  return SYSTEM_PROMPT + getCatalogSummary();
+}
 
 function buildUserMessage(transcript, mode, context) {
   const modeContext = MODE_CONTEXTS[mode] || MODE_CONTEXTS.auto;
@@ -178,11 +209,11 @@ export async function POST(request) {
   try {
     const completion = await getOpenAI().chat.completions.create({
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      max_tokens: 300,
-      temperature: 0.7,
+      max_tokens: 400,
+      temperature: 0.4,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: buildSystemPrompt() },
         { role: 'user', content: userMessage },
       ],
     });

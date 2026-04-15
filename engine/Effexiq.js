@@ -1761,15 +1761,25 @@ class Effexiq {
     // Layers persistent ambient sounds that stack and fade with narrative
     // =====================================================================
     _sceneBedQueries = {
-        weather:    ['wind howling', 'rain ambient', 'thunder distant rumble'],
-        fire:       ['fire crackling professional', 'torch crackle'],
-        water:      ['stream water trickle gentle', 'ocean waves'],
-        atmosphere: ['eerie dark ambience', 'cave dripping echo'],
-        forest:     ['forest birds ambient', 'wind through trees'],
-        nautical:   ['ocean harbor ambience', 'ship creaking waves'],
-        dungeon:    ['dungeon dripping echo', 'chains rattling distant'],
-        combat:     ['battle distant drums', 'tension drone'],
-        celebration:['crowd murmur tavern', 'tavern ambience'],
+        weather:     ['wind howling', 'rain ambient', 'thunder distant rumble', 'blizzard howling'],
+        fire:        ['fire crackling professional', 'torch crackle', 'campfire ambient gentle'],
+        water:       ['stream water trickle gentle', 'ocean waves', 'underground cave river'],
+        atmosphere:  ['eerie dark ambience', 'cave dripping echo', 'castle courtyard ambience'],
+        forest:      ['forest birds ambient', 'wind through trees', 'forest ambience daytime', 'rainy forest ambience'],
+        nautical:    ['ocean harbor ambience', 'ship creaking waves', 'foghorn harbor'],
+        dungeon:     ['dungeon dripping echo', 'chains rattling distant', 'dungeon stone ambience'],
+        combat:      ['battle distant drums', 'tension drone'],
+        celebration: ['crowd murmur tavern', 'tavern ambience', 'saloon ambience'],
+        jungle:      ['jungle ambience', 'monkey screech jungle'],
+        desert:      ['desert sandstorm', 'desert night ambience', 'tumbleweed desert'],
+        sewer:       ['sewer drip ambience', 'trapped in the sewers'],
+        sacred:      ['cathedral interior', 'church bell toll'],
+        graveyard:   ['graveyard night', 'eerie dark ambience'],
+        village:     ['village morning ambience', 'market crowd busy'],
+        library:     ['library quiet', 'silence ambience room'],
+        underwater:  ['underwater ambience', 'deep sea underwater ambience', 'bubbles underwater'],
+        mountain:    ['mountain wind ambience', 'wind howling'],
+        night:       ['cricket chorus night', 'campfire night crickets'],
     };
 
     async _updateSceneBed(detectedCategories) {
@@ -1778,7 +1788,7 @@ class Effexiq {
         if (now - this._lastSceneBedUpdate < 5000) return; // throttle updates
         this._lastSceneBedUpdate = now;
 
-        const ambientCategories = new Set(['weather', 'fire', 'water', 'atmosphere', 'forest', 'nautical', 'dungeon', 'celebration']);
+        const ambientCategories = new Set(['weather', 'fire', 'water', 'atmosphere', 'forest', 'nautical', 'dungeon', 'celebration', 'combat', 'jungle', 'desert', 'sewer', 'sacred', 'graveyard', 'village', 'library', 'underwater', 'mountain', 'night']);
         const relevantCats = detectedCategories.filter(c => ambientCategories.has(c));
 
         // Fade out layers whose category is no longer relevant
@@ -4673,19 +4683,28 @@ class Effexiq {
             // --- Adaptive ambient scene bed: derive categories from scene + SFX tags ---
             const bedCats = [];
             const sceneStr = (decisions.scene || '').toLowerCase();
-            if (/forest|wood|grove|jungle/i.test(sceneStr)) bedCats.push('forest');
-            if (/cave|dungeon|underground|crypt/i.test(sceneStr)) bedCats.push('dungeon');
-            if (/ocean|sea|ship|harbor|nautical|sail/i.test(sceneStr)) bedCats.push('nautical');
-            if (/fire|volcano|inferno|forge/i.test(sceneStr)) bedCats.push('fire');
-            if (/rain|storm|tempest|blizzard/i.test(sceneStr)) bedCats.push('weather');
-            if (/tavern|inn|celebration|feast/i.test(sceneStr)) bedCats.push('celebration');
-            if (/cave|cavern|grotto/i.test(sceneStr)) bedCats.push('atmosphere');
-            if (/river|lake|waterfall|stream/i.test(sceneStr)) bedCats.push('water');
-            if (/battle|combat|fight|war/i.test(sceneStr)) bedCats.push('combat');
-            if (/cottage|cabin|hut|hearth|home/i.test(sceneStr)) bedCats.push('fire');
-            if (/castle|throne|palace|tower|hall/i.test(sceneStr)) bedCats.push('atmosphere');
-            if (/magic|enchant|spell|fairy|witch/i.test(sceneStr)) bedCats.push('atmosphere');
-            if (/garden|meadow|clearing|field/i.test(sceneStr)) bedCats.push('forest');
+            if (/forest|wood|grove|clearing|meadow|field/i.test(sceneStr)) bedCats.push('forest');
+            if (/jungle|tropic|rainforest/i.test(sceneStr)) bedCats.push('jungle');
+            if (/cave|dungeon|underground|crypt|catacomb|tomb/i.test(sceneStr)) bedCats.push('dungeon');
+            if (/ocean|sea|ship|harbor|nautical|sail|lighthouse|coast|cliff/i.test(sceneStr)) bedCats.push('nautical');
+            if (/fire|volcano|inferno|forge|blacksmith|furnace/i.test(sceneStr)) bedCats.push('fire');
+            if (/rain|storm|tempest|blizzard|snow|sleet|hail/i.test(sceneStr)) bedCats.push('weather');
+            if (/tavern|inn|celebration|feast|saloon|pub|bar/i.test(sceneStr)) bedCats.push('celebration');
+            if (/river|lake|waterfall|stream|pond|creek|swamp|marsh|bog/i.test(sceneStr)) bedCats.push('water');
+            if (/battle|combat|fight|war|siege|skirmish/i.test(sceneStr)) bedCats.push('combat');
+            if (/cottage|cabin|hut|hearth|home|fireplace/i.test(sceneStr)) bedCats.push('fire');
+            if (/castle|throne|palace|tower|hall|fortress|keep/i.test(sceneStr)) bedCats.push('atmosphere');
+            if (/magic|enchant|spell|fairy|witch|ritual|arcane/i.test(sceneStr)) bedCats.push('atmosphere');
+            if (/garden|park|courtyard|orchard/i.test(sceneStr)) bedCats.push('forest');
+            if (/desert|sand|dune|arid|oasis/i.test(sceneStr)) bedCats.push('desert');
+            if (/sewer|drain|tunnel|underpass/i.test(sceneStr)) bedCats.push('sewer');
+            if (/church|cathedral|chapel|temple|shrine|monastery/i.test(sceneStr)) bedCats.push('sacred');
+            if (/graveyard|cemetery|crypt|mausoleum|burial/i.test(sceneStr)) bedCats.push('graveyard');
+            if (/village|town|market|bazaar|street|square/i.test(sceneStr)) bedCats.push('village');
+            if (/library|study|archive|scriptorium/i.test(sceneStr)) bedCats.push('library');
+            if (/underwater|ocean floor|deep sea|submerge|abyss/i.test(sceneStr)) bedCats.push('underwater');
+            if (/mountain|peak|summit|highland|alpine/i.test(sceneStr)) bedCats.push('mountain');
+            if (/night|midnight|dusk|moonlit|nocturnal/i.test(sceneStr)) bedCats.push('night');
             this._updateSceneBed(bedCats).catch(e => debugLog('Scene bed update failed:', e.message));
 
             // --- Predictive preloading for current scene category ---
@@ -4797,6 +4816,14 @@ class Effexiq {
         if (!sound) {
             // AI sometimes returns just the filename without the folder prefix
             sound = this.soundCatalog.find(s => s.id && s.id.endsWith('/' + musicData.id));
+        }
+        if (!sound) {
+            // Semantic fallback: search by ID as a descriptive query (same as SFX path)
+            const fallbacks = this.semanticSearchCatalog(musicData.id, 'music', 1);
+            if (fallbacks.length > 0) {
+                debugLog('Music semantic fallback for', musicData.id, '->', fallbacks[0].id);
+                sound = fallbacks[0];
+            }
         }
         if (!sound) {
             console.warn('Music ID not found in catalog:', musicData.id);
@@ -5063,7 +5090,12 @@ class Effexiq {
         }
         
         // Find sound in catalog
-        const sound = this.soundCatalog.find(s => s.id === sfxData.id);
+        let sound = this.soundCatalog.find(s => s.id === sfxData.id);
+        if (!sound) {
+            // Match by name (AI now returns exact names from the catalog)
+            const q = sfxData.id.toLowerCase();
+            sound = this.soundCatalog.find(s => s.name && s.name.toLowerCase() === q && s.type === 'sfx');
+        }
         if (!sound) {
             // Semantic fallback: search by ID as a query
             const fallbacks = this.semanticSearchCatalog(sfxData.id, 'sfx', 1);
@@ -5355,20 +5387,39 @@ class Effexiq {
         
         // Synonym expansion for common audio terms
         const synonyms = {
-            sword: ['blade', 'slash', 'metal', 'clang'],
-            door: ['creak', 'open', 'slam', 'knock'],
-            rain: ['water', 'drip', 'storm', 'wet'],
-            fire: ['flame', 'crackle', 'burn', 'torch'],
-            wind: ['breeze', 'gust', 'howl', 'whoosh'],
-            walk: ['footstep', 'step', 'boots'],
-            horse: ['gallop', 'hooves', 'neigh'],
-            fight: ['battle', 'combat', 'clash', 'war'],
-            magic: ['spell', 'enchant', 'arcane', 'mystic'],
-            monster: ['creature', 'beast', 'roar', 'growl'],
-            forest: ['trees', 'leaves', 'birds', 'nature'],
-            tavern: ['crowd', 'mug', 'inn', 'chatter'],
-            ocean: ['waves', 'sea', 'water', 'shore'],
-            night: ['crickets', 'owl', 'dark', 'nocturnal']
+            sword: ['blade', 'slash', 'metal', 'clang', 'weapon', 'dagger', 'steel'],
+            door: ['creak', 'open', 'slam', 'knock', 'gate', 'entrance'],
+            rain: ['water', 'drip', 'storm', 'wet', 'shower', 'downpour'],
+            fire: ['flame', 'crackle', 'burn', 'torch', 'inferno', 'campfire', 'fireplace'],
+            wind: ['breeze', 'gust', 'howl', 'whoosh', 'blizzard', 'storm'],
+            walk: ['footstep', 'step', 'boots', 'footsteps', 'running', 'gravel'],
+            horse: ['gallop', 'hooves', 'neigh', 'whinny', 'trotting', 'cavalry'],
+            fight: ['battle', 'combat', 'clash', 'war', 'attack', 'strike', 'medieval'],
+            magic: ['spell', 'enchant', 'arcane', 'mystic', 'wizard', 'cast', 'potion', 'healing'],
+            monster: ['creature', 'beast', 'roar', 'growl', 'demon', 'zombie', 'dragon', 'troll', 'goblin'],
+            forest: ['trees', 'leaves', 'birds', 'nature', 'jungle', 'grove', 'branch', 'woodland'],
+            tavern: ['crowd', 'mug', 'inn', 'chatter', 'pub', 'bar', 'rowdy', 'drinking'],
+            ocean: ['waves', 'sea', 'water', 'shore', 'nautical', 'ship', 'harbor', 'sailing'],
+            night: ['crickets', 'owl', 'dark', 'nocturnal', 'midnight', 'evening'],
+            thunder: ['lightning', 'storm', 'rumble', 'electric', 'bolt'],
+            scream: ['shriek', 'yell', 'shout', 'cry', 'wail'],
+            ghost: ['phantom', 'spirit', 'haunt', 'spectral', 'eerie', 'spooky', 'whisper'],
+            explosion: ['blast', 'boom', 'detonate', 'cannon', 'impact'],
+            arrow: ['bow', 'shot', 'missile', 'projectile', 'quiver'],
+            dragon: ['wyrm', 'drake', 'serpent', 'beast', 'wings', 'roar', 'fire'],
+            castle: ['throne', 'royal', 'palace', 'tower', 'fortress', 'dungeon', 'portcullis'],
+            cave: ['dungeon', 'underground', 'drip', 'echo', 'cavern', 'crypt'],
+            dog: ['bark', 'howl', 'puppy', 'hound', 'growl', 'whimper'],
+            cat: ['meow', 'hiss', 'purr', 'feline', 'screech'],
+            bell: ['chime', 'ring', 'toll', 'ding', 'clock'],
+            laugh: ['giggle', 'chuckle', 'cackle', 'evil'],
+            death: ['dying', 'dead', 'funeral', 'grave', 'somber', 'dirge'],
+            heal: ['healing', 'cure', 'restore', 'holy', 'divine', 'blessing'],
+            pirate: ['ship', 'sea', 'shanty', 'swashbuckle', 'cannon', 'treasure'],
+            wolf: ['howl', 'growl', 'snarl', 'predator', 'pack'],
+            underwater: ['deep', 'submerge', 'bubbles', 'diving', 'depths'],
+            christmas: ['holiday', 'festive', 'winter', 'sleigh', 'carol', 'jingle'],
+            scary: ['horror', 'fright', 'terror', 'creepy', 'suspense', 'eerie']
         };
         
         // Expand tokens with synonyms
@@ -7873,6 +7924,10 @@ class Effexiq {
         if (playBtn) playBtn.addEventListener('click', () => this.scPlay());
         if (addCueBtn) addCueBtn.addEventListener('click', () => this.scAddCueRow());
 
+        // Read Aloud (standalone TTS)
+        const readAloudBtn = document.getElementById('scReadAloudBtn');
+        if (readAloudBtn) readAloudBtn.addEventListener('click', () => this.scReadAloud());
+
         // Generate Soundscape (batch mode)
         const soundscapeBtn = document.getElementById('scSoundscapeBtn');
         if (soundscapeBtn) soundscapeBtn.addEventListener('click', () => this.generateSoundscape());
@@ -7896,6 +7951,64 @@ class Effexiq {
         this._restoreDraft();
         // Migrate old WYO campaigns to SC stories (one-time)
         this._migrateWyoData();
+    }
+
+    /** Read Aloud — standalone TTS for the story text (no sound-effect orchestration). */
+    async scReadAloud() {
+        const textArea = document.getElementById('scTextArea');
+        const btn = document.getElementById('scReadAloudBtn');
+        const text = textArea?.value?.trim();
+        if (!text) { this.showToast('Write something first', 'warning'); return; }
+
+        // If already reading, stop
+        if (this._readAloudAudio) {
+            this._readAloudAudio.pause();
+            this._readAloudAudio = null;
+            if (this._readAloudUrl) URL.revokeObjectURL(this._readAloudUrl);
+            this._readAloudUrl = null;
+            if (btn) btn.textContent = 'Read Aloud (AI Voice)';
+            return;
+        }
+
+        if (btn) { btn.textContent = 'Generating...'; btn.disabled = true; }
+
+        try {
+            const backendUrl = typeof getBackendUrl === 'function' ? getBackendUrl() : '';
+            const ttsUrl = `${backendUrl}/api/tts`;
+            const chunks = this._splitTextForTTS(text, 5000);
+            const audioBlobs = [];
+
+            for (const chunk of chunks) {
+                const headers = { 'Content-Type': 'application/json' };
+                const tok = getAccessToken();
+                if (tok) headers['Authorization'] = `Bearer ${tok}`;
+                const resp = await fetch(ttsUrl, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify({ text: chunk }),
+                });
+                if (!resp.ok) throw new Error(`TTS ${resp.status}`);
+                audioBlobs.push(await resp.blob());
+            }
+
+            const blob = new Blob(audioBlobs, { type: 'audio/mpeg' });
+            this._readAloudUrl = URL.createObjectURL(blob);
+            this._readAloudAudio = new Audio(this._readAloudUrl);
+
+            this._readAloudAudio.addEventListener('ended', () => {
+                if (btn) btn.textContent = 'Read Aloud (AI Voice)';
+                URL.revokeObjectURL(this._readAloudUrl);
+                this._readAloudAudio = null;
+                this._readAloudUrl = null;
+            }, { once: true });
+
+            if (btn) { btn.textContent = 'Stop Reading'; btn.disabled = false; }
+            this._readAloudAudio.play();
+        } catch (e) {
+            console.error('[ReadAloud]', e);
+            this.showToast('Read Aloud failed — check your subscription', 'error');
+            if (btn) { btn.textContent = 'Read Aloud (AI Voice)'; btn.disabled = false; }
+        }
     }
 
     _migrateWyoData() {
