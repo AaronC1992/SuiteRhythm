@@ -8,6 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '../../../lib/supabase.js';
+import { requireAuth } from '../../../lib/api-auth.js';
 
 export async function GET() {
   try {
@@ -30,6 +31,10 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  // Auth check — only authenticated clients can create stories
+  const denied = requireAuth(request);
+  if (denied) return denied;
+
   try {
     const body = await request.json();
     const { title, theme, description, text } = body;

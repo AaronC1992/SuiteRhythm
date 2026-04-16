@@ -12,6 +12,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { MODE_CONTEXTS, MODE_RULES } from '../../../lib/modules/ai-director.js';
+import { requireAuth } from '../../../lib/api-auth.js';
 
 let _openai;
 function getOpenAI() {
@@ -160,6 +161,10 @@ function buildUserMessage(transcript, mode, context) {
 }
 
 export async function POST(request) {
+  // Auth check — reject unauthenticated requests before doing any work
+  const denied = requireAuth(request);
+  if (denied) return denied;
+
   if (!process.env.OPENAI_API_KEY) {
     return NextResponse.json({ error: 'OpenAI not configured' }, { status: 503 });
   }

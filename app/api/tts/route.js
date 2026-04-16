@@ -5,10 +5,16 @@
  * Returns: audio/mpeg stream
  */
 
+import { requireAuth } from '../../../lib/api-auth.js';
+
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const DEFAULT_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'PPzYpIqttlTYA83688JI';
 
 export async function POST(request) {
+    // Auth check
+    const denied = requireAuth(request);
+    if (denied) return denied;
+
     if (!ELEVENLABS_API_KEY) {
         return new Response(
             JSON.stringify({ error: 'ElevenLabs API key not configured' }),
