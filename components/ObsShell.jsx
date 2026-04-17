@@ -3,7 +3,7 @@
 /**
  * ObsShell — minimal transparent-background component for OBS Browser Source.
  *
- * Renders only the essential DOM elements that the Effexiq engine needs
+ * Renders only the essential DOM elements that the SuiteRhythm engine needs
  * (because it relies on getElementById), plus a visible "currently playing"
  * overlay. Background is transparent so OBS can composite it over a scene.
  */
@@ -22,7 +22,7 @@ export default function ObsShell() {
       if (typeof window !== 'undefined') {
         window.__OBS_MODE = true;
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
-        if (backendUrl) window.Effexiq_BACKEND_URL = backendUrl;
+        if (backendUrl) window.SuiteRhythm_BACKEND_URL = backendUrl;
         window.__R2_PUBLIC_URL = '/r2-audio';
       }
 
@@ -36,8 +36,8 @@ export default function ObsShell() {
       } catch (_) {}
 
       try {
-        const { default: Effexiq } = await import('../engine/Effexiq');
-        engineInstance = new Effexiq();
+        const { default: SuiteRhythm } = await import('../engine/SuiteRhythm');
+        engineInstance = new SuiteRhythm();
         window.gameInstance = engineInstance;
       } catch (e) {
         console.error('[ObsShell] Engine failed:', e);
@@ -100,7 +100,7 @@ export default function ObsShell() {
         maxWidth: 400,
         backdropFilter: 'blur(8px)',
       }}>
-        <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: 4 }}>EFFEXIQ LIVE</div>
+        <div style={{ fontSize: '0.75rem', opacity: 0.6, marginBottom: 4 }}>SUITERHYTHM LIVE</div>
         <div id="obsStatus" style={{ fontSize: '0.85rem', marginBottom: 8, opacity: 0.8 }}>
           Initializing...
         </div>

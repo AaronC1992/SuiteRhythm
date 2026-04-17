@@ -3,7 +3,7 @@
 import { Component } from 'react';
 
 /**
- * ErrorBoundary — catches runtime errors in the Effexiq engine or child
+ * ErrorBoundary — catches runtime errors in the SuiteRhythm engine or child
  * components and shows a recovery UI instead of a blank screen.
  */
 export default class ErrorBoundary extends Component {
@@ -44,7 +44,7 @@ export default class ErrorBoundary extends Component {
         >
           <h1 style={{ color: '#bb86fc', marginBottom: 12 }}>Something went wrong</h1>
           <p style={{ maxWidth: 480, marginBottom: 20, opacity: 0.8 }}>
-            The Effexiq engine encountered an error. This is usually temporary.
+            The SuiteRhythm engine encountered an error. This is usually temporary.
           </p>
           <pre
             style={{
@@ -72,7 +72,7 @@ export default class ErrorBoundary extends Component {
               cursor: 'pointer',
             }}
           >
-            Reload Effexiq
+            Reload SuiteRhythm
           </button>
         </div>
       );

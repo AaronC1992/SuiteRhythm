@@ -36,7 +36,7 @@ describe('ExternalBridge', () => {
             addEventListener: (t, cb) => { (listeners[t] ||= []).push(cb); },
             removeEventListener: (t, cb) => { listeners[t] = (listeners[t] || []).filter(x => x !== cb); },
             dispatchEvent: (e) => { (listeners[e.type] || []).forEach(cb => cb(e)); return true; },
-            Effexiq: undefined,
+            SuiteRhythm: undefined,
         };
         engine = makeEngine();
         bridge = new ExternalBridge(engine, { rateLimitMs: 0 });
@@ -48,8 +48,8 @@ describe('ExternalBridge', () => {
         globalThis.window = origWindow;
     });
 
-    it('exposes a trigger API on window.Effexiq', async () => {
-        const res = await window.Effexiq.trigger('thunder');
+    it('exposes a trigger API on window.SuiteRhythm', async () => {
+        const res = await window.SuiteRhythm.trigger('thunder');
         expect(res.ok).toBe(true);
         expect(res.soundId).toBe(1);
         expect(res.name).toBe('thunder');
@@ -57,7 +57,7 @@ describe('ExternalBridge', () => {
     });
 
     it('falls back to searchAudio for fuzzy queries', async () => {
-        await window.Effexiq.trigger('rolling thunder boom');
+        await window.SuiteRhythm.trigger('rolling thunder boom');
         expect(engine.calls.some(c => c[0] === 'search')).toBe(true);
     });
 
@@ -76,14 +76,14 @@ describe('ExternalBridge', () => {
     });
 
     it('dispatches via CustomEvent', async () => {
-        window.dispatchEvent({ type: 'effexiq:command', detail: { type: 'stopAll' } });
+        window.dispatchEvent({ type: 'suiterhythm:command', detail: { type: 'stopAll' } });
         // Allow the handler's async work to resolve.
         await Promise.resolve();
         expect(engine.calls.some(c => c[0] === 'stopAll')).toBe(true);
     });
 
     it('status() returns a snapshot', () => {
-        const s = window.Effexiq.status();
+        const s = window.SuiteRhythm.status();
         expect(s.mode).toBe('auto');
         expect(s.listening).toBe(true);
         expect(s.mood).toBe('tense');
@@ -102,7 +102,7 @@ describe('ExternalBridge', () => {
 
     it('uninstall removes window listeners', () => {
         bridge.uninstall();
-        window.dispatchEvent({ type: 'effexiq:command', detail: { type: 'stopAll' } });
+        window.dispatchEvent({ type: 'suiterhythm:command', detail: { type: 'stopAll' } });
         const before = engine.calls.length;
         expect(engine.calls.length).toBe(before); // no new calls
     });
@@ -126,7 +126,7 @@ describe('ExternalBridge postMessage channel', () => {
             },
             removeEventListener: (t, cb) => { listeners[t] = (listeners[t] || []).filter(x => x !== cb); },
             dispatchEvent: (e) => { (listeners[e.type] || []).forEach(cb => cb(e)); return true; },
-            Effexiq: undefined,
+            SuiteRhythm: undefined,
         };
         engine = makeEngine();
     });
@@ -143,7 +143,7 @@ describe('ExternalBridge postMessage channel', () => {
     it('accepts same-origin postMessage commands', async () => {
         bridge = new ExternalBridge(engine, { rateLimitMs: 0 });
         bridge.install();
-        postMessage({ effexiq: 'trigger', query: 'thunder' }, 'http://localhost');
+        postMessage({ suiterhythm: 'trigger', query: 'thunder' }, 'http://localhost');
         // Flush two microtask boundaries + a macrotask for the nested async
         // chain (handle → _cmdTrigger → engine.playAudio).
         await new Promise(r => setTimeout(r, 20));
@@ -153,7 +153,7 @@ describe('ExternalBridge postMessage channel', () => {
     it('rejects cross-origin postMessage by default', async () => {
         bridge = new ExternalBridge(engine, { rateLimitMs: 0 });
         bridge.install();
-        postMessage({ effexiq: 'stopAll' }, 'https://evil.example.com');
+        postMessage({ suiterhythm: 'stopAll' }, 'https://evil.example.com');
         await new Promise(r => setTimeout(r, 0));
         expect(engine.calls.some(c => c[0] === 'stopAll')).toBe(false);
     });
@@ -164,12 +164,12 @@ describe('ExternalBridge postMessage channel', () => {
             allowedOrigins: ['https://obs.local'],
         });
         bridge.install();
-        postMessage({ effexiq: 'stopAll' }, 'https://obs.local');
+        postMessage({ suiterhythm: 'stopAll' }, 'https://obs.local');
         await new Promise(r => setTimeout(r, 0));
         expect(engine.calls.some(c => c[0] === 'stopAll')).toBe(true);
     });
 
-    it('ignores messages without an effexiq field', async () => {
+    it('ignores messages without an suiterhythm field', async () => {
         bridge = new ExternalBridge(engine, { rateLimitMs: 0 });
         bridge.install();
         postMessage({ type: 'trigger', query: 'thunder' }, 'http://localhost');
@@ -183,7 +183,7 @@ describe('ExternalBridge postMessage channel', () => {
             allowedOrigins: ['*'],
         });
         bridge.install();
-        postMessage({ effexiq: 'stopAll' }, 'https://anywhere.example');
+        postMessage({ suiterhythm: 'stopAll' }, 'https://anywhere.example');
         await new Promise(r => setTimeout(r, 0));
         expect(engine.calls.some(c => c[0] === 'stopAll')).toBe(true);
     });
@@ -191,11 +191,11 @@ describe('ExternalBridge postMessage channel', () => {
 
 // Opt-in integration test against real Twitch IRC. Off by default so CI
 // never hits the network. Run with:
-//   EFFEXIQ_TWITCH_IT=1 EFFEXIQ_TWITCH_CHANNEL=<channel> npx vitest run
-const RUN_TWITCH_IT = process.env.EFFEXIQ_TWITCH_IT === '1';
+//   SUITERHYTHM_TWITCH_IT=1 SUITERHYTHM_TWITCH_CHANNEL=<channel> npx vitest run
+const RUN_TWITCH_IT = process.env.SUITERHYTHM_TWITCH_IT === '1';
 describe.runIf(RUN_TWITCH_IT)('ExternalBridge Twitch bridge (integration)', () => {
     it('connects anonymously and receives at least one line', async () => {
-        const channel = process.env.EFFEXIQ_TWITCH_CHANNEL || 'twitch';
+        const channel = process.env.SUITERHYTHM_TWITCH_CHANNEL || 'twitch';
         const origWindow = globalThis.window;
         const listeners = {};
         globalThis.window = {
@@ -203,7 +203,7 @@ describe.runIf(RUN_TWITCH_IT)('ExternalBridge Twitch bridge (integration)', () =
             addEventListener: (t, cb) => { (listeners[t] ||= []).push(cb); },
             removeEventListener: () => {},
             dispatchEvent: () => true,
-            Effexiq: undefined,
+            SuiteRhythm: undefined,
         };
 
         const bridge = new ExternalBridge(makeEngine(), { rateLimitMs: 0 });

@@ -1,4 +1,4 @@
-// ===== Effexiq - INTELLIGENT AUDIO COMPANION =====
+// ===== SuiteRhythm - INTELLIGENT AUDIO COMPANION =====
 // Author: Expert AI Team
 // Version: 3.0.0 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
 
@@ -20,7 +20,7 @@ import {
     appendCaption, vibrateStinger, applyColorblindPreference,
     applyPreloadNetworkBudget, scheduleBedtimeFadeOut, cancelBedtimeFadeOut,
     obsSceneToMode,
-} from '../lib/modules/effexiq-extras.js';
+} from '../lib/modules/suiterhythm-extras.js';
 import { installSidechainDuck } from '../lib/modules/sidechain-duck.js';
 import { TensionCurve } from '../lib/modules/tension-curve.js';
 import { PriorityBudget } from '../lib/modules/priority-budget.js';
@@ -89,13 +89,13 @@ const storage = {
 
 // ===== SUBSCRIPTION TOKEN MANAGEMENT =====
 function getAccessToken() {
-    try { return localStorage.getItem('Effexiq_token') || null; } catch (_) { return null; }
+    try { return localStorage.getItem('SuiteRhythm_token') || null; } catch (_) { return null; }
 }
 
 function setAccessToken(token) {
     try {
-        if (token) { localStorage.setItem('Effexiq_token', token); }
-        else { localStorage.removeItem('Effexiq_token'); }
+        if (token) { localStorage.setItem('SuiteRhythm_token', token); }
+        else { localStorage.removeItem('SuiteRhythm_token'); }
     } catch (_) {}
 }
 
@@ -141,7 +141,7 @@ function isIOSDevice() {
         || (ua.includes('Mac') && navigator.maxTouchPoints > 1);
 }
 
-class Effexiq {
+class SuiteRhythm {
     constructor() {
         // Backend Configuration
         this.backendUrl = this.getBackendUrl();
@@ -189,8 +189,8 @@ class Effexiq {
                 if (this.audioContext && this.audioContext.state !== 'closed') {
                     this.audioContext.close().catch(() => {});
                 }
-                if (window.__effexiqAudioCtx === this.audioContext) {
-                    window.__effexiqAudioCtx = null;
+                if (window.__suiterhythmAudioCtx === this.audioContext) {
+                    window.__suiterhythmAudioCtx = null;
                 }
             } catch (_) {}
         };
@@ -215,47 +215,47 @@ class Effexiq {
         this.analysisVersion = 0; // increment on mode changes to ignore stale AI results
         this.storyContext = ''; // User-provided story context for better AI understanding
         this.mutedCategories = new Set();
-        try { this.disabledSounds = new Set(JSON.parse(localStorage.getItem('Effexiq_disabled_sounds') || '[]')); } catch { this.disabledSounds = new Set(); }
+        try { this.disabledSounds = new Set(JSON.parse(localStorage.getItem('SuiteRhythm_disabled_sounds') || '[]')); } catch { this.disabledSounds = new Set(); }
         // Mood & sentiment tracking
         this.moodHistory = []; // Last N mood readings { primary, intensity, timestamp }
         this.currentMood = { primary: 'neutral', intensity: 0.5 };
-        this.sessionContext = localStorage.getItem('Effexiq_session_context') || '';
+        this.sessionContext = localStorage.getItem('SuiteRhythm_session_context') || '';
         // Dramatic beat detection
         this.lastSpeechTime = 0;
         this.dramaticPhrases = /^(and then|suddenly|just then|at that moment|but then|without warning|in an instant|from the shadows|out of nowhere)/i;
         // Custom recorded sounds
         try {
-            const raw = JSON.parse(localStorage.getItem('Effexiq_custom_sounds') || '[]');
+            const raw = JSON.parse(localStorage.getItem('SuiteRhythm_custom_sounds') || '[]');
             this.customSounds = Array.isArray(raw) ? raw.filter(s => s && typeof s.name === 'string') : [];
         } catch { this.customSounds = []; }
         // Sound history for playback feedback
         this.soundHistory = [];
     // Playback preferences
-    try { this.musicEnabled = JSON.parse(localStorage.getItem('Effexiq_music_enabled') ?? 'true'); } catch { this.musicEnabled = true; }
-    try { this.sfxEnabled = JSON.parse(localStorage.getItem('Effexiq_sfx_enabled') ?? 'true'); } catch { this.sfxEnabled = true; }
+    try { this.musicEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_music_enabled') ?? 'true'); } catch { this.musicEnabled = true; }
+    try { this.sfxEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_sfx_enabled') ?? 'true'); } catch { this.sfxEnabled = true; }
     // Mixer levels (user-controlled)
-    this.musicLevel = parseFloat(localStorage.getItem('Effexiq_music_level') ?? '0.5'); // default 50%
-    this.sfxLevel = parseFloat(localStorage.getItem('Effexiq_sfx_level') ?? '0.9');   // default 90%
-    this.ambientDurationMultiplier = parseFloat(localStorage.getItem('Effexiq_ambient_duration') ?? '1.0'); // 0.5x to 3x
-    try { this.ambienceEnabled = JSON.parse(localStorage.getItem('Effexiq_ambience_enabled') ?? 'true'); } catch { this.ambienceEnabled = true; }
+    this.musicLevel = parseFloat(localStorage.getItem('SuiteRhythm_music_level') ?? '0.5'); // default 50%
+    this.sfxLevel = parseFloat(localStorage.getItem('SuiteRhythm_sfx_level') ?? '0.9');   // default 90%
+    this.ambientDurationMultiplier = parseFloat(localStorage.getItem('SuiteRhythm_ambient_duration') ?? '1.0'); // 0.5x to 3x
+    try { this.ambienceEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_ambience_enabled') ?? 'true'); } catch { this.ambienceEnabled = true; }
     this.voiceIntensity = 0.5; // mic loudness ratio: ~0.4 quiet → ~1.5 shouting
     this._micAnalyser = null;  // AnalyserNode connected to mic (measurement only, no echo)
     this._startupSoundPlayed = false;
     this.currentMusicBase = 0.5; // last intensity-derived music gain (pre-user)
     // Mood & performance
-    this.moodBias = parseFloat(localStorage.getItem('Effexiq_mood_bias') ?? '0.5'); // 0..1
-    try { this.voiceDuckEnabled = JSON.parse(localStorage.getItem('Effexiq_voice_duck') ?? 'false'); } catch { this.voiceDuckEnabled = false; }
+    this.moodBias = parseFloat(localStorage.getItem('SuiteRhythm_mood_bias') ?? '0.5'); // 0..1
+    try { this.voiceDuckEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_voice_duck') ?? 'false'); } catch { this.voiceDuckEnabled = false; }
     this._voiceDuckActive = false; // true when voice duck is currently lowering music
-    try { this.lowLatencyMode = JSON.parse(localStorage.getItem('Effexiq_low_latency') ?? 'false'); } catch { this.lowLatencyMode = false; }
+    try { this.lowLatencyMode = JSON.parse(localStorage.getItem('SuiteRhythm_low_latency') ?? 'false'); } catch { this.lowLatencyMode = false; }
     this.preloadConcurrency = this.getPreloadConcurrency();
-    this.keywordCooldownMs = parseInt(localStorage.getItem('Effexiq_keyword_cooldown_ms') ?? '3000');
+    this.keywordCooldownMs = parseInt(localStorage.getItem('SuiteRhythm_keyword_cooldown_ms') ?? '3000');
     // Cross-session ambient restore is OPT-IN and only honors snapshots <2 min old.
     // Prevents the "sounds mysteriously playing from a previous session" bug where
     // a day-old snapshot would auto-play on page load.
-    try { this.restoreAmbientOnStart = JSON.parse(localStorage.getItem('Effexiq_restore_ambient_on_start') ?? 'false'); } catch { this.restoreAmbientOnStart = false; }
+    try { this.restoreAmbientOnStart = JSON.parse(localStorage.getItem('SuiteRhythm_restore_ambient_on_start') ?? 'false'); } catch { this.restoreAmbientOnStart = false; }
     this._sessionRestoreMaxAgeMs = 2 * 60 * 1000; // 2 minutes
     // Scene presets — lazy-init from defaults if not yet saved
-    try { this.scenePresets = JSON.parse(localStorage.getItem('Effexiq_scene_presets') ?? 'null') || null; } catch { this.scenePresets = null; }
+    try { this.scenePresets = JSON.parse(localStorage.getItem('SuiteRhythm_scene_presets') ?? 'null') || null; } catch { this.scenePresets = null; }
     // Control board listen mode (set after setupControlBoard)
     this.cbListenMode = false;
         
@@ -384,7 +384,7 @@ class Effexiq {
 
         // User-defined phrase triggers (persisted to localStorage)
         try {
-            this._customPhraseEntries = JSON.parse(localStorage.getItem('Effexiq_custom_phrases') || '[]');
+            this._customPhraseEntries = JSON.parse(localStorage.getItem('SuiteRhythm_custom_phrases') || '[]');
         } catch (_) {
             this._customPhraseEntries = [];
         }
@@ -451,15 +451,15 @@ class Effexiq {
         this._worldState = { location: null, weather: null, timeOfDay: null };
         this._reverbPreset = 'room';
         // --- Creator / live-streamer mode: shorter cooldowns, slightly lower confidence gate.
-        this.creatorMode = JSON.parse(localStorage.getItem('Effexiq_creator_mode') ?? 'false');
+        this.creatorMode = JSON.parse(localStorage.getItem('SuiteRhythm_creator_mode') ?? 'false');
 
         // ===== SING MODE STATE =====
         // Singer-focused: backing music only, no SFX, BPM detection, applause on song end.
         this.singState = 'idle';              // 'idle' | 'singing' | 'between_songs'
-        this.singApplauseEnabled = JSON.parse(localStorage.getItem('Effexiq_sing_applause') ?? 'true');
+        this.singApplauseEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_sing_applause') ?? 'true');
         // Live stage feel: occasional low-volume crowd cheers/whistles during sustained singing.
         // Off by default so quiet rehearsal is the baseline; users opt in when they want hype.
-        this.singStageFeelEnabled = JSON.parse(localStorage.getItem('Effexiq_sing_stage_feel') ?? 'false');
+        this.singStageFeelEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_sing_stage_feel') ?? 'false');
         this._singLastStageCueTs = 0;
         this.detectedBPM = null;              // rolling estimate while singing
         this._singOnsetTimes = [];            // timestamps of recent vocal-energy onsets (for BPM)
@@ -474,9 +474,9 @@ class Effexiq {
         this.savedSounds = { files: [] };
         // Instant trigger keywords for immediate sound effects
     // AI prediction (auto analysis + auto-playback); default ON
-    this.predictionEnabled = JSON.parse(localStorage.getItem('Effexiq_prediction_enabled') ?? 'true');
+    this.predictionEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_prediction_enabled') ?? 'true');
     // Story preferences
-    this.autoStartStoryListening = JSON.parse(localStorage.getItem('Effexiq_auto_start_story_listening') ?? 'false');
+    this.autoStartStoryListening = JSON.parse(localStorage.getItem('SuiteRhythm_auto_start_story_listening') ?? 'false');
             this.instantKeywords = {};
             this.instantKeywordCooldowns = new Map(); // keyword -> last trigger time
             // Will be populated by buildTriggerMap() after saved sounds load
@@ -639,7 +639,7 @@ class Effexiq {
                 this.instantKeywords = buildTriggerMap(this.savedSounds);
                 debugLog(`Built trigger map: ${Object.keys(this.instantKeywords).length} keywords`);
             }
-        } catch(e) { console.warn('[Effexiq] loadSavedSounds failed:', e.message); }
+        } catch(e) { console.warn('[SuiteRhythm] loadSavedSounds failed:', e.message); }
     }
 
     // ===== API KEY MANAGEMENT =====
@@ -2201,7 +2201,7 @@ class Effexiq {
         // Also persist to localStorage for previously-on restore.
         // Tagged with a timestamp so stale snapshots can be rejected on load.
         try {
-            localStorage.setItem('Effexiq_scene_bed_snapshot', JSON.stringify({
+            localStorage.setItem('SuiteRhythm_scene_bed_snapshot', JSON.stringify({
                 savedAt: Date.now(),
                 layers: snapshot,
             }));
@@ -2281,7 +2281,7 @@ class Effexiq {
     async _preloadForScene(sceneCategory) {
         if (sceneCategory === this._lastPreloadedScene) return;
         this._lastPreloadedScene = sceneCategory;
-        const bundle = Effexiq._scenePreloadBundles[sceneCategory];
+        const bundle = SuiteRhythm._scenePreloadBundles[sceneCategory];
         if (!bundle) return;
 
         debugLog(`Preloading sounds for scene: ${sceneCategory}`);
@@ -2350,13 +2350,13 @@ class Effexiq {
     // =====================================================================
     async _restorePreviousSessionAmbient() {
         try {
-            const raw = localStorage.getItem('Effexiq_scene_bed_snapshot');
+            const raw = localStorage.getItem('SuiteRhythm_scene_bed_snapshot');
             if (!raw) return;
 
             // Opt-in only. Default is OFF so sounds never auto-play on page load
             // without user intent.
             if (!this.restoreAmbientOnStart) {
-                localStorage.removeItem('Effexiq_scene_bed_snapshot');
+                localStorage.removeItem('SuiteRhythm_scene_bed_snapshot');
                 return;
             }
 
@@ -2374,7 +2374,7 @@ class Effexiq {
             // rejects day-old leftovers).
             const age = Date.now() - savedAt;
             if (!savedAt || age > this._sessionRestoreMaxAgeMs) {
-                localStorage.removeItem('Effexiq_scene_bed_snapshot');
+                localStorage.removeItem('SuiteRhythm_scene_bed_snapshot');
                 return;
             }
 
@@ -2568,7 +2568,7 @@ class Effexiq {
 
         // --- Contextual disambiguation ---
         // For ambiguous keywords, check surrounding words to pick the right sound
-        const overrides = Effexiq._contextOverrides[word];
+        const overrides = SuiteRhythm._contextOverrides[word];
         let queryOverride = null;
         if (overrides) {
             const nearby = this._getStoryContextWords(8, wordIdx);
@@ -2592,7 +2592,7 @@ class Effexiq {
         this._fadeOutStaleStorySfx(category);
 
         // Ambient cue words loop continuously until a scene change fades them
-        const isAmbient = Effexiq._ambientCueWords.has(word);
+        const isAmbient = SuiteRhythm._ambientCueWords.has(word);
         // Skip ambient sounds entirely if ambience is disabled
         if (isAmbient && !this.ambienceEnabled) return;
         const baseVol = isAmbient ? 0.45 : 0.7;
@@ -2827,11 +2827,11 @@ class Effexiq {
                 if (resp.ok) {
                     this.backendAvailable = true;
                     try { this.backendHealth = await resp.json(); } catch (_) { this.backendHealth = null; }
-                    debugLog('[Effexiq] Backend connected');
+                    debugLog('[SuiteRhythm] Backend connected');
                 }
             } catch (_) {
                 this.backendAvailable = false;
-                debugLog('[Effexiq] Backend not reachable');
+                debugLog('[SuiteRhythm] Backend not reachable');
             }
         }
 
@@ -2851,7 +2851,7 @@ class Effexiq {
                     const data = await resp.json();
                     setAccessToken(data.token);
                     this.accessToken = data.token;
-                    this.updateStatus('Subscription activated! Welcome to Effexiq.');
+                    this.updateStatus('Subscription activated! Welcome to SuiteRhythm.');
                     this.logActivity('Subscription activated', 'success');
                 } else {
                     const err = await resp.json().catch(() => ({}));
@@ -2982,7 +2982,7 @@ class Effexiq {
         const type = (document.getElementById('feedbackType')?.value || 'Feedback').trim();
         const subjectInput = (document.getElementById('feedbackSubject')?.value || '').trim();
         const message = (document.getElementById('feedbackText')?.value || '').trim();
-        const subject = subjectInput || `${type} - Effexiq`;
+        const subject = subjectInput || `${type} - SuiteRhythm`;
         
         // Gather minimal context
         const versionText = document.querySelector('.version')?.textContent || 'v1.x';
@@ -3021,7 +3021,7 @@ class Effexiq {
         const type = (document.getElementById('feedbackType')?.value || 'Feedback').trim();
         const subjectInput = (document.getElementById('feedbackSubject')?.value || '').trim();
         const message = (document.getElementById('feedbackText')?.value || '').trim();
-        const subject = subjectInput || `${type} - Effexiq`;
+        const subject = subjectInput || `${type} - SuiteRhythm`;
         const versionText = document.querySelector('.version')?.textContent || 'v1.x';
         const ctx = [
             `Mode: ${this.currentMode}`,
@@ -3047,7 +3047,7 @@ class Effexiq {
         const type = (document.getElementById('feedbackType')?.value || 'Feedback').trim();
         const subjectInput = (document.getElementById('feedbackSubject')?.value || '').trim();
         const message = (document.getElementById('feedbackText')?.value || '').trim();
-        const subject = subjectInput || `${type} - Effexiq`;
+        const subject = subjectInput || `${type} - SuiteRhythm`;
         const versionText = document.querySelector('.version')?.textContent || 'v1.x';
         const ctx = [
             `Mode: ${this.currentMode}`,
@@ -3118,7 +3118,7 @@ class Effexiq {
             setPixabayKey(pixabayKey);
             this.updateApiStatusIndicators();
             this.updateStatus('Audio source enabled: Pixabay');
-            alert('Pixabay API Key Saved!\n\nYou will now hear high-quality sounds when Effexiq analyzes your speech.');
+            alert('Pixabay API Key Saved!\n\nYou will now hear high-quality sounds when SuiteRhythm analyzes your speech.');
         } else {
             alert('Please enter a valid Pixabay API key (10+ characters).');
         }
@@ -3169,7 +3169,7 @@ class Effexiq {
             if (musicLevelValue) musicLevelValue.textContent = musicLevelSlider.value;
             musicLevelSlider.addEventListener('input', (e) => {
                 this.musicLevel = e.target.value / 100;
-                localStorage.setItem('Effexiq_music_level', String(this.musicLevel));
+                localStorage.setItem('SuiteRhythm_music_level', String(this.musicLevel));
                 if (musicLevelValue) musicLevelValue.textContent = e.target.value;
                 // Apply to current music (Howler or legacy Web Audio)
                 if (this.currentMusic && this.currentMusic._howl) {
@@ -3190,7 +3190,7 @@ class Effexiq {
             if (sfxLevelValue) sfxLevelValue.textContent = sfxLevelSlider.value;
             sfxLevelSlider.addEventListener('input', (e) => {
                 this.sfxLevel = e.target.value / 100;
-                localStorage.setItem('Effexiq_sfx_level', String(this.sfxLevel));
+                localStorage.setItem('SuiteRhythm_sfx_level', String(this.sfxLevel));
                 if (sfxLevelValue) sfxLevelValue.textContent = e.target.value;
                 // Update all active SFX (Howler or legacy)
                 this.activeSounds.forEach((soundObj) => {
@@ -3241,7 +3241,7 @@ class Effexiq {
             if (moodValue) moodValue.textContent = moodSlider.value;
             moodSlider.addEventListener('input', (e) => {
                 this.moodBias = e.target.value / 100;
-                localStorage.setItem('Effexiq_mood_bias', String(this.moodBias));
+                localStorage.setItem('SuiteRhythm_mood_bias', String(this.moodBias));
                 if (moodValue) moodValue.textContent = e.target.value;
             });
         }
@@ -3250,7 +3250,7 @@ class Effexiq {
             lowLatencyToggle.checked = !!this.lowLatencyMode;
             lowLatencyToggle.addEventListener('change', (e) => {
                 this.lowLatencyMode = e.target.checked;
-                localStorage.setItem('Effexiq_low_latency', JSON.stringify(this.lowLatencyMode));
+                localStorage.setItem('SuiteRhythm_low_latency', JSON.stringify(this.lowLatencyMode));
                 this.preloadConcurrency = this.getPreloadConcurrency();
                 
                 // Update analysis interval for low latency mode
@@ -3284,7 +3284,7 @@ class Effexiq {
             voiceDuckToggle.checked = !!this.voiceDuckEnabled;
             voiceDuckToggle.addEventListener('change', (e) => {
                 this.voiceDuckEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_voice_duck', JSON.stringify(this.voiceDuckEnabled));
+                localStorage.setItem('SuiteRhythm_voice_duck', JSON.stringify(this.voiceDuckEnabled));
                 if (!this.voiceDuckEnabled) this._restoreVoiceDuck();
                 this.updateStatus(`Voice Ducking ${this.voiceDuckEnabled ? 'enabled' : 'disabled'}`);
             });
@@ -3296,7 +3296,7 @@ class Effexiq {
             creatorModeToggle.checked = !!this.creatorMode;
             creatorModeToggle.addEventListener('change', (e) => {
                 this.creatorMode = e.target.checked;
-                localStorage.setItem('Effexiq_creator_mode', JSON.stringify(this.creatorMode));
+                localStorage.setItem('SuiteRhythm_creator_mode', JSON.stringify(this.creatorMode));
                 // Immediately re-apply cooldowns so the change takes effect now
                 try { this.adaptCooldownsToMood(); } catch (_) {}
                 this.updateStatus(`Live Streamer Mode ${this.creatorMode ? 'enabled' : 'disabled'}`);
@@ -3309,7 +3309,7 @@ class Effexiq {
             singApplauseToggle.checked = !!this.singApplauseEnabled;
             singApplauseToggle.addEventListener('change', (e) => {
                 this.singApplauseEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_sing_applause', JSON.stringify(this.singApplauseEnabled));
+                localStorage.setItem('SuiteRhythm_sing_applause', JSON.stringify(this.singApplauseEnabled));
             });
         }
 
@@ -3319,7 +3319,7 @@ class Effexiq {
             singStageFeelToggle.checked = !!this.singStageFeelEnabled;
             singStageFeelToggle.addEventListener('change', (e) => {
                 this.singStageFeelEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_sing_stage_feel', JSON.stringify(this.singStageFeelEnabled));
+                localStorage.setItem('SuiteRhythm_sing_stage_feel', JSON.stringify(this.singStageFeelEnabled));
                 // Reset cue timer so toggling on doesn't immediately fire.
                 this._singLastStageCueTs = Date.now();
                 this.updateStatus(`Live stage feel ${this.singStageFeelEnabled ? 'enabled' : 'disabled'}`);
@@ -3335,7 +3335,7 @@ class Effexiq {
             if (cooldownValue) cooldownValue.textContent = (this.keywordCooldownMs / 1000).toFixed(1) + 's';
             cooldownSlider.addEventListener('input', (e) => {
                 this.keywordCooldownMs = parseInt(e.target.value) * 1000;
-                localStorage.setItem('Effexiq_keyword_cooldown_ms', String(this.keywordCooldownMs));
+                localStorage.setItem('SuiteRhythm_keyword_cooldown_ms', String(this.keywordCooldownMs));
                 if (cooldownValue) cooldownValue.textContent = (this.keywordCooldownMs / 1000).toFixed(1) + 's';
             });
         }
@@ -3376,8 +3376,8 @@ class Effexiq {
         this._setupObsBridge();
 
         // ===== External-Controller Bridge =====
-        // Exposes a single command surface (window.Effexiq.trigger/stopAll/
-        // scene, 'effexiq:command' CustomEvents, postMessage, and optional
+        // Exposes a single command surface (window.SuiteRhythm.trigger/stopAll/
+        // scene, 'suiterhythm:command' CustomEvents, postMessage, and optional
         // Twitch chat !bang-commands) so Stream Deck / OBS browser source /
         // custom bookmarklets can drive the engine without reaching into it.
         try {
@@ -3482,7 +3482,7 @@ class Effexiq {
             toggleMusic.checked = !!this.musicEnabled;
             toggleMusic.addEventListener('change', (e) => {
                 this.musicEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_music_enabled', JSON.stringify(this.musicEnabled));
+                localStorage.setItem('SuiteRhythm_music_enabled', JSON.stringify(this.musicEnabled));
                 this.updateStatus(`Music ${this.musicEnabled ? 'enabled' : 'disabled'}`);
                 if (!this.musicEnabled && this.currentMusic) {
                     this.fadeOutAudio(this.currentMusic);
@@ -3499,7 +3499,7 @@ class Effexiq {
             toggleSfx.checked = !!this.sfxEnabled;
             toggleSfx.addEventListener('change', (e) => {
                 this.sfxEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_sfx_enabled', JSON.stringify(this.sfxEnabled));
+                localStorage.setItem('SuiteRhythm_sfx_enabled', JSON.stringify(this.sfxEnabled));
                 this.updateStatus(`Sound effects ${this.sfxEnabled ? 'enabled' : 'disabled'}`);
                 if (!this.sfxEnabled && this.activeSounds.size > 0) {
                     this.activeSounds.forEach((soundObj) => {
@@ -3515,7 +3515,7 @@ class Effexiq {
             togglePrediction.checked = !!this.predictionEnabled; // default ON unless previously disabled
             togglePrediction.addEventListener('change', (e) => {
                 this.predictionEnabled = e.target.checked;
-                localStorage.setItem('Effexiq_prediction_enabled', JSON.stringify(this.predictionEnabled));
+                localStorage.setItem('SuiteRhythm_prediction_enabled', JSON.stringify(this.predictionEnabled));
                 this.updateStatus(`AI predictions ${this.predictionEnabled ? 'enabled' : 'disabled'}`);
                 // Manage timers while listening
                 if (!this.predictionEnabled) {
@@ -3587,7 +3587,7 @@ class Effexiq {
             autoStartStoryToggle.checked = !!this.autoStartStoryListening;
             autoStartStoryToggle.addEventListener('change', (e) => {
                 this.autoStartStoryListening = e.target.checked;
-                localStorage.setItem('Effexiq_auto_start_story_listening', JSON.stringify(this.autoStartStoryListening));
+                localStorage.setItem('SuiteRhythm_auto_start_story_listening', JSON.stringify(this.autoStartStoryListening));
             });
         }
         // ESC to close story overlay
@@ -3759,7 +3759,7 @@ class Effexiq {
         } else {
             this.disabledSounds.add(id);
         }
-        localStorage.setItem('Effexiq_disabled_sounds', JSON.stringify([...this.disabledSounds]));
+        localStorage.setItem('SuiteRhythm_disabled_sounds', JSON.stringify([...this.disabledSounds]));
         this.renderSoundLibrary();
     }
 
@@ -3818,7 +3818,7 @@ class Effexiq {
                 e.stopPropagation();
                 const idx = parseInt(deleteBtn.dataset.idx);
                 this.customSounds.splice(idx, 1);
-                localStorage.setItem('Effexiq_custom_sounds', JSON.stringify(this.customSounds));
+                localStorage.setItem('SuiteRhythm_custom_sounds', JSON.stringify(this.customSounds));
                 this.renderCustomSounds();
                 return;
             }
@@ -3930,7 +3930,7 @@ class Effexiq {
                     created: Date.now()
                 };
                 this.customSounds.push(customSound);
-                localStorage.setItem('Effexiq_custom_sounds', JSON.stringify(this.customSounds));
+                localStorage.setItem('SuiteRhythm_custom_sounds', JSON.stringify(this.customSounds));
                 this.renderCustomSounds();
                 closeModal();
             };
@@ -4015,7 +4015,7 @@ class Effexiq {
                     created: Date.now()
                 };
                 this.customSounds.push(customSound);
-                localStorage.setItem('Effexiq_custom_sounds', JSON.stringify(this.customSounds));
+                localStorage.setItem('SuiteRhythm_custom_sounds', JSON.stringify(this.customSounds));
                 this.renderCustomSounds();
                 closeModal();
                 this.updateStatus(`Uploaded sound "${name}" saved`);
@@ -4171,7 +4171,7 @@ class Effexiq {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         // Expose so the root-layout GlobalAudioKill can close the graph on
         // tab close / bfcache restore even when the engine module is gone.
-        try { window.__effexiqAudioCtx = this.audioContext; } catch (_) {}
+        try { window.__suiterhythmAudioCtx = this.audioContext; } catch (_) {}
         
         // Create gain nodes for mixing and ducking
         this.masterGainNode = this.audioContext.createGain();
@@ -5011,13 +5011,13 @@ class Effexiq {
         const idx = this._customPhraseEntries.findIndex(e => e.query === entry.query);
         if (idx !== -1) this._customPhraseEntries[idx] = entry;
         else this._customPhraseEntries.push(entry);
-        localStorage.setItem('Effexiq_custom_phrases', JSON.stringify(this._customPhraseEntries));
+        localStorage.setItem('SuiteRhythm_custom_phrases', JSON.stringify(this._customPhraseEntries));
     }
 
     // Remove a custom phrase trigger by query string.
     removeCustomPhrase(query) {
         this._customPhraseEntries = (this._customPhraseEntries || []).filter(e => e.query !== String(query));
-        localStorage.setItem('Effexiq_custom_phrases', JSON.stringify(this._customPhraseEntries));
+        localStorage.setItem('SuiteRhythm_custom_phrases', JSON.stringify(this._customPhraseEntries));
     }
 
     // Return a copy of all user-defined phrase entries.
@@ -7738,7 +7738,7 @@ class Effexiq {
         }
         if (/\bquieter music\b|\bturn (the )?music down\b/.test(t)) {
             this.musicLevel = Math.max(0, this.musicLevel - 0.1);
-            localStorage.setItem('Effexiq_music_level', String(this.musicLevel));
+            localStorage.setItem('SuiteRhythm_music_level', String(this.musicLevel));
             say(`Music level: ${Math.round(this.musicLevel*100)}%`);
             const target = this.getMusicTargetGain();
             if (this.currentMusic?._howl) { try { this.currentMusic._howl.volume(target); } catch(_){} }
@@ -7750,7 +7750,7 @@ class Effexiq {
         }
         if (/\blouder music\b|\bturn (the )?music up\b/.test(t)) {
             this.musicLevel = Math.min(1, this.musicLevel + 0.1);
-            localStorage.setItem('Effexiq_music_level', String(this.musicLevel));
+            localStorage.setItem('SuiteRhythm_music_level', String(this.musicLevel));
             say(`Music level: ${Math.round(this.musicLevel*100)}%`);
             const target = this.getMusicTargetGain();
             if (this.currentMusic?._howl) { try { this.currentMusic._howl.volume(target); } catch(_){} }
@@ -7760,27 +7760,27 @@ class Effexiq {
         // SFX volume commands
         if (/\blouder (sound effects|sfx|effects)\b|\bturn (the )?(sfx|effects) up\b/.test(t)) {
             this.sfxLevel = Math.min(1, this.sfxLevel + 0.1);
-            localStorage.setItem('Effexiq_sfx_level', String(this.sfxLevel));
+            localStorage.setItem('SuiteRhythm_sfx_level', String(this.sfxLevel));
             say(`SFX level: ${Math.round(this.sfxLevel*100)}%`);
             handled = true;
         }
         if (/\bquieter (sound effects|sfx|effects)\b|\bturn (the )?(sfx|effects) down\b/.test(t)) {
             this.sfxLevel = Math.max(0, this.sfxLevel - 0.1);
-            localStorage.setItem('Effexiq_sfx_level', String(this.sfxLevel));
+            localStorage.setItem('SuiteRhythm_sfx_level', String(this.sfxLevel));
             say(`SFX level: ${Math.round(this.sfxLevel*100)}%`);
             handled = true;
         }
         if (/\bmute sfx\b|\bmute sound effects\b/.test(t)) {
-            this.sfxEnabled = false; localStorage.setItem('Effexiq_sfx_enabled', 'false'); say('Sound effects muted'); handled = true;
+            this.sfxEnabled = false; localStorage.setItem('SuiteRhythm_sfx_enabled', 'false'); say('Sound effects muted'); handled = true;
         }
         if (/\bunmute sfx\b|\bunmute sound effects\b/.test(t)) {
-            this.sfxEnabled = true; localStorage.setItem('Effexiq_sfx_enabled', 'true'); say('Sound effects unmuted'); handled = true;
+            this.sfxEnabled = true; localStorage.setItem('SuiteRhythm_sfx_enabled', 'true'); say('Sound effects unmuted'); handled = true;
         }
         if (/\bmute music\b/.test(t)) {
-            this.musicEnabled = false; localStorage.setItem('Effexiq_music_enabled', 'false'); if (this.currentMusic) this.fadeOutAudio(this.currentMusic, 250); say('Music muted'); handled = true;
+            this.musicEnabled = false; localStorage.setItem('SuiteRhythm_music_enabled', 'false'); if (this.currentMusic) this.fadeOutAudio(this.currentMusic, 250); say('Music muted'); handled = true;
         }
         if (/\bunmute music\b/.test(t)) {
-            this.musicEnabled = true; localStorage.setItem('Effexiq_music_enabled', 'true'); say('Music unmuted'); handled = true;
+            this.musicEnabled = true; localStorage.setItem('SuiteRhythm_music_enabled', 'true'); say('Music unmuted'); handled = true;
         }
         // Replay last sound
         if (/\b(play (that |it )?(again|once more)|(repeat|replay) (that |the )?(last |that )?(sound|effect)?s?)\b/.test(t)) {
@@ -8163,7 +8163,7 @@ class Effexiq {
             sfxToggle.checked = this.sfxEnabled;
             sfxToggle.addEventListener('change', () => {
                 this.sfxEnabled = sfxToggle.checked;
-                localStorage.setItem('Effexiq_sfx_enabled', JSON.stringify(this.sfxEnabled));
+                localStorage.setItem('SuiteRhythm_sfx_enabled', JSON.stringify(this.sfxEnabled));
                 if (!this.sfxEnabled) {
                     // Stop all active SFX
                     this.activeSounds.forEach((snd, id) => {
@@ -8184,7 +8184,7 @@ class Effexiq {
             musicToggle.checked = this.musicEnabled;
             musicToggle.addEventListener('change', () => {
                 this.musicEnabled = musicToggle.checked;
-                localStorage.setItem('Effexiq_music_enabled', JSON.stringify(this.musicEnabled));
+                localStorage.setItem('SuiteRhythm_music_enabled', JSON.stringify(this.musicEnabled));
                 if (!this.musicEnabled && this.currentMusic && this.currentMusic._howl) {
                     this.currentMusic._howl.fade(this.currentMusic._howl.volume(), 0, 500);
                     setTimeout(() => {
@@ -8202,7 +8202,7 @@ class Effexiq {
             ambienceToggle.checked = this.ambienceEnabled;
             ambienceToggle.addEventListener('change', () => {
                 this.ambienceEnabled = ambienceToggle.checked;
-                localStorage.setItem('Effexiq_ambience_enabled', JSON.stringify(this.ambienceEnabled));
+                localStorage.setItem('SuiteRhythm_ambience_enabled', JSON.stringify(this.ambienceEnabled));
                 if (!this.ambienceEnabled) {
                     // Stop ambient bed
                     if (this.ambientBed && this.ambientBed._howl) {
@@ -8229,7 +8229,7 @@ class Effexiq {
             if (ambientDurValue) ambientDurValue.textContent = this.ambientDurationMultiplier.toFixed(1) + 'x';
             ambientDurSlider.addEventListener('input', (e) => {
                 this.ambientDurationMultiplier = parseInt(e.target.value) / 100;
-                localStorage.setItem('Effexiq_ambient_duration', String(this.ambientDurationMultiplier));
+                localStorage.setItem('SuiteRhythm_ambient_duration', String(this.ambientDurationMultiplier));
                 if (ambientDurValue) ambientDurValue.textContent = this.ambientDurationMultiplier.toFixed(1) + 'x';
             });
         }
@@ -8344,14 +8344,14 @@ class Effexiq {
 
         if (parent === 'storySection') {
             if (title) title.textContent = 'Create Your Story';
-            if (intro) intro.textContent = 'Write your stories and play them with Effexiq\'s real-time sound engine.';
+            if (intro) intro.textContent = 'Write your stories and play them with SuiteRhythm\'s real-time sound engine.';
             if (savedTitle) savedTitle.textContent = 'Your Stories';
             if (titleInput) titleInput.placeholder = 'Story Title...';
             if (textArea) textArea.placeholder = 'Write your story here...\n\nThe rain tapped against the window as she opened the old letter...';
             if (playBtn) playBtn.textContent = 'Play Story';
         } else {
             if (title) title.textContent = 'Create Your Campaign';
-            if (intro) intro.textContent = 'Write your campaigns and play them with Effexiq\'s real-time sound engine.';
+            if (intro) intro.textContent = 'Write your campaigns and play them with SuiteRhythm\'s real-time sound engine.';
             if (savedTitle) savedTitle.textContent = 'Your Campaigns';
             if (titleInput) titleInput.placeholder = 'Campaign Title...';
             if (textArea) textArea.placeholder = 'Write your campaign here...\n\nThe adventurers gathered at the tavern as thunder rolled across the darkened sky...';
@@ -8411,7 +8411,7 @@ class Effexiq {
 
         // Only show user-created stories from localStorage
         try {
-            const userStories = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+            const userStories = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
             for (let i = 0; i < userStories.length; i++) {
                 const s = userStories[i];
                 if (!s.title || !s.text) continue;
@@ -8428,7 +8428,7 @@ class Effexiq {
                 this._addStoryCard(container, userStoryId, s.title, s.text, i);
             }
         } catch (e) {
-            console.warn('[Effexiq] Failed to load user stories:', e);
+            console.warn('[SuiteRhythm] Failed to load user stories:', e);
         }
 
         if (container.children.length === 0) {
@@ -8453,7 +8453,7 @@ class Effexiq {
         // Edit: load story into editor
         card.querySelector('.story-card-edit').addEventListener('click', (e) => {
             e.stopPropagation();
-            const saved = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+            const saved = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
             const s = saved[storageIndex];
             if (!s) return;
             document.getElementById('scTitleInput').value = s.title;
@@ -8471,9 +8471,9 @@ class Effexiq {
         card.querySelector('.story-card-delete').addEventListener('click', (e) => {
             e.stopPropagation();
             if (!confirm(`Delete "${title}"?`)) return;
-            const saved = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+            const saved = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
             saved.splice(storageIndex, 1);
-            localStorage.setItem('Effexiq_sc_stories', JSON.stringify(saved));
+            localStorage.setItem('SuiteRhythm_sc_stories', JSON.stringify(saved));
             this.populateStoriesSection();
         });
         container.appendChild(card);
@@ -8495,13 +8495,13 @@ class Effexiq {
         const draft = {};
         if (scTitle || scText) draft.sc = { title: scTitle, text: scText };
         if (Object.keys(draft).length > 0) {
-            localStorage.setItem('Effexiq_draft', JSON.stringify(draft));
+            localStorage.setItem('SuiteRhythm_draft', JSON.stringify(draft));
         }
     }
 
     _restoreDraft() {
         try {
-            const draft = JSON.parse(localStorage.getItem('Effexiq_draft') || '{}');
+            const draft = JSON.parse(localStorage.getItem('SuiteRhythm_draft') || '{}');
             if (draft.sc) {
                 const scTitle = document.getElementById('scTitleInput');
                 const scText = document.getElementById('scTextArea');
@@ -8515,12 +8515,12 @@ class Effexiq {
 
     _clearDraft(section) {
         try {
-            const draft = JSON.parse(localStorage.getItem('Effexiq_draft') || '{}');
+            const draft = JSON.parse(localStorage.getItem('SuiteRhythm_draft') || '{}');
             delete draft[section];
             if (Object.keys(draft).length === 0) {
-                localStorage.removeItem('Effexiq_draft');
+                localStorage.removeItem('SuiteRhythm_draft');
             } else {
-                localStorage.setItem('Effexiq_draft', JSON.stringify(draft));
+                localStorage.setItem('SuiteRhythm_draft', JSON.stringify(draft));
             }
         } catch (_) {}
     }
@@ -8711,7 +8711,7 @@ class Effexiq {
                     this.storyContext = contextInput ? contextInput.value.trim() : '';
                     // Persist as session context for AI prompt
                     this.sessionContext = this.storyContext;
-                    localStorage.setItem('Effexiq_session_context', this.sessionContext);
+                    localStorage.setItem('SuiteRhythm_session_context', this.sessionContext);
                     if (!this.currentMode) this.selectMode('auto');
                     this.startListeningWithContext().catch(e => debugLog('Listen start failed:', e.message));
                     return;
@@ -8983,17 +8983,17 @@ class Effexiq {
 
     _migrateWyoData() {
         try {
-            const old = localStorage.getItem('Effexiq_wyo_campaigns');
+            const old = localStorage.getItem('SuiteRhythm_wyo_campaigns');
             if (!old) return;
             const campaigns = JSON.parse(old);
-            if (!Array.isArray(campaigns) || campaigns.length === 0) { localStorage.removeItem('Effexiq_wyo_campaigns'); return; }
-            const existing = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+            if (!Array.isArray(campaigns) || campaigns.length === 0) { localStorage.removeItem('SuiteRhythm_wyo_campaigns'); return; }
+            const existing = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
             const existingTitles = new Set(existing.map(s => s.title));
             for (const c of campaigns) {
                 if (!existingTitles.has(c.title)) existing.push(c);
             }
-            localStorage.setItem('Effexiq_sc_stories', JSON.stringify(existing));
-            localStorage.removeItem('Effexiq_wyo_campaigns');
+            localStorage.setItem('SuiteRhythm_sc_stories', JSON.stringify(existing));
+            localStorage.removeItem('SuiteRhythm_wyo_campaigns');
         } catch (_) {}
     }
 
@@ -9002,11 +9002,11 @@ class Effexiq {
         const text = (document.getElementById('scTextArea')?.value || '').trim();
         if (!title || !text) { alert('Please enter a title and story text.'); return; }
         const cues = this.scGetCues();
-        const saved = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+        const saved = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
         const idx = saved.findIndex(s => s.title === title);
         const entry = { title, text, cues, savedAt: Date.now() };
         if (idx >= 0) saved[idx] = entry; else saved.push(entry);
-        localStorage.setItem('Effexiq_sc_stories', JSON.stringify(saved));
+        localStorage.setItem('SuiteRhythm_sc_stories', JSON.stringify(saved));
         this._clearDraft('sc');
         alert('Story saved!');
         this.populateStoriesSection();
@@ -9017,7 +9017,7 @@ class Effexiq {
         if (!listEl) return;
         if (!listEl.classList.contains('hidden')) { listEl.classList.add('hidden'); return; }
         const items = document.getElementById('scSavedItems');
-        const saved = JSON.parse(localStorage.getItem('Effexiq_sc_stories') || '[]');
+        const saved = JSON.parse(localStorage.getItem('SuiteRhythm_sc_stories') || '[]');
         items.innerHTML = '';
         if (saved.length === 0) {
             items.innerHTML = '<p class="info-text">No saved campaigns yet.</p>';
@@ -9040,7 +9040,7 @@ class Effexiq {
                 delBtn.setAttribute('aria-label', `Delete story: ${s.title}`);
                 delBtn.addEventListener('click', () => {
                     saved.splice(i, 1);
-                    localStorage.setItem('Effexiq_sc_stories', JSON.stringify(saved));
+                    localStorage.setItem('SuiteRhythm_sc_stories', JSON.stringify(saved));
                     this.scToggleSaved();
                 });
                 row.appendChild(titleSpan);
@@ -9102,8 +9102,8 @@ class Effexiq {
                     if (cw) contextWords.add(cw);
                 }
                 let query = null;
-                if (Effexiq._contextOverrides && Effexiq._contextOverrides[normalized]) {
-                    for (const rule of Effexiq._contextOverrides[normalized]) {
+                if (SuiteRhythm._contextOverrides && SuiteRhythm._contextOverrides[normalized]) {
+                    for (const rule of SuiteRhythm._contextOverrides[normalized]) {
                         for (const ctxWord of rule.context) {
                             if (contextWords.has(ctxWord)) {
                                 query = rule.query;
@@ -9222,12 +9222,12 @@ class Effexiq {
     }
 
     _saveScenePresets() {
-        localStorage.setItem('Effexiq_scene_presets', JSON.stringify(this.scenePresets));
+        localStorage.setItem('SuiteRhythm_scene_presets', JSON.stringify(this.scenePresets));
     }
 
     applyScenePreset(preset) {
         this.moodBias = preset.moodBias;
-        localStorage.setItem('Effexiq_mood_bias', String(this.moodBias));
+        localStorage.setItem('SuiteRhythm_mood_bias', String(this.moodBias));
         const moodSlider = document.getElementById('moodBias');
         const moodValue = document.getElementById('moodBiasValue');
         if (moodSlider) moodSlider.value = Math.round(preset.moodBias * 100);
@@ -9363,7 +9363,7 @@ class Effexiq {
     // ===== CONTROL BOARD (Soundboard) =====
     setupControlBoard() {
         // Initialize tab structure (migrate legacy flat board data if present)
-        const savedTabs = JSON.parse(localStorage.getItem('Effexiq_cb_tabs') || 'null');
+        const savedTabs = JSON.parse(localStorage.getItem('SuiteRhythm_cb_tabs') || 'null');
         if (savedTabs && Array.isArray(savedTabs) && savedTabs.length > 0) {
             this.cbTabs = savedTabs.map(t => ({
                 id: t.id || 'tab_' + Date.now(),
@@ -9382,7 +9382,7 @@ class Effexiq {
 
         this.cbDragging = null;
         this.cbResizing = null;
-        this.cbRecentSounds = JSON.parse(localStorage.getItem('Effexiq_cb_recent') || '[]');
+        this.cbRecentSounds = JSON.parse(localStorage.getItem('SuiteRhythm_cb_recent') || '[]');
         this.cbUndoStack = [];
 
         const addBtn = document.getElementById('cbAddBtn');
@@ -9549,7 +9549,7 @@ class Effexiq {
             id: t.id, name: t.name,
             buttons: t.buttons.map(b => ({ label: b.label, type: b.type, file: b.file, name: b.name, group: b.group || '', x: b.x, y: b.y, w: b.w, h: b.h }))
         }));
-        localStorage.setItem('Effexiq_cb_tabs', JSON.stringify(data));
+        localStorage.setItem('SuiteRhythm_cb_tabs', JSON.stringify(data));
     }
 
     cbToggleListenMode() {
@@ -9681,7 +9681,7 @@ class Effexiq {
         this.cbRecentSounds = this.cbRecentSounds.filter(r => r.file !== file);
         this.cbRecentSounds.unshift({ name: label, file, type });
         if (this.cbRecentSounds.length > 10) this.cbRecentSounds.length = 10;
-        localStorage.setItem('Effexiq_cb_recent', JSON.stringify(this.cbRecentSounds));
+        localStorage.setItem('SuiteRhythm_cb_recent', JSON.stringify(this.cbRecentSounds));
 
         const modal = document.getElementById('cbAddModal');
         if (modal) modal.classList.add('hidden');
@@ -9875,7 +9875,7 @@ class Effexiq {
     cbSaveBoard() {
         const name = prompt('Enter a name for this soundboard:');
         if (!name) return;
-        const boards = JSON.parse(localStorage.getItem('Effexiq_cb_boards') || '[]');
+        const boards = JSON.parse(localStorage.getItem('SuiteRhythm_cb_boards') || '[]');
         const tabs = this.cbTabs.map(t => ({
             id: t.id, name: t.name,
             buttons: t.buttons.map(b => ({ label: b.label, type: b.type, file: b.file, name: b.name, group: b.group || '', x: b.x, y: b.y, w: b.w, h: b.h }))
@@ -9883,7 +9883,7 @@ class Effexiq {
         const idx = boards.findIndex(b => b.name === name);
         const entry = { name, tabs, savedAt: Date.now() };
         if (idx >= 0) boards[idx] = entry; else boards.push(entry);
-        localStorage.setItem('Effexiq_cb_boards', JSON.stringify(boards));
+        localStorage.setItem('SuiteRhythm_cb_boards', JSON.stringify(boards));
         alert('Soundboard saved!');
     }
 
@@ -9891,7 +9891,7 @@ class Effexiq {
         const modal = document.getElementById('cbLoadModal');
         const container = document.getElementById('cbSavedBoards');
         if (!modal || !container) return;
-        const boards = JSON.parse(localStorage.getItem('Effexiq_cb_boards') || '[]');
+        const boards = JSON.parse(localStorage.getItem('SuiteRhythm_cb_boards') || '[]');
         container.innerHTML = '';
         if (boards.length === 0) {
             container.innerHTML = '<p class="info-text">No saved soundboards.</p>';
@@ -9909,7 +9909,7 @@ class Effexiq {
                 delBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     boards.splice(i, 1);
-                    localStorage.setItem('Effexiq_cb_boards', JSON.stringify(boards));
+                    localStorage.setItem('SuiteRhythm_cb_boards', JSON.stringify(boards));
                     this.cbShowLoadModal();
                 });
                 row.appendChild(delBtn);
@@ -10046,7 +10046,7 @@ class Effexiq {
             if (!recBlob) return;
             const a = document.createElement('a');
             a.href = URL.createObjectURL(recBlob);
-            a.download = `effexiq-session-${new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-')}.webm`;
+            a.download = `suiterhythm-session-${new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-')}.webm`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -10058,7 +10058,7 @@ class Effexiq {
                 if (!blob) return;
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = `effexiq-${suffix}-${ts}.webm`;
+                a.download = `suiterhythm-${suffix}-${ts}.webm`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -10375,7 +10375,7 @@ class Effexiq {
         }
     }
 
-    // ===== PUBLIC: extras API (wired to effexiq-extras.js) =====
+    // ===== PUBLIC: extras API (wired to suiterhythm-extras.js) =====
 
     /** Revert the most recent music swap (no-op if none remembered). */
     undoLastMusic() {
@@ -10501,9 +10501,9 @@ class Effexiq {
                 window.removeEventListener('pageshow', this._pageShowHandler);
             }
 
-            debugLog('Effexiq destroyed');
+            debugLog('SuiteRhythm destroyed');
         } catch (e) {
-            console.warn('[Effexiq] Cleanup error:', e);
+            console.warn('[SuiteRhythm] Cleanup error:', e);
         }
     }
 
@@ -10658,6 +10658,6 @@ function initializeMenuToggles() {
 
 // ===== EXPORTS FOR NEXT.JS =====
 // Auto-initialization via DOMContentLoaded is replaced by explicit init in AppShell.jsx useEffect.
-// Call initEffexiq() after the React component has mounted and the DOM is ready.
+// Call initSuiteRhythm() after the React component has mounted and the DOM is ready.
 export { initializeMenuToggles };
-export default Effexiq;
+export default SuiteRhythm;

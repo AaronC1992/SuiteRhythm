@@ -27,7 +27,7 @@ function sseEncoder() {
     return (event, data) => encoder.encode(`event: ${event}\ndata: ${typeof data === 'string' ? data : JSON.stringify(data)}\n\n`);
 }
 
-const BASE_SYSTEM = `You are Effexiq, a streaming sound director. Emit valid JSON only, matching the shape used by /api/analyze. Be concise.`;
+const BASE_SYSTEM = `You are SuiteRhythm, a streaming sound director. Emit valid JSON only, matching the shape used by /api/analyze. Be concise.`;
 
 export async function POST(request) {
     const denied = requireAuth(request);

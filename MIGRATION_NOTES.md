@@ -1,11 +1,11 @@
-# Effexiq — Next.js Migration Notes
+# SuiteRhythm — Next.js Migration Notes
 
 ## What Was Moved
 
 | Original file/folder | New location | Change |
 |---|---|---|
 | `index.html` | `components/AppShell.jsx` + `components/sections/` + `components/modals/` | Converted HTML to JSX, split into React components |
-| `game.js` | `engine/Effexiq.js` | Updated import paths; exports class instead of auto-initializing |
+| `game.js` | `engine/SuiteRhythm.js` | Updated import paths; exports class instead of auto-initializing |
 | `api.js` | `lib/api.js` | Fixed relative URL `saved-sounds.json` → `/saved-sounds.json` |
 | `config.js` | `lib/config.js` | No changes needed |
 | `integration.js` | `lib/integration.js` | No changes needed (paths were already relative) |
@@ -24,11 +24,11 @@
 
 ### Architecture
 
-**Engine initialization**: `game.js` previously auto-initialized via `DOMContentLoaded`. In Next.js, the `Effexiq` class is exported and instantiated inside a `useEffect` in `AppShell.jsx` after the React component has mounted. This preserves the same timing (DOM is ready before the engine runs).
+**Engine initialization**: `game.js` previously auto-initialized via `DOMContentLoaded`. In Next.js, the `SuiteRhythm` class is exported and instantiated inside a `useEffect` in `AppShell.jsx` after the React component has mounted. This preserves the same timing (DOM is ready before the engine runs).
 
 **Dynamic import with `ssr: false`**: `AppShell` is loaded via `next/dynamic` with `ssr: false` on the dashboard page. This prevents the audio engine (which uses `window.AudioContext`, `SpeechRecognition`, `localStorage`, `Howler`) from executing on the server during SSR.
 
-**Howler.js**: Was loaded from CDN (`<script src="howler.min.js">`). Now installed as an npm package (`howler@2.2.4`) and imported at the top of `engine/Effexiq.js` via `import { Howl } from 'howler'`.
+**Howler.js**: Was loaded from CDN (`<script src="howler.min.js">`). Now installed as an npm package (`howler@2.2.4`) and imported at the top of `engine/SuiteRhythm.js` via `import { Howl } from 'howler'`.
 
 **CSS**: All styles moved to `app/globals.css` and automatically applied globally by the root layout. No CSS Modules were introduced — the existing class-based system works fine as-is.
 
@@ -37,11 +37,11 @@
 **Module resolution**: All JS modules now use relative paths correctly:
 - `lib/modules/*.js` import `from '../config.js'` → resolves to `lib/config.js` ✓
 - `lib/integration.js` imports `from './config.js'` → resolves to `lib/config.js` ✓
-- `engine/Effexiq.js` imports updated from `./config.js` → `../lib/config.js` ✓
+- `engine/SuiteRhythm.js` imports updated from `./config.js` → `../lib/config.js` ✓
 
 ### React component decisions
 
-The UI was split into React components for code organization, but **the Effexiq engine still manages all UI state via direct DOM manipulation**. React components render the HTML scaffold; the engine wires up all event listeners and mutations via `getElementById` / `classList` / `innerHTML`. This is intentional — the engine is 7,000+ lines of tightly coupled DOM code that cannot be safely "React-ified" in a single migration without a full rewrite.
+The UI was split into React components for code organization, but **the SuiteRhythm engine still manages all UI state via direct DOM manipulation**. React components render the HTML scaffold; the engine wires up all event listeners and mutations via `getElementById` / `classList` / `innerHTML`. This is intentional — the engine is 7,000+ lines of tightly coupled DOM code that cannot be safely "React-ified" in a single migration without a full rewrite.
 
 All sections are **always rendered** in the DOM (hidden via the CSS `hidden` class), matching the original HTML behavior. The engine shows/hides sections by toggling that class.
 
@@ -106,7 +106,7 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 ## Running Locally
 
 ```bash
-cd Effexiq-next
+cd SuiteRhythm-next
 cp .env.example .env.local   # or create manually
 npm run dev
 # → http://localhost:3000/dashboard
@@ -136,11 +136,11 @@ vercel --prod
 
 ## Batch 3 — Deep Module Wiring
 
-Five standalone modules that previously existed as unused/under-used scaffolding are now wired into the hot path of `engine/Effexiq.js`. This is the "class split" from the original roadmap, reframed: instead of a risky multi-file split of the 9.7k-line class, each module now owns one concern inside the engine.
+Five standalone modules that previously existed as unused/under-used scaffolding are now wired into the hot path of `engine/SuiteRhythm.js`. This is the "class split" from the original roadmap, reframed: instead of a risky multi-file split of the 9.7k-line class, each module now owns one concern inside the engine.
 
 ### What each module now drives
 
-| Module | New behavior inside `Effexiq` |
+| Module | New behavior inside `SuiteRhythm` |
 |---|---|
 | `priority-budget.js` | Every `playSFXBuffer` and `playBufferDirect` cue now reserves a slot via `priorityBudget.add()` and releases it on `onend`. Stinger cues can evict the oldest ambient/sfx cue with a 200ms fade instead of layering on top. SFX-cap overflow is skipped rather than played. |
 | `howl-lru.js` | `this.howlPool = new HowlLRU(32)` in the constructor. `playSFXBuffer` checks the pool for a decoded Howl before creating a new one (rapid repeat triggers reuse). On non-loop `onend`, Howls are returned to the pool instead of being unloaded — eviction is LRU-based and only non-playing Howls are unloaded. `destroy()` calls `howlPool.clear()`. |
@@ -267,7 +267,7 @@ This is what actually wires the 23 ambience entries into the engine's ambient-be
 
 ## Batch 6 — External Integrations
 
-A single module now owns every "outside world → Effexiq" control surface, so Stream Deck, OBS browser sources, custom bookmarklets, and Twitch chat all flow through one rate-limited handler instead of hooking into random internals.
+A single module now owns every "outside world → SuiteRhythm" control surface, so Stream Deck, OBS browser sources, custom bookmarklets, and Twitch chat all flow through one rate-limited handler instead of hooking into random internals.
 
 ### New module: `lib/modules/external-trigger.js`
 
@@ -280,9 +280,9 @@ this.externalBridge.install();
 
 `install()` hooks three equivalent command channels, all dispatched through the same `handle(cmd, ctx)` so authorization and rate-limiting live in one place:
 
-1. **Direct JS API** — `window.Effexiq.trigger('thunder')`, `window.Effexiq.stopAll()`, `window.Effexiq.scene('Combat')`, `window.Effexiq.status()`, `window.Effexiq.twitch.connect('aaronc1992')`.
-2. **CustomEvents** — `window.dispatchEvent(new CustomEvent('effexiq:command', { detail: { type: 'trigger', query: 'thunder' } }))` for in-page integrations that don't want to assume `window.Effexiq` is already attached.
-3. **postMessage** — `window.postMessage({ effexiq: 'trigger', query: 'thunder' }, '*')` for iframe / OBS browser-source bridges. Cross-origin messages are gated by an `allowedOrigins` allowlist; same-origin and no-origin messages pass.
+1. **Direct JS API** — `window.SuiteRhythm.trigger('thunder')`, `window.SuiteRhythm.stopAll()`, `window.SuiteRhythm.scene('Combat')`, `window.SuiteRhythm.status()`, `window.SuiteRhythm.twitch.connect('aaronc1992')`.
+2. **CustomEvents** — `window.dispatchEvent(new CustomEvent('suiterhythm:command', { detail: { type: 'trigger', query: 'thunder' } }))` for in-page integrations that don't want to assume `window.SuiteRhythm` is already attached.
+3. **postMessage** — `window.postMessage({ suiterhythm: 'trigger', query: 'thunder' }, '*')` for iframe / OBS browser-source bridges. Cross-origin messages are gated by an `allowedOrigins` allowlist; same-origin and no-origin messages pass.
 
 `uninstall()` is called from `destroy()`, which removes both listeners and disconnects any active Twitch session.
 
@@ -318,7 +318,7 @@ Non-bang chat is ignored. The client reconnects with exponential backoff capped 
 
 - 44/44 Vitest tests pass (35 → 44, +9 for the new bridge).
 - `next build` completes cleanly.
-- `window.Effexiq` is now a public, documented surface — external controllers can depend on it.
+- `window.SuiteRhythm` is now a public, documented surface — external controllers can depend on it.
 
 
 

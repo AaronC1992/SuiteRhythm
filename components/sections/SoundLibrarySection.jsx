@@ -11,7 +11,7 @@ export default function SoundLibrarySection() {
         <div className="section-body">
           <p className="section-intro">
             Browse, preview, and manage all available sounds. Disable any sound you don&apos;t want
-            Effexiq to use.
+            SuiteRhythm to use.
           </p>
 
           {/* Search & Filters */}
@@ -42,7 +42,7 @@ export default function SoundLibrarySection() {
           <div className="sound-lib-custom">
             <h3>Custom Sounds</h3>
             <p className="info-text">
-              Record or upload your own sounds and assign keyword tags so Effexiq can trigger them.
+              Record or upload your own sounds and assign keyword tags so SuiteRhythm can trigger them.
             </p>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <button id="recordSoundBtn" className="btn-primary">Record Sound</button>

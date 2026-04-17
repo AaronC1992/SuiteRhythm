@@ -1,5 +1,5 @@
-// Effexiq Service Worker
-const CACHE_NAME = 'Effexiq-v23'; // Bumped: sidechain duck, tension curve, vitest suite, streaming analyze, error reporter, local classifier fallback
+// SuiteRhythm Service Worker
+const CACHE_NAME = 'SuiteRhythm-v23'; // Bumped: sidechain duck, tension curve, vitest suite, streaming analyze, error reporter, local classifier fallback
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:

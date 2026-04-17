@@ -6,7 +6,7 @@ export default function Home() {
       {/* Hero */}
       <header className="landing-hero">
         <nav className="landing-nav">
-          <span className="landing-brand">Effexiq</span>
+          <span className="landing-brand">SuiteRhythm</span>
           <Link href="/dashboard" className="landing-nav-cta">
             Open App
           </Link>
@@ -16,12 +16,12 @@ export default function Home() {
             AI-Powered Sound Design<br />for Storytellers
           </h1>
           <p className="landing-tagline">
-            Effexiq listens to your voice and layers music, ambience, and sound
+            SuiteRhythm listens to your voice and layers music, ambience, and sound
             effects in real time — no mixing board required.
           </p>
           <div className="landing-hero-actions">
             <Link href="/dashboard" className="landing-btn-primary">
-              Launch Effexiq
+              Launch SuiteRhythm
             </Link>
             <a href="#features" className="landing-btn-secondary">
               See How It Works
@@ -45,7 +45,7 @@ export default function Home() {
             </div>
             <h3>Voice-Driven</h3>
             <p>
-              Speak naturally and Effexiq detects mood, setting, and action from
+              Speak naturally and SuiteRhythm detects mood, setting, and action from
               your words in real time.
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function Home() {
           <div className="landing-step">
             <span className="landing-step-num">2</span>
             <h3>Start Talking</h3>
-            <p>Read your story aloud or type it in. Effexiq listens through your mic.</p>
+            <p>Read your story aloud or type it in. SuiteRhythm listens through your mic.</p>
           </div>
           <div className="landing-step">
             <span className="landing-step-num">3</span>
@@ -172,12 +172,12 @@ export default function Home() {
       <section className="landing-cta">
         <h2>Ready to bring your stories to life?</h2>
         <Link href="/dashboard" className="landing-btn-primary">
-          Launch Effexiq — Free
+          Launch SuiteRhythm — Free
         </Link>
       </section>
 
       <footer className="landing-footer">
-        <span>&copy; {new Date().getFullYear()} Effexiq</span>
+        <span>&copy; {new Date().getFullYear()} SuiteRhythm</span>
       </footer>
     </div>
   );

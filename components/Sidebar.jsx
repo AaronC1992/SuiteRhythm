@@ -4,7 +4,7 @@ import EngineStatusDot from './EngineStatusDot';
 
 /**
  * Sidebar — platform navigation.
- * All button clicks (section switching) are handled by the Effexiq
+ * All button clicks (section switching) are handled by the SuiteRhythm
  * engine's setupEventListeners() which queries the DOM by data-section
  * attributes. React only renders the markup; the engine wires event listeners.
  */
@@ -13,7 +13,7 @@ export default function Sidebar() {
     <aside id="platformSidebar" aria-label="Platform navigation">
       <div className="sidebar-brand">
         <div className="sidebar-brand-row">
-          <span className="sidebar-logo-text">Effexiq</span>
+          <span className="sidebar-logo-text">SuiteRhythm</span>
           <EngineStatusDot />
         </div>
         <span className="sidebar-tagline">AI Sound Design</span>
@@ -90,7 +90,7 @@ export default function Sidebar() {
           <button id="tutorialBtn" className="sidebar-action-btn">How to Use</button>
           <button id="feedbackBtn" className="sidebar-action-btn">Feedback</button>
         </div>
-        <p className="version">v3.0.0 | Effexiq &copy; 2026</p>
+        <p className="version">v3.0.0 | SuiteRhythm &copy; 2026</p>
       </div>
     </aside>
   );

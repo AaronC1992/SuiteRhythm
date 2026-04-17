@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Terms of Service - Effexiq',
+  title: 'Terms of Service - SuiteRhythm',
 };
 
 export default function TermsPage() {
@@ -10,13 +10,13 @@ export default function TermsPage() {
 
       <h2>1. Acceptance</h2>
       <p>
-        By accessing or using Effexiq (&ldquo;the Service&rdquo;), you agree to be bound by these
+        By accessing or using SuiteRhythm (&ldquo;the Service&rdquo;), you agree to be bound by these
         Terms of Service. If you do not agree, do not use the Service.
       </p>
 
       <h2>2. Description of Service</h2>
       <p>
-        Effexiq is an AI-powered ambient sound design platform for tabletop RPG sessions,
+        SuiteRhythm is an AI-powered ambient sound design platform for tabletop RPG sessions,
         storytelling, and content creation. The Service analyses spoken audio via your microphone
         (with your permission) and plays contextual music and sound effects.
       </p>
@@ -36,13 +36,13 @@ export default function TermsPage() {
 
       <h2>5. Intellectual Property</h2>
       <p>
-        All sounds, code, and branding are owned by Effexiq or licensed from third parties.
+        All sounds, code, and branding are owned by SuiteRhythm or licensed from third parties.
         You may not redistribute the sound library or recordings derived from it.
       </p>
 
       <h2>6. Limitation of Liability</h2>
       <p>
-        The Service is provided &ldquo;as is&rdquo; without warranty of any kind. Effexiq is not
+        The Service is provided &ldquo;as is&rdquo; without warranty of any kind. SuiteRhythm is not
         liable for any indirect, incidental, or consequential damages arising from use of the
         Service.
       </p>
@@ -58,7 +58,7 @@ export default function TermsPage() {
       </p>
 
       <p style={{ marginTop: 40 }}>
-        <a href="/dashboard" style={{ color: '#bb86fc' }}>&larr; Back to Effexiq</a>
+        <a href="/dashboard" style={{ color: '#bb86fc' }}>&larr; Back to SuiteRhythm</a>
       </p>
     </main>
   );

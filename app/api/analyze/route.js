@@ -96,7 +96,7 @@ function setCache(key, data) {
   responseCache.set(key, { data, expiresAt: Date.now() + CACHE_TTL_MS });
 }
 
-const SYSTEM_PROMPT = `You are Effexiq, an AI sound director for live narration sessions.
+const SYSTEM_PROMPT = `You are SuiteRhythm, an AI sound director for live narration sessions.
 Given a transcript and a list of available sounds, respond with a JSON object that drives a layered audio engine.
 
 RESPONSE FORMAT (strict JSON):

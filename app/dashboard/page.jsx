@@ -3,9 +3,9 @@
 import dynamic from 'next/dynamic';
 
 /**
- * Dashboard page — the main Effexiq application experience.
+ * Dashboard page — the main SuiteRhythm application experience.
  *
- * AppShell is loaded with `ssr: false` because the Effexiq audio
+ * AppShell is loaded with `ssr: false` because the SuiteRhythm audio
  * engine uses browser-only APIs (AudioContext, SpeechRecognition, Howler,
  * localStorage) that can't run during server-side rendering.
  *
@@ -27,7 +27,7 @@ const AppShell = dynamic(() => import('../../components/AppShell'), {
         fontSize: '1.1rem',
       }}
     >
-      Loading Effexiq…
+      Loading SuiteRhythm…
     </div>
   ),
 });

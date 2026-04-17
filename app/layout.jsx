@@ -3,24 +3,24 @@ import GlobalAudioKill from '../components/GlobalAudioKill';
 import DebugPerfPanel from '../components/DebugPerfPanel';
 
 export const metadata = {
-  title: 'Effexiq - Intelligent Audio Companion',
+  title: 'SuiteRhythm - Intelligent Audio Companion',
   description:
     'AI-powered ambient sound designer that listens to conversations and automatically plays contextually-appropriate music and sound effects',
   manifest: '/manifest.json',
   openGraph: {
     type: 'website',
-    url: 'https://effexiq.vercel.app/',
-    title: 'Effexiq - Intelligent Audio Companion',
+    url: 'https://suiterhythm.vercel.app/',
+    title: 'SuiteRhythm - Intelligent Audio Companion',
     description:
       'AI-powered ambient sound designer that listens to conversations and automatically plays contextually-appropriate music and sound effects',
-    images: [{ url: 'https://effexiq.vercel.app/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://suiterhythm.vercel.app/og-image.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Effexiq - Intelligent Audio Companion',
+    title: 'SuiteRhythm - Intelligent Audio Companion',
     description:
       'AI-powered ambient sound designer that listens to conversations and automatically plays contextually-appropriate music and sound effects',
-    images: ['https://effexiq.vercel.app/og-image.png'],
+    images: ['https://suiterhythm.vercel.app/og-image.png'],
   },
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Howler.js is loaded as an npm package (see engine/Effexiq.js) */}
+        {/* Howler.js is loaded as an npm package (see engine/SuiteRhythm.js) */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body>

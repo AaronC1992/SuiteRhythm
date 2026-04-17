@@ -9,7 +9,7 @@ export default function AutoDetectSection() {
       </div>
       <div className="section-body">
         <p className="section-intro">
-          Effexiq will listen and automatically play contextual sounds and music.
+          SuiteRhythm will listen and automatically play contextual sounds and music.
         </p>
 
         {/* Mode Selector */}
@@ -38,14 +38,14 @@ export default function AutoDetectSection() {
           </div>
         </div>
 
-        {/* Scene Presets Bar — populated by Effexiq engine */}
+        {/* Scene Presets Bar — populated by SuiteRhythm engine */}
         <div className="scene-presets-bar" id="scenePresetsBar" />
 
         {/* Sing Mode Panel — shown by the engine when mode === 'sing' via .visualizer-section.mode-sing CSS hook */}
         <section id="singModePanel" className="sing-mode-panel" style={{ display: 'none' }}>
           <h3 style={{ margin: 0, marginBottom: 6 }}>Sing Mode</h3>
           <p className="info-text" style={{ marginTop: 0 }}>
-            Start singing. Effexiq will pick backing music that matches your tempo and energy, and keep it going between verses. Headphones recommended so your mic doesn&apos;t catch the music.
+            Start singing. SuiteRhythm will pick backing music that matches your tempo and energy, and keep it going between verses. Headphones recommended so your mic doesn&apos;t catch the music.
           </p>
           <div className="sing-stats">
             <div className="stat-item">

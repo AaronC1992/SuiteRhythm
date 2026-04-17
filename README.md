@@ -1,6 +1,6 @@
 <div align="center">
 
-# Effexiq
+# SuiteRhythm
 
 ### Intelligent Audio Companion for Tabletop RPGs
 
@@ -8,7 +8,7 @@ AI-powered ambient sound designer that listens to your game in real time and aut
 
 <br>
 
-[![Play Now](https://img.shields.io/badge/Play%20Now-Effexiq-8a2be2?style=for-the-badge&logoColor=white)](https://effexiq.vercel.app)
+[![Play Now](https://img.shields.io/badge/Play%20Now-SuiteRhythm-8a2be2?style=for-the-badge&logoColor=white)](https://suiterhythm.vercel.app)
 
 <br>
 
@@ -22,7 +22,7 @@ Tabletop RPG game masters spend hours curating playlists and manually triggering
 
 ## The Solution
 
-Effexiq listens to what's happening at the table and **automatically** plays the right sounds at the right time — no manual input needed.
+SuiteRhythm listens to what's happening at the table and **automatically** plays the right sounds at the right time — no manual input needed.
 
 - A player says *"I kick down the tavern door"* — tavern ambiance fades in
 - The DM describes a thunderstorm — rain and thunder start rolling
@@ -32,7 +32,7 @@ The GM stays in the story. The players stay immersed. The audio just works.
 
 ## How It Works
 
-Effexiq uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4o-mini), and maps the output to a curated library of **450+ sound effects and ambient tracks** — all in real time.
+SuiteRhythm uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4o-mini), and maps the output to a curated library of **450+ sound effects and ambient tracks** — all in real time.
 
 ```
 Voice Input → Speech Recognition → AI Context Analysis → Sound Matching → Playback
@@ -55,7 +55,7 @@ The tabletop RPG market has grown into a **$2B+ industry** (2025), fueled by act
 
 **No product on the market offers real-time, voice-reactive audio.**
 
-Current alternatives require manual playlist management (Syrinscape, Tabletop Audio) or pre-configured triggers. Effexiq is the first to close the loop between spoken narrative and dynamic audio — zero-touch.
+Current alternatives require manual playlist management (Syrinscape, Tabletop Audio) or pre-configured triggers. SuiteRhythm is the first to close the loop between spoken narrative and dynamic audio — zero-touch.
 
 ### Target Users
 
@@ -120,27 +120,27 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 - **Mobile companion app** — control board from your phone
 - **Community marketplace** — user-created sound packs and story scenes
 
-## External Controllers (`window.Effexiq`)
+## External Controllers (`window.SuiteRhythm`)
 
-Effexiq exposes a small, stable command surface for external controllers — Stream Deck plugins, OBS browser sources, bookmarklets, webhooks, and anonymous Twitch chat. Every channel funnels into the same rate-limited handler, so your integration never depends on engine internals.
+SuiteRhythm exposes a small, stable command surface for external controllers — Stream Deck plugins, OBS browser sources, bookmarklets, webhooks, and anonymous Twitch chat. Every channel funnels into the same rate-limited handler, so your integration never depends on engine internals.
 
 ### Command channels
 
 ```js
 // 1. Direct JS (same-page integrations / devtools)
-await window.Effexiq.trigger('thunder');                 // by name or id
-await window.Effexiq.trigger('rolling thunder', { volume: 0.8 });
-await window.Effexiq.stopAll();
-await window.Effexiq.scene('Combat');
-window.Effexiq.status();                                 // { mode, mood, listening, music, activeSounds, twitch }
+await window.SuiteRhythm.trigger('thunder');                 // by name or id
+await window.SuiteRhythm.trigger('rolling thunder', { volume: 0.8 });
+await window.SuiteRhythm.stopAll();
+await window.SuiteRhythm.scene('Combat');
+window.SuiteRhythm.status();                                 // { mode, mood, listening, music, activeSounds, twitch }
 
-// 2. CustomEvent (for modules that load before window.Effexiq is attached)
-window.dispatchEvent(new CustomEvent('effexiq:command', {
+// 2. CustomEvent (for modules that load before window.SuiteRhythm is attached)
+window.dispatchEvent(new CustomEvent('suiterhythm:command', {
     detail: { type: 'trigger', query: 'thunder' }
 }));
 
 // 3. postMessage (OBS browser sources / iframes — origin-gated)
-window.postMessage({ effexiq: 'trigger', query: 'thunder' }, '*');
+window.postMessage({ suiterhythm: 'trigger', query: 'thunder' }, '*');
 ```
 
 All `trigger` calls resolve to `{ ok, name, soundId, url, source }` so you can later stop a specific instance with the engine API.
@@ -148,15 +148,15 @@ All `trigger` calls resolve to `{ ok, name, soundId, url, source }` so you can l
 ### Twitch chat bridge (no OAuth)
 
 ```js
-window.Effexiq.twitch.connect('aaronc1992');
+window.SuiteRhythm.twitch.connect('aaronc1992');
 // Viewers can now type in chat:
 //   !sfx thunder       → plays a thunder SFX
 //   !stop              → stops all audio
 //   !scene Combat      → applies the Combat scene preset
-window.Effexiq.twitch.disconnect();
+window.SuiteRhythm.twitch.disconnect();
 ```
 
-Effexiq joins as an anonymous `justinfan*` user over Twitch's WebSocket IRC gateway — **read-only, no tokens, no chat writes**. Unknown bang-commands are ignored. Commands are rate-limited (500ms per `type:query` pair by default) so a chat flood can't thrash the audio graph.
+SuiteRhythm joins as an anonymous `justinfan*` user over Twitch's WebSocket IRC gateway — **read-only, no tokens, no chat writes**. Unknown bang-commands are ignored. Commands are rate-limited (500ms per `type:query` pair by default) so a chat flood can't thrash the audio graph.
 
 ### Rate limiting & origin allowlist
 
@@ -166,10 +166,10 @@ Effexiq joins as an anonymous `justinfan*` user over Twitch's WebSocket IRC gate
 
 ## Get in Touch
 
-Interested in Effexiq? Reach out:
+Interested in SuiteRhythm? Reach out:
 
-- **Live Demo:** [effexiq.vercel.app](https://effexiq.vercel.app)
-- **GitHub:** [AaronC1992/Effexiq](https://github.com/AaronC1992/Effexiq)
+- **Live Demo:** [suiterhythm.vercel.app](https://suiterhythm.vercel.app)
+- **GitHub:** [AaronC1992/SuiteRhythm](https://github.com/AaronC1992/SuiteRhythm)
 
 ---
 

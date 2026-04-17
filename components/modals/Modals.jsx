@@ -4,7 +4,7 @@
  * Collection of all overlay/modal components.
  * Grouped in one file to keep imports clean in AppShell.
  * Each modal is always rendered in the DOM (hidden via CSS class) so the
- * Effexiq engine can show/hide them via classList manipulation.
+ * SuiteRhythm engine can show/hide them via classList manipulation.
  */
 
 export function SubscribeModal() {
@@ -17,7 +17,7 @@ export function SubscribeModal() {
       aria-labelledby="subscribeModalTitle"
     >
       <div className="modal-content">
-        <h2 id="subscribeModalTitle">Welcome to Effexiq</h2>
+        <h2 id="subscribeModalTitle">Welcome to SuiteRhythm</h2>
         <p><strong>AI-Powered Sound Design Platform</strong></p>
         <p className="info-text">
           Get unlimited AI sound analysis for storytelling, D&amp;D, and content creation &mdash;
@@ -90,9 +90,9 @@ export function TutorialModal() {
     >
       <div className="modal-content tutorial-content">
         <button id="closeTutorial" className="close-btn">✕</button>
-        <h2 id="tutorialModalTitle">Effexiq Tutorial</h2>
+        <h2 id="tutorialModalTitle">SuiteRhythm Tutorial</h2>
         <p className="tutorial-intro">
-          Welcome to Effexiq! Here&apos;s everything you need to know to get started.
+          Welcome to SuiteRhythm! Here&apos;s everything you need to know to get started.
         </p>
 
         <div className="tutorial-section">
@@ -109,7 +109,7 @@ export function TutorialModal() {
         <div className="tutorial-section">
           <h3>Performance</h3>
           <p>
-            <strong>Low Latency Mode:</strong> When enabled, Effexiq preloads more sounds in
+            <strong>Low Latency Mode:</strong> When enabled, SuiteRhythm preloads more sounds in
             parallel and responds faster. Best on strong networks and modern devices; may use more
             bandwidth and battery.
           </p>
@@ -120,7 +120,7 @@ export function TutorialModal() {
           <p><strong>Music Toggle:</strong> Turn background music on/off.</p>
           <p><strong>SFX Toggle:</strong> Turn sound effects on/off.</p>
           <p>
-            <strong>AI Predictions:</strong> When enabled, Effexiq analyzes what you say and
+            <strong>AI Predictions:</strong> When enabled, SuiteRhythm analyzes what you say and
             auto-plays matching music/SFX. Default is off. Turn off to prevent any automatic sounds;
             instant keyword triggers (e.g., &quot;bang&quot;, &quot;knock&quot;, &quot;bark&quot;)
             still work.
@@ -130,7 +130,7 @@ export function TutorialModal() {
 
         <div className="tutorial-section">
           <h3>Voice Commands</h3>
-          <p>Control Effexiq hands-free while listening:</p>
+          <p>Control SuiteRhythm hands-free while listening:</p>
           <ul>
             <li><strong>&quot;Skip track&quot;</strong> or <strong>&quot;Next song&quot;</strong> - Change the music</li>
             <li><strong>&quot;Quieter music&quot;</strong> or <strong>&quot;Louder music&quot;</strong> - Adjust music volume by 10%</li>

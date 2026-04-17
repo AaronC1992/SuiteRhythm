@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const filePath = 'engine/Effexiq.js';
+const filePath = 'engine/SuiteRhythm.js';
 const buf = fs.readFileSync(filePath);
 
 // Strategy: find double-encoded UTF-8 sequences at byte level.

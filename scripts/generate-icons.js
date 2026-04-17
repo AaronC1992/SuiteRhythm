@@ -36,7 +36,7 @@ async function main() {
       <path d="M64 0v70c0 13.6-13 24.6-29 24.6S6 83.6 6 70s13-24.6 29-24.6c4.8 0 9.4 1 13.4 2.8V16.1L64 0z"/>
       <circle cx="35" cy="70" r="14" fill="#fff" opacity="0.9"/>
     </g>
-    <text x="600" y="410" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="64" font-weight="800">Effexiq</text>
+    <text x="600" y="410" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="64" font-weight="800">SuiteRhythm</text>
     <text x="600" y="470" text-anchor="middle" fill="#aaaaaa" font-family="system-ui,sans-serif" font-size="24">AI-Powered Sound Design for Storytellers</text>
   </svg>`;
 

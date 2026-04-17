@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const filePath = 'c:/Users/jenna/Desktop/Portfolio projects/Effexiq-next/engine/Effexiq.js';
+const filePath = 'c:/Users/jenna/Desktop/Portfolio projects/SuiteRhythm-next/engine/SuiteRhythm.js';
 let buf = fs.readFileSync(filePath);
 
 const fixes = [

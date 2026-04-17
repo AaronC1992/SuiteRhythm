@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privacy Policy - Effexiq',
+  title: 'Privacy Policy - SuiteRhythm',
 };
 
 export default function PrivacyPage() {
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
       </p>
 
       <p style={{ marginTop: 40 }}>
-        <a href="/dashboard" style={{ color: '#bb86fc' }}>&larr; Back to Effexiq</a>
+        <a href="/dashboard" style={{ color: '#bb86fc' }}>&larr; Back to SuiteRhythm</a>
       </p>
     </main>
   );

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 /**
  * OBS Browser Source page — a minimal, transparent-background wrapper
- * that runs the Effexiq engine for audio capture by OBS Studio.
+ * that runs the SuiteRhythm engine for audio capture by OBS Studio.
  *
  * Usage: Add this URL as a Browser Source in OBS:
  *   https://your-domain.com/obs

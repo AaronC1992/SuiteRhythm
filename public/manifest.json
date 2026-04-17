@@ -1,6 +1,6 @@
 {
-  "name": "Effexiq - Intelligent Audio Companion",
-  "short_name": "Effexiq",
+  "name": "SuiteRhythm - Intelligent Audio Companion",
+  "short_name": "SuiteRhythm",
   "description": "AI-powered ambient sound designer with performance enhancements, memory management, error handling, and accessibility features",
   "start_url": "/dashboard",
   "display": "standalone",

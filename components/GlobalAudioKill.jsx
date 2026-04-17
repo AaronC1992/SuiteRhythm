@@ -36,7 +36,7 @@ export default function GlobalAudioKill() {
       } catch (_) {}
       // 3) Close any surviving AudioContext so the OS releases the graph.
       try {
-        const ctx = window.__effexiqAudioCtx || window.audioContext;
+        const ctx = window.__suiterhythmAudioCtx || window.audioContext;
         if (ctx && typeof ctx.close === 'function' && ctx.state !== 'closed') {
           ctx.close().catch(() => {});
         }

@@ -1,18 +1,18 @@
 'use client';
 
 /**
- * AppShell — the main "use client" component for Effexiq.
+ * AppShell — the main "use client" component for SuiteRhythm.
  *
  * ARCHITECTURE DECISION:
- * The Effexiq audio engine (engine/Effexiq.js) is a 7,000+ line class
+ * The SuiteRhythm audio engine (engine/SuiteRhythm.js) is a 7,000+ line class
  * that orchestrates audio playback, speech recognition, and UI state through
  * direct DOM manipulation (getElementById, addEventListener, classList).
  * A full conversion to React state/hooks would be a multi-month rewrite with
  * high regression risk. Instead, this component:
  *   1. Renders the full DOM scaffold as JSX (all sections are always in the DOM,
- *      hidden via CSS, exactly as the original HTML — so Effexiq can find
+ *      hidden via CSS, exactly as the original HTML — so SuiteRhythm can find
  *      elements by ID at any time).
- *   2. Dynamically imports and instantiates Effexiq in useEffect after mount,
+ *   2. Dynamically imports and instantiates SuiteRhythm in useEffect after mount,
  *      exactly replicating the original DOMContentLoaded init sequence.
  *   3. Cleans up on unmount.
  *
@@ -62,7 +62,7 @@ export default function AppShell() {
       if (typeof window !== 'undefined') {
         const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || '';
         if (backendUrl) {
-          window.Effexiq_BACKEND_URL = backendUrl;
+          window.SuiteRhythm_BACKEND_URL = backendUrl;
         }
         // R2 audio proxy path (avoids CORS issues with pub-*.r2.dev)
         window.__R2_PUBLIC_URL = '/r2-audio';
@@ -85,17 +85,17 @@ export default function AppShell() {
       }
 
       try {
-        // 3. Import and instantiate the Effexiq engine. Dynamic import keeps it
+        // 3. Import and instantiate the SuiteRhythm engine. Dynamic import keeps it
         //    out of the server bundle entirely (ssr:false on the dashboard page gives
         //    a second layer of protection, but being explicit here is safer).
-        const { default: Effexiq, initializeMenuToggles } = await import('../engine/Effexiq');
-        engineInstance = new Effexiq();
+        const { default: SuiteRhythm, initializeMenuToggles } = await import('../engine/SuiteRhythm');
+        engineInstance = new SuiteRhythm();
         window.gameInstance = engineInstance;
 
         // 4. Wire up settings accordion toggles (was a standalone function in game.js)
         initializeMenuToggles();
       } catch (e) {
-        console.error('[AppShell] Effexiq engine failed to start:', e);
+        console.error('[AppShell] SuiteRhythm engine failed to start:', e);
         // Show user-visible error if the engine fails to initialize
         const app = document.getElementById('appContainer');
         if (app) {
@@ -156,7 +156,7 @@ export default function AppShell() {
                 <line x1="3" y1="18" x2="21" y2="18" />
               </svg>
             </button>
-            <span className="mobile-brand">Effexiq</span>
+            <span className="mobile-brand">SuiteRhythm</span>
             <span id="noKeyBannerMobile" className="mobile-no-key hidden">No subscription</span>
           </header>
 
@@ -181,7 +181,7 @@ export default function AppShell() {
             >
               <span>
                 Auto Detect and Story modes require Chrome or Edge for microphone access. Firefox
-                does not support the Web Speech API used by Effexiq.
+                does not support the Web Speech API used by SuiteRhythm.
               </span>
               <button
                 onClick={(e) => e.currentTarget.closest('#firefoxWarning')?.classList.add('hidden')}

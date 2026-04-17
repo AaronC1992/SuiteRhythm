@@ -64,7 +64,7 @@ export default function DebugPerfPanel() {
             const mode = engine?.currentMode || 'n/a';
 
             el.innerHTML =
-                `<strong>Effexiq debug</strong>\n` +
+                `<strong>SuiteRhythm debug</strong>\n` +
                 `fps:     ${String(fps).padStart(3)}\n` +
                 `howls:   ${howls}\n` +
                 `active:  ${active}\n` +
