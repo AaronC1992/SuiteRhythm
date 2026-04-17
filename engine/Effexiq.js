@@ -146,6 +146,38 @@ class Effexiq {
             }
         };
         document.addEventListener('visibilitychange', this._visibilityHandler);
+
+        // ===== ZOMBIE-AUDIO GUARDS =====
+        // If the user closes the tab/app while audio is playing, some browsers
+        // (and most mobile PWA shells) put the page into the back/forward cache
+        // and resume playback on return — which means the user lands on the main
+        // menu with last session's music still going. Kill audio on pagehide and
+        // again on bfcache restore to guarantee a clean start.
+        //
+        // Scope: `this` refers to the engine instance; handlers also cover the
+        // global Howler pool in case older instances were leaked somewhere.
+        const killAllAudio = () => {
+            try { this.stopAllAudio?.(); } catch (_) {}
+            try {
+                if (typeof Howler !== 'undefined' && Array.isArray(Howler._howls)) {
+                    Howler._howls.forEach(h => { try { h.stop(); } catch (_) {} });
+                }
+            } catch (_) {}
+        };
+        this._pageHideHandler = () => killAllAudio();
+        this._pageShowHandler = (e) => {
+            // event.persisted === true means the page was restored from bfcache.
+            if (e && e.persisted) killAllAudio();
+        };
+        window.addEventListener('pagehide', this._pageHideHandler);
+        window.addEventListener('pageshow', this._pageShowHandler);
+        // Also stop any stale Howler instances that somehow survived a reload.
+        try {
+            if (typeof Howler !== 'undefined' && Array.isArray(Howler._howls) && Howler._howls.length) {
+                Howler._howls.forEach(h => { try { h.stop(); h.unload(); } catch (_) {} });
+            }
+        } catch (_) {}
+
         this.currentMode = 'auto'; // Always use auto mode
         this.isListening = false;
         this.minVolume = 0.2;
@@ -9939,6 +9971,12 @@ class Effexiq {
             // Remove visibility listener
             if (this._visibilityHandler) {
                 document.removeEventListener('visibilitychange', this._visibilityHandler);
+            }
+            if (this._pageHideHandler) {
+                window.removeEventListener('pagehide', this._pageHideHandler);
+            }
+            if (this._pageShowHandler) {
+                window.removeEventListener('pageshow', this._pageShowHandler);
             }
 
             debugLog('Effexiq destroyed');

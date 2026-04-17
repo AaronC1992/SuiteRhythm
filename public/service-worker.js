@@ -1,5 +1,5 @@
 // Effexiq Service Worker
-const CACHE_NAME = 'Effexiq-v19'; // Bumped: sing-mode live stage feel toggle
+const CACHE_NAME = 'Effexiq-v20'; // Bumped: zombie-audio guard on pagehide/bfcache restore
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
