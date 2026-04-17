@@ -4107,3 +4107,312 @@ body.cb-visualizer .visualizer-bar-alt {
     color: #aec4ff;
     font-weight: 600;
 }
+
+/* ============================================================ */
+/* UI ENHANCEMENTS (Batch 8) - appended block, overrides earlier  */
+/* rules via source order. Pure additive, no IDs removed.        */
+/* ============================================================ */
+
+/* ── Tokens: semantic additions over the existing palette ──────── */
+:root {
+    /* Soften the brand gradient anchors */
+    --brand-grad-from:    #8a2be2;
+    --brand-grad-to:      #03dac6;
+    --brand-grad-mid:     #bb86fc;
+
+    /* Surface system for layering */
+    --surface-0: #0a0a12;
+    --surface-1: #10101c;
+    --surface-2: #17172a;
+    --surface-3: #1f1f34;
+
+    /* State tints */
+    --tint-primary:  rgba(138, 43, 226, 0.14);
+    --tint-teal:     rgba(3, 218, 198, 0.14);
+    --tint-danger:   rgba(207, 102, 121, 0.16);
+    --tint-warning:  rgba(255, 183, 77, 0.16);
+    --tint-success:  rgba(0, 200, 83, 0.16);
+
+    /* Focus ring — visible against every surface */
+    --ring: 0 0 0 2px rgba(138, 43, 226, 0.35), 0 0 0 4px rgba(3, 218, 198, 0.25);
+
+    /* Type scale */
+    --fs-xs: 0.72rem;
+    --fs-sm: 0.8125rem;
+    --fs-md: 0.9375rem;
+    --fs-lg: 1.125rem;
+    --fs-xl: 1.5rem;
+
+    /* Radii */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+
+    /* Motion */
+    --ease: cubic-bezier(.2, .9, .3, 1);
+    --dur-fast: 120ms;
+    --dur: 180ms;
+}
+
+/* ── Global focus ring — visible, never outline:none ──────────── */
+*:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+    border-radius: var(--radius-sm);
+    transition: box-shadow var(--dur-fast) var(--ease);
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+/* ── Scrollbars (dark-mode friendly) ─────────────────────────── */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #2a2a40 transparent;
+}
+*::-webkit-scrollbar         { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb   { background: #2a2a40; border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: #3a3a55; background-clip: padding-box; border: 2px solid transparent; }
+*::-webkit-scrollbar-track   { background: transparent; }
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================================ */
+/* NOW PLAYING STRIP                                              */
+/* ============================================================ */
+.now-playing-strip {
+    position: sticky;
+    top: 0;
+    z-index: 150;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 18px;
+    background: linear-gradient(180deg,
+        rgba(15, 15, 30, 0.92) 0%,
+        rgba(15, 15, 30, 0.78) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    font-size: var(--fs-sm);
+    color: var(--text);
+    letter-spacing: 0.01em;
+}
+
+.now-playing-strip.is-listening {
+    background: linear-gradient(180deg,
+        rgba(3, 218, 198, 0.08) 0%,
+        rgba(15, 15, 30, 0.82) 100%);
+    border-bottom-color: rgba(3, 218, 198, 0.25);
+}
+
+.np-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.np-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    opacity: 0.6;
+}
+
+.np-label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+.np-muted {
+    color: var(--muted-2);
+    font-weight: 400;
+}
+.np-ago {
+    font-size: var(--fs-xs);
+    margin-left: 2px;
+}
+
+/* Status dot (listening / idle) */
+.np-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5a5a70;
+    box-shadow: 0 0 0 0 rgba(0,0,0,0);
+    flex-shrink: 0;
+}
+.np-dot.is-listening {
+    background: #03dac6;
+    animation: np-pulse 1.6s var(--ease) infinite;
+}
+.np-dot.is-idle { background: #5a5a70; }
+
+@keyframes np-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(3, 218, 198, 0.55); }
+    70%  { box-shadow: 0 0 0 9px rgba(3, 218, 198, 0.0); }
+    100% { box-shadow: 0 0 0 0 rgba(3, 218, 198, 0.0); }
+}
+
+/* Mood chip — tinted by --mood-color set inline */
+.np-mood-chip {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mood-color, var(--teal));
+    background: color-mix(in srgb, var(--mood-color, var(--teal)) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--mood-color, var(--teal)) 40%, transparent);
+}
+
+/* Count + music track + last trigger */
+.np-count svg  { color: var(--teal); opacity: 0.8; }
+.np-music svg  { color: var(--primary-2); opacity: 0.8; }
+.np-track {
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.np-kw {
+    font-style: italic;
+    color: var(--primary-2);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Subtle flash when a new sound is triggered */
+.np-flash { animation: np-flash 900ms var(--ease); }
+@keyframes np-flash {
+    0%   { background: rgba(3, 218, 198, 0.22); border-radius: 8px; padding-left: 8px; padding-right: 8px; }
+    100% { background: transparent; padding-left: 0; padding-right: 0; }
+}
+
+@media (max-width: 720px) {
+    .now-playing-strip { padding: 8px 12px; gap: 8px; font-size: var(--fs-xs); }
+    .np-track, .np-kw  { max-width: 120px; }
+}
+
+/* ============================================================ */
+/* ENGINE STATUS DOT (sidebar)                                    */
+/* ============================================================ */
+.engine-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    color: var(--muted-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+.engine-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #5a5a70;
+}
+.engine-status-offline   .engine-status-dot { background: #555; }
+.engine-status-idle      .engine-status-dot { background: #7b8eb5; }
+.engine-status-listening .engine-status-dot { background: #03dac6; animation: np-pulse 1.8s var(--ease) infinite; }
+.engine-status-playing   .engine-status-dot { background: #bb86fc; animation: np-pulse 1.4s var(--ease) infinite; }
+
+.engine-status-offline   .engine-status-label { color: #6a6a78; }
+.engine-status-idle      .engine-status-label { color: #8b9bb6; }
+.engine-status-listening .engine-status-label { color: #03dac6; }
+.engine-status-playing   .engine-status-label { color: #bb86fc; }
+
+/* ============================================================ */
+/* SIDEBAR POLISH                                                 */
+/* ============================================================ */
+.sidebar-brand {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+}
+.sidebar-brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+}
+.sidebar-nav-item {
+    position: relative;
+    transition: background var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease),
+                border-left-color var(--dur-fast) var(--ease);
+}
+.sidebar-nav-item:hover { background: var(--tint-primary); }
+.sidebar-nav-item.active {
+    background: var(--tint-primary);
+    box-shadow: inset 3px 0 0 var(--primary-2);
+    border-left-color: transparent;
+}
+
+/* ============================================================ */
+/* BUTTON POLISH                                                  */
+/* ============================================================ */
+/* Only enhances existing `button` elements — does not restyle
+   anything the engine inspects by class name. */
+button {
+    transition: transform var(--dur-fast) var(--ease),
+                box-shadow var(--dur-fast) var(--ease),
+                background var(--dur-fast) var(--ease),
+                border-color var(--dur-fast) var(--ease),
+                color var(--dur-fast) var(--ease);
+}
+button:not(:disabled):active { transform: translateY(1px); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ============================================================ */
+/* DASHBOARD HERO POLISH                                          */
+/* ============================================================ */
+.dashboard-hero .dashboard-title {
+    background: linear-gradient(135deg,
+        var(--brand-grad-from) 0%,
+        var(--brand-grad-mid) 50%,
+        var(--brand-grad-to) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+.use-case-card {
+    transition: transform var(--dur) var(--ease),
+                border-color var(--dur) var(--ease),
+                box-shadow var(--dur) var(--ease);
+    will-change: transform;
+}
+.use-case-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-2);
+    box-shadow: 0 12px 32px rgba(138, 43, 226, 0.18);
+}
+.use-case-cta {
+    transition: color var(--dur-fast) var(--ease),
+                transform var(--dur-fast) var(--ease);
+}
+.use-case-card:hover .use-case-cta {
+    color: var(--teal);
+    transform: translateX(3px);
+}

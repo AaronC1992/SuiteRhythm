@@ -1,5 +1,7 @@
 'use client';
 
+import EngineStatusDot from './EngineStatusDot';
+
 /**
  * Sidebar — platform navigation.
  * All button clicks (section switching) are handled by the Effexiq
@@ -10,7 +12,10 @@ export default function Sidebar() {
   return (
     <aside id="platformSidebar" aria-label="Platform navigation">
       <div className="sidebar-brand">
-        <span className="sidebar-logo-text">Effexiq</span>
+        <div className="sidebar-brand-row">
+          <span className="sidebar-logo-text">Effexiq</span>
+          <EngineStatusDot />
+        </div>
         <span className="sidebar-tagline">AI Sound Design</span>
       </div>
 

@@ -24,6 +24,7 @@ import { useEffect } from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import { EngineProvider } from '../lib/engine-bridge';
 import Sidebar from './Sidebar';
+import NowPlayingStrip from './NowPlayingStrip';
 import DashboardSection from './sections/DashboardSection';
 import AutoDetectSection from './sections/AutoDetectSection';
 import StoryEditorSection from './sections/StoryEditorSection';
@@ -164,6 +165,9 @@ export default function AppShell() {
 
           {/* ===== MAIN CONTENT ===== */}
           <main id="platformMain">
+            {/* Live engine status bar — reactive via useEngine() */}
+            <NowPlayingStrip />
+
             {/* Firefox compatibility warning — shown only in Firefox by the engine */}
             <div
               id="firefoxWarning"
