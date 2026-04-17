@@ -4087,6 +4087,10 @@ class Effexiq {
             this.musicChangeThreshold = Math.max(this.musicChangeThreshold, 45000);
             // Reset sing analysis state for the new session.
             this._resetSingState();
+            // Sing mode is singer-focused: kill any ambient beds (e.g. birds,
+            // forest, wind) that may have been started by a prior mode so they
+            // don't bleed into the backing-track-only experience.
+            try { this.stopProceduralAmbient(); } catch (_) {}
             // UI toggle sync
             const vd = document.getElementById('voiceDuckToggle');
             if (vd) vd.checked = false;
@@ -5433,6 +5437,11 @@ class Effexiq {
             this.detectSceneTransition(decisions);
             // Scene state machine: update state + potentially force fast music change
             this._updateSceneState(decisions);
+            // Now that we have a real analyzed mood/scene, it's safe to start
+            // procedural ambient beds. Skipped for sing mode inside the method.
+            if (this.isListening && this.currentMode !== 'sing') {
+                this.startProceduralAmbient();
+            }
             // Rolling scene memory: rebuild summary every 3 analyses
             this._analysisCountSinceLastSummary = (this._analysisCountSinceLastSummary || 0) + 1;
             if (this._analysisCountSinceLastSummary >= 3) {
@@ -6804,6 +6813,11 @@ class Effexiq {
     // Layer multiple ambient elements driven by mood trajectory
     startProceduralAmbient() {
         if (!this.ambienceEnabled) return;
+        // Sing mode is singer-focused (backing music only, no ambient beds/SFX).
+        if (this.currentMode === 'sing') return;
+        // Don't start until we have an actually analyzed context — otherwise the
+        // default state ('exploration') + neutral mood spawns forest/birds/wind
+        // before the user has said a single word.
         if (this.proceduralTimer) return; // Already running
         this.updateProceduralLayers();
         // Re-evaluate layers periodically
@@ -7443,10 +7457,14 @@ class Effexiq {
     async startListeningWithContext() {
         this.isListening = true;
         this.sessionStartTime = Date.now();
-        
-        // Start procedural ambient layering
-        this.startProceduralAmbient();
-        
+
+        // NOTE: Do NOT start procedural ambient here. Previously we kicked it off
+        // immediately, which would spin up the default `exploration` palette
+        // (forest + birds + wind) before the user had said a single word — and
+        // it would even run in Sing mode where ambient beds don't belong.
+        // Procedural ambient is now started on-demand from processSoundDecisions
+        // once we actually have a real analyzed mood/scene (and never in sing mode).
+
         // Resume audio context if suspended (browser requirement)
         if (this.audioContext && this.audioContext.state === 'suspended') {
             try {
