@@ -328,7 +328,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "campfire, night, wood burning medium, crickets in background",
       "file": "Saved sounds/ES_Campfire, Night, Wood Burning Medium, Crickets In Background - Epidemic Sound.mp3",
       "keywords": [
@@ -340,8 +340,11 @@
         "crickets",
         "background",
         "door",
-        "fire"
-      ]
+        "fire",
+        "ambience",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -385,7 +388,8 @@
         "scared",
         "yowl",
         "fight",
-        "shriek"
+        "shriek",
+        "combat"
       ]
     },
     {
@@ -414,7 +418,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -426,7 +431,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -438,7 +444,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -450,7 +457,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -462,7 +470,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -474,7 +483,8 @@
         "monster",
         "screams",
         "creature",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -738,7 +748,8 @@
         "growls",
         "roaring",
         "creature",
-        "monster"
+        "monster",
+        "horror"
       ]
     },
     {
@@ -831,7 +842,8 @@
         "evil",
         "corrupt",
         "fantasy",
-        "sinister"
+        "sinister",
+        "horror"
       ]
     },
     {
@@ -850,7 +862,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "deep sea underwater ambience",
       "file": "Saved sounds/dragon-studio-deep-sea-underwater-ambience-472383.mp3",
       "keywords": [
@@ -860,9 +872,11 @@
         "ocean",
         "ambience",
         "water",
-        "submerged"
+        "submerged",
+        "ambient",
+        "nature"
       ],
-      "loop": false
+      "loop": true
     },
     {
       "type": "sfx",
@@ -905,7 +919,9 @@
         "growl",
         "monster",
         "roar",
-        "creature"
+        "creature",
+        "fantasy",
+        "horror"
       ]
     },
     {
@@ -918,7 +934,8 @@
         "unsheath",
         "metal",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -1007,7 +1024,8 @@
         "mysterious",
         "dnd",
         "night",
-        "music"
+        "music",
+        "nature"
       ]
     },
     {
@@ -1068,7 +1086,8 @@
         "growl",
         "snarl",
         "creature",
-        "monster"
+        "monster",
+        "horror"
       ]
     },
     {
@@ -1135,7 +1154,7 @@
       "loop": false
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "fireplace",
       "file": "Saved sounds/fireplace.mp3",
       "keywords": [
@@ -1148,8 +1167,11 @@
         "flame",
         "cozy",
         "logs",
-        "warmth"
-      ]
+        "warmth",
+        "ambience",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -1245,7 +1267,8 @@
         "leaves",
         "forest",
         "crunch",
-        "walking"
+        "walking",
+        "nature"
       ]
     },
     {
@@ -1279,7 +1302,8 @@
         "ice",
         "outdoor",
         "steps",
-        "crunching"
+        "crunching",
+        "weather"
       ]
     },
     {
@@ -1326,7 +1350,8 @@
         "ancient",
         "mystery",
         "haunting",
-        "abandoned"
+        "abandoned",
+        "fantasy"
       ]
     },
     {
@@ -1385,7 +1410,8 @@
         "travel",
         "transport",
         "medieval",
-        "vehicle"
+        "vehicle",
+        "fantasy"
       ]
     },
     {
@@ -1629,7 +1655,7 @@
         "death",
         "dying",
         "pulse",
-        "EKG"
+        "ekg"
       ]
     },
     {
@@ -1948,7 +1974,8 @@
         "whoosh",
         "slash",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -2012,7 +2039,8 @@
         "storm",
         "thunder",
         "flash",
-        "intense"
+        "intense",
+        "weather"
       ]
     },
     {
@@ -2029,7 +2057,8 @@
         "storm",
         "rumble",
         "gentle",
-        "flash"
+        "flash",
+        "weather"
       ]
     },
     {
@@ -2165,7 +2194,9 @@
         "grunts",
         "combat",
         "weapon",
-        "scream"
+        "scream",
+        "fantasy",
+        "horror"
       ]
     },
     {
@@ -2211,7 +2242,8 @@
         "layer",
         "combat",
         "weapon",
-        "arrow"
+        "arrow",
+        "fantasy"
       ]
     },
     {
@@ -2226,7 +2258,8 @@
         "swords",
         "layer",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -2255,7 +2288,8 @@
         "fight",
         "clash",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -2325,7 +2359,8 @@
         "ward",
         "baby",
         "crying",
-        "scream"
+        "scream",
+        "horror"
       ]
     },
     {
@@ -2395,7 +2430,8 @@
         "screech",
         "hunting",
         "feathered",
-        "who"
+        "who",
+        "nature"
       ]
     },
     {
@@ -2412,7 +2448,8 @@
         "screech",
         "who",
         "hollow",
-        "feathered"
+        "feathered",
+        "nature"
       ]
     },
     {
@@ -2511,7 +2548,8 @@
         "pirate",
         "boat",
         "ocean",
-        "creaking"
+        "creaking",
+        "nature"
       ]
     },
     {
@@ -2635,7 +2673,8 @@
         "small",
         "animal",
         "chitter",
-        "dungeon"
+        "dungeon",
+        "fantasy"
       ]
     },
     {
@@ -2646,7 +2685,8 @@
         "rain",
         "windows",
         "interior",
-        "storm"
+        "storm",
+        "weather"
       ]
     },
     {
@@ -2657,7 +2697,7 @@
         "rewind",
         "tape",
         "cassette",
-        "VCR",
+        "vcr",
         "recording",
         "spin",
         "backward",
@@ -2694,7 +2734,8 @@
         "gentle",
         "ambient",
         "nature",
-        "music"
+        "music",
+        "weather"
       ]
     },
     {
@@ -2758,7 +2799,8 @@
         "powerful",
         "intimidating",
         "savage",
-        "loud"
+        "loud",
+        "fantasy"
       ]
     },
     {
@@ -3061,7 +3103,8 @@
         "drop",
         "metal",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3079,7 +3122,8 @@
         "armor",
         "schoeps",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3093,7 +3137,8 @@
         "whetstone",
         "metal",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3107,7 +3152,8 @@
         "hit",
         "strike",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3120,7 +3166,8 @@
         "stone",
         "grind",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3133,7 +3180,8 @@
         "metal",
         "slide",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3146,7 +3194,8 @@
         "hit",
         "impact",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3159,7 +3208,8 @@
         "whoosh",
         "slash",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3174,7 +3224,8 @@
         "hit",
         "impact",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3187,7 +3238,8 @@
         "metal",
         "slide",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3212,7 +3264,8 @@
         "crowd",
         "chatter",
         "ambience",
-        "music"
+        "music",
+        "fantasy"
       ]
     },
     {
@@ -3240,7 +3293,8 @@
         "siege",
         "warrior",
         "combat",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -3256,7 +3310,8 @@
         "spell",
         "fantasy",
         "arcane",
-        "sinister"
+        "sinister",
+        "horror"
       ]
     },
     {
@@ -3286,7 +3341,8 @@
         "horror",
         "nautical",
         "haunted",
-        "ocean"
+        "ocean",
+        "nature"
       ]
     },
     {
@@ -3330,7 +3386,8 @@
         "haunted",
         "spooky",
         "eerie",
-        "ambient"
+        "ambient",
+        "halloween"
       ]
     },
     {
@@ -3650,7 +3707,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "underwater ambience",
       "file": "Saved sounds/dragon-studio-underwater-ambience-376890.mp3",
       "keywords": [
@@ -3659,9 +3716,11 @@
         "water",
         "ocean",
         "deep",
-        "submerged"
+        "submerged",
+        "ambient",
+        "nature"
       ],
-      "loop": false
+      "loop": true
     },
     {
       "type": "sfx",
@@ -3673,7 +3732,8 @@
         "water",
         "bubble",
         "ocean",
-        "deep"
+        "deep",
+        "nature"
       ],
       "loop": false
     },
@@ -3774,7 +3834,8 @@
         "alien",
         "sci-fi",
         "ambient",
-        "approaching"
+        "approaching",
+        "scifi"
       ]
     },
     {
@@ -3838,7 +3899,8 @@
         "eerie",
         "whistle",
         "haunting",
-        "breeze"
+        "breeze",
+        "weather"
       ]
     },
     {
@@ -3855,7 +3917,8 @@
         "haunting",
         "eerie",
         "storm",
-        "breeze"
+        "breeze",
+        "weather"
       ]
     },
     {
@@ -3923,7 +3986,8 @@
         "moonlit",
         "canine",
         "bay",
-        "mournful"
+        "mournful",
+        "nature"
       ]
     },
     {
@@ -3940,7 +4004,8 @@
         "forest",
         "howling",
         "lonesome",
-        "night"
+        "night",
+        "nature"
       ]
     },
     {
@@ -3970,7 +4035,8 @@
         "wood",
         "floating",
         "ocean",
-        "creak"
+        "creak",
+        "nature"
       ]
     },
     {
@@ -4023,7 +4089,8 @@
         "growl",
         "monster",
         "undead",
-        "creature"
+        "creature",
+        "horror"
       ]
     },
     {
@@ -4050,7 +4117,8 @@
         "roaring",
         "creature",
         "monster",
-        "undead"
+        "undead",
+        "horror"
       ]
     },
     {
@@ -4065,7 +4133,9 @@
         "creature",
         "ocean",
         "underwater",
-        "beast"
+        "beast",
+        "horror",
+        "nature"
       ]
     },
     {
@@ -4106,7 +4176,9 @@
         "war",
         "battle",
         "signal",
-        "fanfare"
+        "fanfare",
+        "fantasy",
+        "combat"
       ]
     },
     {
@@ -4148,7 +4220,8 @@
         "cry",
         "epic",
         "fight",
-        "warrior"
+        "warrior",
+        "horror"
       ]
     },
     {
@@ -4162,7 +4235,9 @@
         "shout",
         "scream",
         "battle",
-        "warrior"
+        "warrior",
+        "horror",
+        "combat"
       ]
     },
     {
@@ -4176,7 +4251,8 @@
         "battle",
         "tribal",
         "epic",
-        "march"
+        "march",
+        "combat"
       ],
       "loop": true
     },
@@ -4205,7 +4281,9 @@
         "sea",
         "storm",
         "water",
-        "crashing"
+        "crashing",
+        "nature",
+        "weather"
       ],
       "loop": true
     },
@@ -4232,7 +4310,8 @@
         "water",
         "ocean",
         "sailing",
-        "gentle"
+        "gentle",
+        "nature"
       ]
     },
     {
@@ -4283,7 +4362,9 @@
         "adventure",
         "sword",
         "fight",
-        "action"
+        "action",
+        "fantasy",
+        "combat"
       ]
     },
     {
@@ -4377,7 +4458,9 @@
         "whoosh",
         "breeze",
         "moaning",
-        "ambient"
+        "ambient",
+        "horror",
+        "halloween"
       ]
     },
     {
@@ -4424,7 +4507,9 @@
         "witch",
         "evil",
         "horror",
-        "maniacal"
+        "maniacal",
+        "fantasy",
+        "halloween"
       ]
     },
     {
@@ -4441,7 +4526,8 @@
         "clink",
         "clank",
         "captive",
-        "shackle"
+        "shackle",
+        "fantasy"
       ]
     },
     {
@@ -4458,7 +4544,8 @@
         "dark",
         "menacing",
         "mad",
-        "wicked"
+        "wicked",
+        "horror"
       ]
     },
     {
@@ -4509,7 +4596,8 @@
         "passage",
         "rumble",
         "heavy",
-        "temple"
+        "temple",
+        "fantasy"
       ]
     },
     {
@@ -4543,7 +4631,8 @@
         "flickering",
         "wall",
         "light",
-        "cave"
+        "cave",
+        "fantasy"
       ]
     },
     {
@@ -4557,7 +4646,6 @@
         "misfire",
         "magic",
         "arcane",
-        "fail",
         "pop",
         "dissipate",
         "miscast"
@@ -4594,7 +4682,9 @@
         "sneak",
         "ambush",
         "giggle",
-        "evil"
+        "evil",
+        "fantasy",
+        "horror"
       ]
     },
     {
@@ -4622,7 +4712,6 @@
         "bat",
         "screech",
         "cave",
-        "screech",
         "flap",
         "wings",
         "dark",
@@ -4679,7 +4768,8 @@
         "quest",
         "complete",
         "celebration",
-        "brass"
+        "brass",
+        "christmas"
       ]
     },
     {
@@ -4730,7 +4820,8 @@
         "quick",
         "metal",
         "assassin",
-        "pull"
+        "pull",
+        "combat"
       ]
     },
     {
@@ -4768,7 +4859,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "tavern ambience",
       "file": "Saved sounds/tavern-ambience.mp3",
       "keywords": [
@@ -4781,8 +4872,11 @@
         "fireplace",
         "warm",
         "medieval",
-        "crowd"
-      ]
+        "crowd",
+        "ambient",
+        "fantasy"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -4798,7 +4892,8 @@
         "alarm",
         "birds",
         "startled",
-        "ravens"
+        "ravens",
+        "nature"
       ]
     },
     {
@@ -4815,7 +4910,8 @@
         "bolt",
         "pew",
         "futuristic",
-        "fire"
+        "fire",
+        "scifi"
       ]
     },
     {
@@ -4832,7 +4928,8 @@
         "drone",
         "vibration",
         "ship",
-        "rumble"
+        "rumble",
+        "scifi"
       ]
     },
     {
@@ -4849,7 +4946,8 @@
         "sci-fi",
         "buzz",
         "dome",
-        "protect"
+        "protect",
+        "scifi"
       ]
     },
     {
@@ -4866,7 +4964,8 @@
         "faster",
         "light",
         "whoosh",
-        "acceleration"
+        "acceleration",
+        "scifi"
       ]
     },
     {
@@ -4883,7 +4982,8 @@
         "otherworldly",
         "xenomorph",
         "screaming",
-        "beast"
+        "beast",
+        "scifi"
       ]
     },
     {
@@ -4900,7 +5000,8 @@
         "blip",
         "panel",
         "futuristic",
-        "digital"
+        "digital",
+        "scifi"
       ]
     },
     {
@@ -4917,7 +5018,8 @@
         "footsteps",
         "whirr",
         "machine",
-        "stomp"
+        "stomp",
+        "scifi"
       ]
     },
     {
@@ -4934,7 +5036,8 @@
         "warning",
         "spaceship",
         "danger",
-        "blare"
+        "blare",
+        "scifi"
       ]
     },
     {
@@ -4968,11 +5071,12 @@
         "sheriff",
         "metal",
         "clink",
-        "footstep"
+        "footstep",
+        "christmas"
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "saloon ambience",
       "file": "Saved sounds/saloon-ambience.mp3",
       "keywords": [
@@ -4985,8 +5089,10 @@
         "drinking",
         "glasses",
         "old",
-        "west"
-      ]
+        "west",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -5019,7 +5125,8 @@
         "distorted",
         "hell",
         "snarl",
-        "creature"
+        "creature",
+        "horror"
       ]
     },
     {
@@ -5070,7 +5177,8 @@
         "haunted",
         "voice",
         "breathe",
-        "disturbing"
+        "disturbing",
+        "horror"
       ]
     },
     {
@@ -5104,7 +5212,8 @@
         "shadow",
         "power",
         "demon",
-        "electricity"
+        "electricity",
+        "horror"
       ]
     },
     {
@@ -5155,7 +5264,8 @@
         "plate",
         "metal",
         "spike",
-        "trigger"
+        "trigger",
+        "fantasy"
       ]
     },
     {
@@ -5172,7 +5282,8 @@
         "grind",
         "castle",
         "activate",
-        "click"
+        "click",
+        "fantasy"
       ]
     },
     {
@@ -5189,7 +5300,8 @@
         "crash",
         "trap",
         "medieval",
-        "slam"
+        "slam",
+        "fantasy"
       ]
     },
     {
@@ -5206,7 +5318,8 @@
         "captive",
         "dungeon",
         "clang",
-        "locked"
+        "locked",
+        "fantasy"
       ]
     },
     {
@@ -5223,7 +5336,8 @@
         "bridge",
         "mechanism",
         "entrance",
-        "creak"
+        "creak",
+        "fantasy"
       ]
     },
     {
@@ -5240,11 +5354,13 @@
         "gravestones",
         "eerie",
         "dark",
-        "sinister"
+        "sinister",
+        "horror",
+        "halloween"
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "swamp ambience",
       "file": "Saved sounds/swamp-ambience.mp3",
       "keywords": [
@@ -5257,11 +5373,13 @@
         "dark",
         "water",
         "drip",
-        "mysterious"
-      ]
+        "mysterious",
+        "ambient"
+      ],
+      "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "jungle ambience",
       "file": "Saved sounds/jungle-ambience.mp3",
       "keywords": [
@@ -5274,8 +5392,10 @@
         "insects",
         "lush",
         "exotic",
-        "nature"
-      ]
+        "nature",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -5312,7 +5432,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "sewer drip ambience",
       "file": "Saved sounds/sewer-drip-ambience.mp3",
       "keywords": [
@@ -5325,8 +5445,11 @@
         "rats",
         "water",
         "passage",
-        "grim"
-      ]
+        "grim",
+        "ambience",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -5342,7 +5465,8 @@
         "outdoor",
         "medieval",
         "vendors",
-        "lively"
+        "lively",
+        "fantasy"
       ]
     },
     {
@@ -5376,7 +5500,8 @@
         "arctic",
         "gale",
         "whiteout",
-        "winter"
+        "winter",
+        "weather"
       ]
     },
     {
@@ -5410,7 +5535,8 @@
         "tumble",
         "disaster",
         "catastrophic",
-        "deep"
+        "deep",
+        "weather"
       ]
     },
     {
@@ -5427,7 +5553,8 @@
         "rocks",
         "mist",
         "powerful",
-        "nature"
+        "nature",
+        "weather"
       ]
     },
     {
@@ -5461,7 +5588,8 @@
         "silence",
         "tense",
         "break",
-        "woodland"
+        "woodland",
+        "nature"
       ]
     },
     {
@@ -5529,7 +5657,8 @@
         "nevermore",
         "call",
         "foreboding",
-        "sinister"
+        "sinister",
+        "horror"
       ]
     },
     {
@@ -5614,7 +5743,7 @@
         "strike",
         "fast",
         "lash",
-        "Indiana"
+        "indiana"
       ]
     },
     {
@@ -5631,7 +5760,8 @@
         "strike",
         "thud",
         "heavy",
-        "buried"
+        "buried",
+        "combat"
       ]
     },
     {
@@ -5665,7 +5795,9 @@
         "glass",
         "crash",
         "chaotic",
-        "melee"
+        "melee",
+        "fantasy",
+        "combat"
       ]
     },
     {
@@ -5852,7 +5984,8 @@
         "money",
         "pouch",
         "clink",
-        "rattle"
+        "rattle",
+        "christmas"
       ]
     },
     {
@@ -5954,7 +6087,8 @@
         "jingle",
         "triumphant",
         "flourish",
-        "short"
+        "short",
+        "christmas"
       ]
     },
     {
@@ -6022,7 +6156,8 @@
         "bawdy",
         "medieval",
         "inn",
-        "celebration"
+        "celebration",
+        "fantasy"
       ]
     },
     {
@@ -6158,11 +6293,12 @@
         "flare",
         "light",
         "cave",
-        "fire"
+        "fire",
+        "fantasy"
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "campfire crackling logs",
       "file": "Saved sounds/campfire_crackle.mp3",
       "keywords": [
@@ -6175,11 +6311,14 @@
         "wood",
         "fire",
         "night",
-        "nature"
-      ]
+        "nature",
+        "ambience",
+        "ambient"
+      ],
+      "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "fireplace hearth roar",
       "file": "Saved sounds/fireplace_roar.mp3",
       "keywords": [
@@ -6192,11 +6331,14 @@
         "crackling",
         "cozy",
         "home",
-        "flames"
-      ]
+        "flames",
+        "ambience",
+        "ambient"
+      ],
+      "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "campfire ambient gentle",
       "file": "Saved sounds/campfire_ambient.mp3",
       "keywords": [
@@ -6213,8 +6355,10 @@
         "soft",
         "soothing",
         "logs",
-        "burning"
-      ]
+        "burning",
+        "ambience"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -6231,7 +6375,8 @@
         "pirate",
         "battle",
         "ignite",
-        "pyrotechnic"
+        "pyrotechnic",
+        "combat"
       ]
     },
     {
@@ -6316,7 +6461,8 @@
         "forest",
         "fire",
         "uncontrolled",
-        "catastrophic"
+        "catastrophic",
+        "nature"
       ]
     },
     {
@@ -6350,7 +6496,8 @@
         "deep",
         "suffering",
         "hit",
-        "warrior"
+        "warrior",
+        "horror"
       ]
     },
     {
@@ -6367,7 +6514,8 @@
         "high",
         "innocent",
         "small",
-        "cry"
+        "cry",
+        "horror"
       ]
     },
     {
@@ -6384,7 +6532,8 @@
         "high",
         "pitched",
         "scream",
-        "panic"
+        "panic",
+        "horror"
       ]
     },
     {
@@ -6435,7 +6584,8 @@
         "battle",
         "grunt",
         "loud",
-        "male"
+        "male",
+        "combat"
       ]
     },
     {
@@ -6469,7 +6619,8 @@
         "young",
         "helpless",
         "distress",
-        "small"
+        "small",
+        "horror"
       ]
     },
     {
@@ -6563,7 +6714,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "silence ambience room",
       "file": "Saved sounds/silence_ambience_room.mp3",
       "keywords": [
@@ -6576,8 +6727,10 @@
         "calm",
         "indoor",
         "peaceful",
-        "tone"
-      ]
+        "tone",
+        "ambient"
+      ],
+      "loop": true
     },
     {
       "type": "sfx",
@@ -6661,7 +6814,9 @@
         "wicked",
         "witch",
         "mad",
-        "theatrical"
+        "theatrical",
+        "horror",
+        "halloween"
       ]
     },
     {
@@ -6695,7 +6850,8 @@
         "impact",
         "combat",
         "fight",
-        "weapon"
+        "weapon",
+        "fantasy"
       ]
     },
     {
@@ -6716,7 +6872,7 @@
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "forest ambience daytime",
       "file": "Saved sounds/forest_ambience_daytime.mp3",
       "keywords": [
@@ -6729,12 +6885,13 @@
         "nature",
         "outdoor",
         "peaceful",
-        "woods"
+        "woods",
+        "ambient"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "mountain wind ambience",
       "file": "Saved sounds/mountain_wind_ambience.mp3",
       "keywords": [
@@ -6747,12 +6904,13 @@
         "altitude",
         "outdoor",
         "nature",
-        "gusting"
+        "gusting",
+        "ambient"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "campfire night crickets",
       "file": "Saved sounds/campfire_night_crickets.mp3",
       "keywords": [
@@ -6765,12 +6923,13 @@
         "fire",
         "peaceful",
         "ambient",
-        "nature"
+        "nature",
+        "ambience"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "dungeon stone ambience",
       "file": "Saved sounds/dungeon_stone_ambience.mp3",
       "keywords": [
@@ -6783,12 +6942,14 @@
         "dark",
         "hollow",
         "ominous",
-        "cavern"
+        "cavern",
+        "ambient",
+        "fantasy"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "castle courtyard ambience",
       "file": "Saved sounds/castle_courtyard_ambience.mp3",
       "keywords": [
@@ -6801,12 +6962,14 @@
         "birds",
         "wind",
         "fantasy",
-        "atmosphere"
+        "atmosphere",
+        "ambient",
+        "nature"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "ocean harbor ambience",
       "file": "Saved sounds/ocean_harbor_ambience.mp3",
       "keywords": [
@@ -6819,12 +6982,14 @@
         "port",
         "dock",
         "sea",
-        "ship"
+        "ship",
+        "ambient",
+        "nature"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "rainy forest ambience",
       "file": "Saved sounds/rainy_forest_ambience.mp3",
       "keywords": [
@@ -6837,7 +7002,9 @@
         "leaves",
         "outdoor",
         "storm",
-        "wet"
+        "wet",
+        "ambient",
+        "weather"
       ],
       "loop": true
     },
@@ -6855,7 +7022,8 @@
         "freezing",
         "outdoor",
         "eerie",
-        "quiet"
+        "quiet",
+        "weather"
       ],
       "loop": true
     },
@@ -6891,7 +7059,8 @@
         "dark",
         "subterranean",
         "cavern",
-        "ambient"
+        "ambient",
+        "nature"
       ],
       "loop": true
     },
@@ -6909,12 +7078,14 @@
         "wind",
         "turbulent",
         "maritime",
-        "storm"
+        "storm",
+        "nature",
+        "weather"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "desert night ambience",
       "file": "Saved sounds/desert_night_ambience.mp3",
       "keywords": [
@@ -6927,12 +7098,13 @@
         "dry",
         "quiet",
         "outdoor",
-        "sandstorm"
+        "sandstorm",
+        "ambient"
       ],
       "loop": true
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "village morning ambience",
       "file": "Saved sounds/village_morning_ambience.mp3",
       "keywords": [
@@ -6945,7 +7117,10 @@
         "peaceful",
         "medieval",
         "outdoor",
-        "dawn"
+        "dawn",
+        "ambient",
+        "fantasy",
+        "nature"
       ],
       "loop": true
     },
@@ -6963,7 +7138,8 @@
         "walking",
         "rattling",
         "medieval",
-        "warrior"
+        "warrior",
+        "fantasy"
       ]
     },
     {
@@ -6980,7 +7156,8 @@
         "metal",
         "impact",
         "combat",
-        "clang"
+        "clang",
+        "fantasy"
       ]
     },
     {
@@ -7031,7 +7208,8 @@
         "incantation",
         "hex",
         "wicked",
-        "occult"
+        "occult",
+        "horror"
       ]
     },
     {
@@ -7183,7 +7361,8 @@
         "submerged",
         "abyss",
         "ambient",
-        "ethereal"
+        "ethereal",
+        "nature"
       ]
     },
     {
@@ -7274,7 +7453,8 @@
         "stars",
         "galaxy",
         "ethereal",
-        "vast"
+        "vast",
+        "scifi"
       ]
     },
     {
@@ -7334,7 +7514,8 @@
         "foreboding",
         "claustrophobic",
         "dnd",
-        "exploration"
+        "exploration",
+        "fantasy"
       ]
     },
     {
@@ -7410,7 +7591,8 @@
         "drinking",
         "rowdy",
         "medieval",
-        "jolly"
+        "jolly",
+        "fantasy"
       ]
     },
     {
@@ -7483,7 +7665,8 @@
         "deep",
         "mournful",
         "underwater",
-        "majestic"
+        "majestic",
+        "nature"
       ]
     },
     {
@@ -7498,7 +7681,8 @@
         "harbor",
         "ocean",
         "bird",
-        "squawk"
+        "squawk",
+        "nature"
       ]
     },
     {
@@ -7543,11 +7727,12 @@
         "bugle",
         "forest",
         "rutting",
-        "woodland"
+        "woodland",
+        "nature"
       ]
     },
     {
-      "type": "sfx",
+      "type": "ambience",
       "name": "cricket chorus night",
       "file": "Saved sounds/cricket-chorus-night.mp3",
       "keywords": [
@@ -7557,7 +7742,9 @@
         "insect",
         "summer",
         "evening",
-        "chorus"
+        "chorus",
+        "ambience",
+        "ambient"
       ],
       "loop": true
     },
@@ -7588,7 +7775,8 @@
         "weapon",
         "ranged",
         "medieval",
-        "fire"
+        "fire",
+        "fantasy"
       ]
     },
     {
@@ -7618,7 +7806,8 @@
         "thud",
         "magic",
         "stone",
-        "impact"
+        "impact",
+        "fantasy"
       ]
     },
     {
@@ -7633,7 +7822,10 @@
         "barrage",
         "medieval",
         "siege",
-        "war"
+        "war",
+        "fantasy",
+        "combat",
+        "weather"
       ]
     },
     {
@@ -7648,7 +7840,8 @@
         "army",
         "galloping",
         "battle",
-        "thundering"
+        "thundering",
+        "combat"
       ]
     },
     {
@@ -7663,7 +7856,8 @@
         "trebuchet",
         "projectile",
         "medieval",
-        "war"
+        "war",
+        "fantasy"
       ]
     },
     {
@@ -7678,7 +7872,8 @@
         "castle",
         "impact",
         "war",
-        "breach"
+        "breach",
+        "fantasy"
       ]
     },
     {
@@ -7693,7 +7888,8 @@
         "weapon",
         "medieval",
         "spiked",
-        "heavy"
+        "heavy",
+        "fantasy"
       ]
     },
     {
@@ -7738,7 +7934,8 @@
         "blast",
         "charge",
         "command",
-        "resonating"
+        "resonating",
+        "combat"
       ]
     },
     {
@@ -7753,7 +7950,8 @@
         "roar",
         "final",
         "beast",
-        "kill"
+        "kill",
+        "horror"
       ]
     },
     {
@@ -7768,7 +7966,8 @@
         "flame",
         "roar",
         "devastating",
-        "attack"
+        "attack",
+        "fantasy"
       ]
     },
     {
@@ -7783,7 +7982,8 @@
         "unbuckle",
         "chainmail",
         "knight",
-        "plate"
+        "plate",
+        "fantasy"
       ]
     },
     {
@@ -7798,7 +7998,8 @@
         "pirate",
         "battle",
         "volley",
-        "blast"
+        "blast",
+        "combat"
       ]
     },
     {
@@ -7903,7 +8104,8 @@
         "shadow",
         "necromantic",
         "force",
-        "blast"
+        "blast",
+        "horror"
       ]
     },
     {
@@ -7948,7 +8150,8 @@
         "wailing",
         "evil",
         "necromantic",
-        "death"
+        "death",
+        "horror"
       ]
     },
     {
@@ -7994,7 +8197,8 @@
         "torrential",
         "deluge",
         "storm",
-        "intense"
+        "intense",
+        "weather"
       ],
       "loop": true
     },
@@ -8025,7 +8229,8 @@
         "fracture",
         "lake",
         "shatter",
-        "cold"
+        "cold",
+        "nature"
       ]
     },
     {
@@ -8070,7 +8275,8 @@
         "jump",
         "lake",
         "river",
-        "impact"
+        "impact",
+        "nature"
       ]
     },
     {
@@ -8085,7 +8291,8 @@
         "trickling",
         "creek",
         "peaceful",
-        "water"
+        "water",
+        "nature"
       ],
       "loop": true
     },
@@ -8147,7 +8354,8 @@
         "alert",
         "guard",
         "castle",
-        "urgent"
+        "urgent",
+        "fantasy"
       ]
     },
     {
@@ -8177,7 +8385,8 @@
         "rumble",
         "dungeon",
         "danger",
-        "crushing"
+        "crushing",
+        "fantasy"
       ]
     },
     {
@@ -8252,7 +8461,8 @@
         "dungeon",
         "pressure",
         "mechanism",
-        "trigger"
+        "trigger",
+        "fantasy"
       ]
     },
     {
@@ -8267,7 +8477,8 @@
         "rpg",
         "tabletop",
         "tumble",
-        "chance"
+        "chance",
+        "fantasy"
       ]
     },
     {
@@ -8327,7 +8538,8 @@
         "goblet",
         "drink",
         "celebration",
-        "tavern"
+        "tavern",
+        "fantasy"
       ]
     },
     {
@@ -8434,7 +8646,8 @@
         "tankard",
         "ale",
         "tavern",
-        "thirsty"
+        "thirsty",
+        "fantasy"
       ]
     },
     {
@@ -8479,7 +8692,8 @@
         "horse",
         "medieval",
         "transport",
-        "rattling"
+        "rattling",
+        "fantasy"
       ]
     },
     {
@@ -8731,7 +8945,8 @@
         "festival",
         "bpm-128",
         "tempo-upbeat",
-        "synth"
+        "synth",
+        "scifi"
       ],
       "loop": true,
       "bpm": 128

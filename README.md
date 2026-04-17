@@ -120,6 +120,50 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 - **Mobile companion app** — control board from your phone
 - **Community marketplace** — user-created sound packs and story scenes
 
+## External Controllers (`window.Effexiq`)
+
+Effexiq exposes a small, stable command surface for external controllers — Stream Deck plugins, OBS browser sources, bookmarklets, webhooks, and anonymous Twitch chat. Every channel funnels into the same rate-limited handler, so your integration never depends on engine internals.
+
+### Command channels
+
+```js
+// 1. Direct JS (same-page integrations / devtools)
+await window.Effexiq.trigger('thunder');                 // by name or id
+await window.Effexiq.trigger('rolling thunder', { volume: 0.8 });
+await window.Effexiq.stopAll();
+await window.Effexiq.scene('Combat');
+window.Effexiq.status();                                 // { mode, mood, listening, music, activeSounds, twitch }
+
+// 2. CustomEvent (for modules that load before window.Effexiq is attached)
+window.dispatchEvent(new CustomEvent('effexiq:command', {
+    detail: { type: 'trigger', query: 'thunder' }
+}));
+
+// 3. postMessage (OBS browser sources / iframes — origin-gated)
+window.postMessage({ effexiq: 'trigger', query: 'thunder' }, '*');
+```
+
+All `trigger` calls resolve to `{ ok, name, soundId, url, source }` so you can later stop a specific instance with the engine API.
+
+### Twitch chat bridge (no OAuth)
+
+```js
+window.Effexiq.twitch.connect('aaronc1992');
+// Viewers can now type in chat:
+//   !sfx thunder       → plays a thunder SFX
+//   !stop              → stops all audio
+//   !scene Combat      → applies the Combat scene preset
+window.Effexiq.twitch.disconnect();
+```
+
+Effexiq joins as an anonymous `justinfan*` user over Twitch's WebSocket IRC gateway — **read-only, no tokens, no chat writes**. Unknown bang-commands are ignored. Commands are rate-limited (500ms per `type:query` pair by default) so a chat flood can't thrash the audio graph.
+
+### Rate limiting & origin allowlist
+
+- Default rate limit: 500ms per command key.
+- `postMessage` commands from cross-origin pages are rejected unless the origin is in `allowedOrigins` (set when constructing the bridge). Same-origin messages always pass.
+- Unknown command types return `{ ok: false, error: 'unknown command' }` rather than throwing, so older clients don't crash when a newer bridge adds commands.
+
 ## Get in Touch
 
 Interested in Effexiq? Reach out:

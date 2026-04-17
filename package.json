@@ -10,7 +10,9 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "catalog:check": "node scripts/retag-catalog.js --check",
+    "catalog:write": "node scripts/retag-catalog.js --write"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1024.0",

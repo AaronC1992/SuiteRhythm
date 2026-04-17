@@ -24,6 +24,12 @@ import {
 import { installSidechainDuck } from '../lib/modules/sidechain-duck.js';
 import { TensionCurve } from '../lib/modules/tension-curve.js';
 import { PriorityBudget } from '../lib/modules/priority-budget.js';
+import { HowlLRU } from '../lib/modules/howl-lru.js';
+import { getSharedTicker } from '../lib/modules/raf-coalesce.js';
+import { cooldownFor as durationCooldownFor, waitBeforeStart as waitBeforeCueStart } from '../lib/modules/duration-scheduler.js';
+import { recordFire as recordKeywordFire, cooldownFor as learnedKeywordCooldown } from '../lib/modules/keyword-learning.js';
+import { MusicCrossfader } from '../lib/modules/music-crossfade.js';
+import { ExternalBridge } from '../lib/modules/external-trigger.js';
 import { applyHorrorRestraint } from '../lib/modules/scene-toggles.js';
 import { installErrorReporter } from '../lib/modules/error-reporter.js';
 
@@ -3336,6 +3342,16 @@ class Effexiq {
         // ===== OBS WebSocket Integration =====
         this._setupObsBridge();
 
+        // ===== External-Controller Bridge =====
+        // Exposes a single command surface (window.Effexiq.trigger/stopAll/
+        // scene, 'effexiq:command' CustomEvents, postMessage, and optional
+        // Twitch chat !bang-commands) so Stream Deck / OBS browser source /
+        // custom bookmarklets can drive the engine without reaching into it.
+        try {
+            this.externalBridge = new ExternalBridge(this, { rateLimitMs: 500 });
+            this.externalBridge.install();
+        } catch (e) { debugLog('ExternalBridge init failed:', e?.message); }
+
         // Control Buttons
         const testMicBtnEl = document.getElementById('testMicBtn');
         if (testMicBtnEl) testMicBtnEl.addEventListener('click', () => this.testMicrophone());
@@ -4157,9 +4173,14 @@ class Effexiq {
         this.analyser.fftSize = 256;
         
         // Audio graph:
-        // music -> musicGain -> master -> limiter -> analyser -> destination
+        // music -> [crossfader A/B buses] -> musicGain -> master -> limiter -> analyser -> destination
         // sfx (per-source) -> panner -> gain -> [reverbSend branch] -> sfxCompressor -> sfxBusGain -> master
         this.musicGainNode.connect(this.masterGainNode);
+        // WebAudio crossfader sits in front of musicGainNode — two parallel
+        // buses let incoming tracks fade in while the outgoing track fades out
+        // without either one touching the other's gain curve.
+        try { this.musicCrossfader = new MusicCrossfader(this.audioContext, this.musicGainNode); }
+        catch (e) { this.musicCrossfader = null; debugLog('MusicCrossfader init failed:', e?.message); }
         this.sfxCompressor.connect(this.sfxBusGain);
         this.sfxBusGain.connect(this.masterGainNode);
         // Reverb return lands on the master bus (post sfxBus so it adds tail).
@@ -4196,6 +4217,19 @@ class Effexiq {
         this.tensionCurve = new TensionCurve();
         this.priorityBudget = new PriorityBudget({ ambient: 3, sfx: 4, stinger: 2, music: 1 });
 
+        // LRU pool of Howl instances, keyed by canonical URL. Evicts and unloads
+        // idle Howls so long sessions don't balloon memory.
+        this.howlPool = new HowlLRU(32);
+
+        // Rolling log of "currently playing" cues used by duration-scheduler to
+        // decide the earliest safe start for the next cue of the same category.
+        // Entries: { id, category, startedAt, durationMs, token }
+        this._cueTimeline = [];
+
+        // Handles for the shared rAF ticker (one loop drives visualizer + mic).
+        this._visualizerTickHandle = null;
+        this._micSampleTickHandle = null;
+
         // Global audio unlock for mobile: resume AudioContext on first user gesture
         this._setupMobileAudioUnlock();
     }
@@ -4208,6 +4242,13 @@ class Effexiq {
             h = Math.imul(h, 16777619);
         }
         return h >>> 0;
+    }
+
+    /** Remove an entry from the cue timeline by active-sound id. */
+    _removeFromCueTimeline(id) {
+        if (!this._cueTimeline || id == null) return;
+        const idx = this._cueTimeline.findIndex(e => e.id === id);
+        if (idx >= 0) this._cueTimeline.splice(idx, 1);
     }
 
     /**
@@ -4313,9 +4354,8 @@ class Effexiq {
             const sample = () => {
                 if (!this._micAnalyser) return;
                 if (!this.isListening) {
-                    // Decay back to neutral and stop the loop
+                    // Decay back to neutral; ticker handle removal happens in stopListening.
                     this.voiceIntensity = 0.5;
-                    this._micSampleRAF = null;
                     return;
                 }
                 this._micAnalyser.getByteTimeDomainData(buf);
@@ -4332,10 +4372,15 @@ class Effexiq {
                 this._processVoiceDuck(rms);
                 // Sing mode: onset/BPM detection + song-end detection
                 if (this.currentMode === 'sing') this._processSingFrame(rms);
-                this._micSampleRAF = requestAnimationFrame(sample);
             };
             this._micSampleFn = sample; // store for restart after stopListening
-            this._micSampleRAF = requestAnimationFrame(sample);
+            try {
+                this._micSampleTickHandle = getSharedTicker().add(sample);
+            } catch (_) {
+                // Fallback to per-instance rAF if the ticker is unavailable (SSR etc.).
+                const loop = () => { sample(); if (this.isListening) this._micSampleRAF = requestAnimationFrame(loop); };
+                this._micSampleRAF = requestAnimationFrame(loop);
+            }
             debugLog('Mic intensity analyser started');
         } catch (e) {
             debugLog('Mic intensity analyser unavailable:', e.message);
@@ -4815,9 +4860,17 @@ class Effexiq {
         
             for (const [keyword, config] of Object.entries(this.instantKeywords)) {
                 if (triggered >= maxTriggers) break;
-                // Per-keyword cooldown to prevent spam from repeated interim transcripts
+                // Per-keyword cooldown to prevent spam from repeated interim transcripts.
+                // Base cooldown from settings, then blend with the learned cooldown so
+                // keywords that spam get stretched and rare ones get shorter gaps.
                 const lastTrigger = this.instantKeywordCooldowns.get(keyword) || 0;
-                if (now - lastTrigger < KEYWORD_COOLDOWN) continue;
+                let effectiveCooldown = KEYWORD_COOLDOWN;
+                try {
+                    const learned = learnedKeywordCooldown(keyword);
+                    // Weighted average biased slightly toward the learned value.
+                    effectiveCooldown = Math.round((KEYWORD_COOLDOWN * 0.4) + (learned * 0.6));
+                } catch (_) {}
+                if (now - lastTrigger < effectiveCooldown) continue;
                 // Skip keywords whose event was already consumed (e.g. the train already passed)
                 if (this._isEventConsumed(keyword)) continue;
                 const escapedKw = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -4825,6 +4878,7 @@ class Effexiq {
                 // Check primary transcript, alternative transcriptions, AND synonym expansions
                 if (regex.test(lowerText) || lowerAlts.some(alt => regex.test(alt)) || expandedHits.has(keyword)) {
                     this.instantKeywordCooldowns.set(keyword, now);
+                    try { recordKeywordFire(keyword); } catch (_) {}
                     debugLog(`Instant trigger detected: "${keyword}"`);
                     this.bumpStat('keywords');
                     this.bumpStat('triggers');
@@ -5017,6 +5071,15 @@ class Effexiq {
                 
                 // Track as active sound
                 const id = 'instant_' + Date.now();
+                let budgetToken = null;
+                if (this.priorityBudget) {
+                    try { budgetToken = this.priorityBudget.add('sfx', id); } catch (_) {}
+                }
+                try {
+                    const durMs = buffer?.duration ? Math.round(buffer.duration * 1000) : 1500;
+                    this._cueTimeline.push({ id, category: 'sfx', startedAt: Date.now(), durationMs: durMs, token: budgetToken });
+                    if (this._cueTimeline.length > 64) this._cueTimeline.splice(0, this._cueTimeline.length - 64);
+                } catch (_) {}
                 this.activeSounds.set(id, {
                     type: 'sfx',
                     source,
@@ -5027,6 +5090,8 @@ class Effexiq {
                 // Clean up on end (only fires for non-looping sources)
                 source.onended = () => {
                     this.activeSounds.delete(id);
+                    if (budgetToken != null) this.priorityBudget?.remove(budgetToken);
+                    this._removeFromCueTimeline(id);
                     try { source.disconnect(); } catch {}
                     try { gainNode.disconnect(); } catch {}
                     if (panner) { try { panner.disconnect(); } catch {} }
@@ -6399,51 +6464,108 @@ class Effexiq {
         // apply the cached replay gain. First-time plays are untouched
         // (gain=1.0) and prime the cache for next time.
         const normalizedVol = applyLoudnessGain(spatialEffective, options.id || options.name);
-        const howl = new Howl({
-            src: sfxSrcs,
-            volume: normalizedVol,
-            loop: !!options.loop,
-            rate: spatialPitch,
-            stereo: az,
-            onload: () => {
-                debugLog(`SFX loaded: ${options.name}`);
-                // Cache duration for Sound Library display
-                if (options.id && howl.duration() > 0) {
-                    this.durationCache.set(options.id, howl.duration());
+
+        // Priority budget: enforce per-category caps. For stingers we ask the
+        // budget to evict the oldest ambient cue first so the hit can land.
+        const budgetCat = options.category === 'stinger' ? 'stinger' : 'sfx';
+        if (this.priorityBudget && !this.priorityBudget.canAdd(budgetCat)) {
+            if (budgetCat === 'stinger') {
+                const victim = this.priorityBudget.oldestIn('ambient') || this.priorityBudget.oldestIn('sfx');
+                if (victim) {
+                    const aged = this.activeSounds.get(victim.id);
+                    if (aged?._howl) { try { aged._howl.fade(aged._howl.volume(), 0, 200); } catch (_) {} }
+                    this.priorityBudget.remove(victim.token);
                 }
-                // Cache decoded buffer for next time (if using Web Audio backend)
-                if (howl._sounds && howl._sounds.length > 0) {
-                    const sound = howl._sounds[0];
-                    if (sound._node && sound._node.bufferSource && sound._node.bufferSource.buffer) {
-                        this.addToBufferCache(url, sound._node.bufferSource.buffer);
+            } else {
+                // SFX cap hit — let the natural age-based cleanup handle it; skip this one.
+                debugLog(`SFX budget full, skipping: ${options.name}`);
+                return null;
+            }
+        }
+
+        // Reuse a pooled Howl if we have one decoded for this URL. Otherwise
+        // create a new one and register it in the LRU cache.
+        let howl = this.howlPool ? this.howlPool.get(url) : null;
+        const pooled = !!howl;
+        // Forward-declared so the Howl onend closure can see them before they're assigned.
+        let id = null;
+        let budgetToken = null;
+        if (!howl) {
+            howl = new Howl({
+                src: sfxSrcs,
+                volume: normalizedVol,
+                loop: !!options.loop,
+                rate: spatialPitch,
+                stereo: az,
+                onload: () => {
+                    debugLog(`SFX loaded: ${options.name}`);
+                    // Cache duration for Sound Library display
+                    if (options.id && howl.duration() > 0) {
+                        this.durationCache.set(options.id, howl.duration());
+                    }
+                    // Cache decoded buffer for next time (if using Web Audio backend)
+                    if (howl._sounds && howl._sounds.length > 0) {
+                        const sound = howl._sounds[0];
+                        if (sound._node && sound._node.bufferSource && sound._node.bufferSource.buffer) {
+                            this.addToBufferCache(url, sound._node.bufferSource.buffer);
+                        }
+                    }
+                    // Prime the loudness cache for future plays of this id.
+                    try { primeReplayGain(options.id || options.name, url, this.audioContext); } catch {}
+                },
+                onloaderror: (sid, err) => {
+                    console.warn('SFX load error:', options.name, err, 'sources:', sfxSrcs);
+                    if (this.howlPool) this.howlPool.delete(url);
+                },
+                onplayerror: (sid, err) => {
+                    console.warn('SFX play error:', options.name, err, 'sources:', sfxSrcs);
+                    // Mobile: resume AudioContext and retry once
+                    if (this.audioContext && this.audioContext.state === 'suspended') {
+                        this.audioContext.resume().then(() => howl.play()).catch(() => {});
+                    }
+                },
+                onend: () => {
+                    // Looping sounds should NOT be cleaned up on each loop iteration
+                    if (howl.loop()) return;
+                    this.activeSounds.delete(id);
+                    if (budgetToken != null) this.priorityBudget?.remove(budgetToken);
+                    this._removeFromCueTimeline(id);
+                    this.updateSoundsList();
+                    // Pool handles unloading on eviction. Keep the Howl loaded so a
+                    // rapid second play reuses the decoded buffer.
+                    if (this.howlPool) {
+                        this.howlPool.set(url, howl);
+                    } else {
+                        howl.unload();
                     }
                 }
-                // Prime the loudness cache for future plays of this id.
-                try { primeReplayGain(options.id || options.name, url, this.audioContext); } catch {}
-            },
-            onloaderror: (id, err) => {
-                // Only log errors in debug mode to avoid console spam
-                console.warn('SFX load error:', options.name, err, 'sources:', sfxSrcs);
-                // Don't show status errors for failed sounds - they're often recoverable
-            },
-            onplayerror: (id, err) => {
-                console.warn('SFX play error:', options.name, err, 'sources:', sfxSrcs);
-                // Mobile: resume AudioContext and retry once
-                if (this.audioContext && this.audioContext.state === 'suspended') {
-                    this.audioContext.resume().then(() => howl.play()).catch(() => {});
-                }
-            },
-            onend: () => {
-                // Looping sounds should NOT be cleaned up on each loop iteration
-                if (howl.loop()) return;
-                this.activeSounds.delete(id);
-                this.updateSoundsList();
-                howl.unload();
-            }
-        });
+            });
+            if (this.howlPool) this.howlPool.set(url, howl);
+        } else {
+            // Pooled: reapply per-call parameters.
+            try {
+                howl.volume(normalizedVol);
+                howl.loop(!!options.loop);
+                howl.rate(spatialPitch);
+                if (typeof howl.stereo === 'function') howl.stereo(az);
+            } catch (_) {}
+            debugLog(`SFX pool hit: ${options.name}`);
+        }
         
-        const id = Date.now() + Math.random();
+        id = Date.now() + Math.random();
         const soundId = howl.play();
+        // Register this cue with the priority budget and duration-scheduler timeline.
+        if (this.priorityBudget) {
+            try { budgetToken = this.priorityBudget.add(budgetCat, id); } catch (_) {}
+        }
+        try {
+            const durationMs = (typeof howl.duration === 'function' && howl.duration() > 0)
+                ? Math.round(howl.duration() * 1000)
+                : 2500; // safe default for short SFX
+            this._cueTimeline.push({ id, category: budgetCat, startedAt: Date.now(), durationMs, token: budgetToken });
+            // Trim very old entries defensively.
+            if (this._cueTimeline.length > 64) this._cueTimeline.splice(0, this._cueTimeline.length - 64);
+        } catch (_) {}
         this.activeSounds.set(id, { 
             _howl: howl, 
             soundId, 
@@ -6467,16 +6589,9 @@ class Effexiq {
         const oldHowl = this.currentMusic;
         const crossfadeMs = 2500;
 
-        // Crossfade: fade out old music over 2.5s (old track keeps playing during fade)
-        if (oldHowl && oldHowl._howl) {
-            const old = oldHowl._howl;
-            old.fade(old.volume(), 0, crossfadeMs);
-            setTimeout(() => {
-                try { old.stop(); old.unload(); } catch(_){}
-            }, crossfadeMs + 100);
-        }
-
-        // Create new Howl instance for music
+        // Create new Howl instance for music. We start it muted and let the
+        // MusicCrossfader drive the fade-in so the volume curve matches the
+        // fade-out of the previous track exactly.
         const musicSrcs = this.buildSrcCandidates(url);
         const newHowl = new Howl({
             src: musicSrcs,
@@ -6513,8 +6628,25 @@ class Effexiq {
             }
         });
 
-        newHowl.play();
-        newHowl.fade(0, targetVol, crossfadeMs);
+        if (this.musicCrossfader) {
+            // WebAudio-routed crossfade: new track fades in on the inactive
+            // bus while the old one fades out on the active bus. Old Howl is
+            // stopped/unloaded ~100ms after the fade completes.
+            this.musicCrossfader.crossfadeToHowl(newHowl, targetVol, crossfadeMs);
+            if (oldHowl && oldHowl._howl && oldHowl._howl !== newHowl) {
+                setTimeout(() => { try { oldHowl._howl.unload(); } catch (_) {} }, crossfadeMs + 150);
+            }
+        } else {
+            // Fallback: manual per-Howl volume fade if the crossfader failed
+            // to initialize (e.g., AudioContext unavailable).
+            if (oldHowl && oldHowl._howl) {
+                const old = oldHowl._howl;
+                try { old.fade(old.volume(), 0, crossfadeMs); } catch (_) {}
+                setTimeout(() => { try { old.stop(); old.unload(); } catch (_) {} }, crossfadeMs + 100);
+            }
+            newHowl.play();
+            try { newHowl.fade(0, targetVol, crossfadeMs); } catch (_) {}
+        }
 
         // Snapshot previous music for undo-last-music.
         if (this.currentMusic && this.currentMusic.name && this.currentMusic.name !== options.name) {
@@ -6981,8 +7113,6 @@ class Effexiq {
 
         let frameSkip = 0;
         const draw = () => {
-            this.visualizerAnimationId = requestAnimationFrame(draw);
-            
             const bufferLength = this.analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
             this.analyser.getByteFrequencyData(dataArray);
@@ -7019,12 +7149,22 @@ class Effexiq {
             }
         };
         
-        draw();
+        // Run through the shared rAF ticker so visualizer + mic sampler share one loop.
+        try {
+            this._visualizerTickHandle = getSharedTicker().add(draw);
+        } catch (_) {
+            draw();
+        }
     }
     
     stopVisualizer() {
+        if (this._visualizerTickHandle) {
+            try { getSharedTicker().remove(this._visualizerTickHandle); } catch (_) {}
+            this._visualizerTickHandle = null;
+        }
         if (this.visualizerAnimationId) {
             cancelAnimationFrame(this.visualizerAnimationId);
+            this.visualizerAnimationId = null;
         }
     }
     
@@ -7290,9 +7430,13 @@ class Effexiq {
         if (!isMobileDevice()) {
             if (!this._micAnalyser) {
                 this._setupMicIntensityAnalyser().catch(() => {});
-            } else if (!this._micSampleRAF && this._micSampleFn) {
-                // RAF loop stopped on previous stopListening — restart it
-                this._micSampleRAF = requestAnimationFrame(this._micSampleFn);
+            } else if (!this._micSampleTickHandle && !this._micSampleRAF && this._micSampleFn) {
+                // Ticker / RAF loop was torn down on previous stopListening — restart it.
+                try {
+                    this._micSampleTickHandle = getSharedTicker().add(this._micSampleFn);
+                } catch (_) {
+                    this._micSampleRAF = requestAnimationFrame(this._micSampleFn);
+                }
             }
         } else {
             this.voiceIntensity = 0.7; // neutral fallback on mobile
@@ -7378,6 +7522,10 @@ class Effexiq {
         }
         this._cancelBeatSilence();
         // Clean up mic intensity RAF loop
+        if (this._micSampleTickHandle) {
+            try { getSharedTicker().remove(this._micSampleTickHandle); } catch (_) {}
+            this._micSampleTickHandle = null;
+        }
         if (this._micSampleRAF) {
             cancelAnimationFrame(this._micSampleRAF);
             this._micSampleRAF = null;
@@ -7787,7 +7935,14 @@ class Effexiq {
     scheduleNextStinger() {
         if (!this.sfxEnabled || !this.predictionEnabled) return;
         if (this.stingerTimer) clearTimeout(this.stingerTimer);
-        const interval = 20000 + Math.random() * 25000; // 20–45s
+        // Base cadence: 20-45s random. Duration-scheduler extends the wait if a
+        // stinger is still playing so we don't double-book the bus.
+        const baseInterval = 20000 + Math.random() * 25000;
+        let interval = baseInterval;
+        try {
+            const extra = waitBeforeCueStart(this._cueTimeline, { category: 'stinger', durationMs: 2000, now: Date.now() });
+            if (extra > 0) interval = baseInterval + extra;
+        } catch (_) {}
         const modeAtSchedule = this.currentMode;
         this.stingerTimer = setTimeout(async () => {
             if (this.currentMode !== modeAtSchedule) return;
@@ -7795,11 +7950,14 @@ class Effexiq {
             const choice = stingerSet[Math.floor(Math.random()*stingerSet.length)];
             const url = await this.searchAudio(choice, 'sfx');
             if (url) {
-                await this.playAudio(url, { type:'sfx', name: choice, volume: this.calculateVolume(0.5), loop:false });
+                await this.playAudio(url, { type:'sfx', name: choice, volume: this.calculateVolume(0.5), loop:false, category: 'stinger' });
                 // Creator-mode mobile haptic so phone-as-screen users get a kick.
                 try { this._maybeVibrateStinger(); } catch {}
             }
-            this.scheduleNextStinger();
+            // Post-cue cooldown (longer for ambient-style stingers, shorter for surprise hits).
+            let postCooldown = 0;
+            try { postCooldown = durationCooldownFor(choice, 'stinger'); } catch (_) {}
+            setTimeout(() => this.scheduleNextStinger(), postCooldown);
         }, interval);
     }
 
@@ -10236,9 +10394,25 @@ class Effexiq {
             if (this._browserTTSSyncTimer) clearInterval(this._browserTTSSyncTimer);
             if (this._pauseResumeInterval) clearInterval(this._pauseResumeInterval);
 
-            // Cancel animation frames
+            // Cancel animation frames / shared ticker handles
+            try {
+                const ticker = getSharedTicker();
+                if (this._visualizerTickHandle) ticker.remove(this._visualizerTickHandle);
+                if (this._micSampleTickHandle) ticker.remove(this._micSampleTickHandle);
+            } catch (_) {}
+            this._visualizerTickHandle = null;
+            this._micSampleTickHandle = null;
             if (this.visualizerAnimationId) cancelAnimationFrame(this.visualizerAnimationId);
             if (this._micSampleRAF) cancelAnimationFrame(this._micSampleRAF);
+
+            // Drain the Howl pool so every decoded buffer is released.
+            try { this.howlPool?.clear?.(); } catch (_) {}
+            // Tear down the music crossfade buses.
+            try { this.musicCrossfader?.destroy?.(); } catch (_) {}
+            this.musicCrossfader = null;
+            // Detach the external-controller bridge (window listeners, Twitch).
+            try { this.externalBridge?.uninstall?.(); } catch (_) {}
+            this.externalBridge = null;
 
             // Uninstall keyboard shortcuts + cancel any pending bedtime fade
             try { uninstallKeyboardShortcuts(); } catch {}
