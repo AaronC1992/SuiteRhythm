@@ -12350,7 +12350,8 @@
         "ethereal",
         "bpm-64",
         "tempo-slow",
-        "dreamy"
+        "dreamy",
+        "scifi"
       ],
       "loop": true,
       "bpm": 64
@@ -12581,7 +12582,8 @@
         "indie",
         "bpm-88",
         "tempo-mid",
-        "dreamy"
+        "dreamy",
+        "scifi"
       ],
       "loop": true,
       "bpm": 88
@@ -13070,7 +13072,8 @@
         "analog-synth",
         "bpm-100",
         "tempo-mid",
-        "retro"
+        "retro",
+        "scifi"
       ],
       "loop": true,
       "bpm": 100
@@ -13435,7 +13438,8 @@
         "synth",
         "bpm-126",
         "tempo-upbeat",
-        "energetic"
+        "energetic",
+        "scifi"
       ],
       "loop": true,
       "bpm": 126
@@ -13455,7 +13459,9 @@
         "analog-synth",
         "bpm-118",
         "tempo-upbeat",
-        "retro"
+        "retro",
+        "scifi",
+        "nature"
       ],
       "loop": true,
       "bpm": 118
@@ -13494,7 +13500,8 @@
         "808",
         "synth",
         "bpm-120",
-        "tempo-upbeat"
+        "tempo-upbeat",
+        "scifi"
       ],
       "loop": true,
       "bpm": 120
@@ -13692,7 +13699,8 @@
         "double-kick",
         "bpm-160",
         "tempo-fast",
-        "minor"
+        "minor",
+        "combat"
       ],
       "loop": true,
       "bpm": 160
@@ -14022,7 +14030,8 @@
         "whack",
         "superhero",
         "action",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14039,7 +14048,8 @@
         "impact",
         "fight",
         "superhero",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14056,7 +14066,8 @@
         "body-slam",
         "heavy",
         "fight",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14075,7 +14086,8 @@
         "fight",
         "finisher",
         "superhero",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14091,7 +14103,8 @@
         "light-hit",
         "tap",
         "fight",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14139,7 +14152,8 @@
         "hit",
         "strike",
         "fight",
-        "onomatopoeia"
+        "onomatopoeia",
+        "combat"
       ]
     },
     {
@@ -14288,7 +14302,8 @@
         "swipe",
         "sword",
         "dodge",
-        "onomatopoeia"
+        "onomatopoeia",
+        "fantasy"
       ]
     },
     {
@@ -14340,7 +14355,8 @@
         "sci-fi",
         "retro",
         "pew",
-        "onomatopoeia"
+        "onomatopoeia",
+        "scifi"
       ]
     },
     {
@@ -14356,7 +14372,8 @@
         "ray-gun",
         "sci-fi",
         "zap",
-        "onomatopoeia"
+        "onomatopoeia",
+        "scifi"
       ]
     },
     {
