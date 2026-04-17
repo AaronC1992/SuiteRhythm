@@ -320,3 +320,37 @@ Non-bang chat is ignored. The client reconnects with exponential backoff capped 
 - `next build` completes cleanly.
 - `window.Effexiq` is now a public, documented surface — external controllers can depend on it.
 
+
+
+
+---
+
+## Batch 7 - Keyword Enrichment (engine match quality)
+
+**Goal**: every catalog entry carries enough well-chosen keywords for the engine's AI Director, `searchAudio` fuzzy fallback, scene-preset matcher, and ambient-bed picker to find the right sound.
+
+**New script**: `scripts/enrich-keywords.js` (sibling of `retag-catalog.js`).
+
+Rule-driven, additive, idempotent:
+
+1. **Name tokenization** - every significant word in `name` becomes a keyword (stopwords stripped).
+2. **Synonym expansion** - ~150 trigger rules covering weapons, magic, weather, biomes, creatures, moods, genres, and role cues (e.g. `sword` -> `blade/weapon/melee`; `rain` -> `weather/storm/water`; `lovecraft` -> `cosmic/horror/eldritch`).
+3. **Mood backfill** (music + ambience only) - if no mood tag is present, infer one from {heroic, tense, combat, dark, horror, mystery, peaceful, sad, joyful, romantic, whimsical, exploration, magical}.
+4. **Context backfill** (music + ambience only) - infer a location tag from {tavern, city, dungeon, forest, mountain, sea, desert, swamp, temple, castle, battlefield, wilderness, space, feywild, graveyard, weather}.
+5. **Normalize** - lowercase, trim, dedupe, drop stopwords, cap at 20 keywords with retag's genre tags (`fantasy/horror/tavern/combat/nature/weather/christmas/halloween/scifi`) protected from trimming so the two scripts converge.
+
+**Result** (572 catalog entries, 128 music / 23 ambience / 421 sfx):
+
+| Metric | Before | After |
+| --- | ---: | ---: |
+| Avg keywords per entry | ~6 | **13.9** |
+| Net keywords added | - | **~2,400** |
+| Entries below 5 keywords | 4 | **0** |
+
+**Pipeline**: `keywords:write` -> `catalog:write` (retag may add new genre tags triggered by new synonyms) -> rerun once; both scripts report clean.
+
+**CI**: added `npm run keywords:check` to `.github/workflows/ci.yml` alongside `catalog:check`. CI fails if keyword enrichment would add new tags - same drift-prevention model as the retag script.
+
+**npm scripts**:
+- `npm run keywords:check` - exit 1 if catalog keywords would change.
+- `npm run keywords:write` - apply enrichment to `public/saved-sounds.json`.

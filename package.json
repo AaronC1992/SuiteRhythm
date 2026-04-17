@@ -13,6 +13,8 @@
     "seed": "node scripts/seed.js",
     "catalog:check": "node scripts/retag-catalog.js --check",
     "catalog:write": "node scripts/retag-catalog.js --write",
+    "keywords:check": "node scripts/enrich-keywords.js --check",
+    "keywords:write": "node scripts/enrich-keywords.js --write",
     "sounds:plan": "node scripts/generate-sounds-batch2.js --dry-run",
     "sounds:generate": "node scripts/generate-sounds-batch2.js"
   },

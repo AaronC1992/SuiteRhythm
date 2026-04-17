@@ -7,14 +7,18 @@
       "keywords": [
         "christmas",
         "miracle",
-        "music",
         "holiday",
         "festive",
         "winter",
         "carol",
         "joyful",
         "celebration",
-        "magical"
+        "magical",
+        "arcane",
+        "happy",
+        "magic",
+        "cheerful",
+        "spell"
       ]
     },
     {
@@ -28,7 +32,9 @@
         "guitar",
         "peaceful",
         "soft",
-        "relaxing"
+        "relaxing",
+        "quiet",
+        "serene"
       ],
       "loop": true
     },
@@ -39,14 +45,18 @@
       "keywords": [
         "adventures",
         "ahead",
-        "music",
         "adventure",
         "epic",
         "journey",
         "heroic",
         "quest",
         "bold",
-        "inspiring"
+        "inspiring",
+        "brave",
+        "cinematic",
+        "grand",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -56,14 +66,15 @@
       "keywords": [
         "afternoon",
         "hammock",
-        "music",
         "calm",
         "gentle",
         "peaceful",
         "lazy",
         "summer",
         "relax",
-        "serene"
+        "serene",
+        "quiet",
+        "soft"
       ]
     },
     {
@@ -90,14 +101,21 @@
       "keywords": [
         "alive",
         "shadows",
-        "music",
         "horror",
         "dark",
         "scary",
         "eerie",
         "sinister",
         "haunting",
-        "suspense"
+        "suspense",
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "tense",
+        "tension",
+        "unsettling",
+        "foreboding"
       ]
     },
     {
@@ -105,13 +123,15 @@
       "name": "ambient atmosphere",
       "file": "Saved sounds/paulyudin-ambient-ambient-music-482398.mp3",
       "keywords": [
-        "ambient",
         "atmosphere",
         "calm",
         "soft",
         "meditation",
         "gentle",
-        "relaxing"
+        "relaxing",
+        "peaceful",
+        "quiet",
+        "serene"
       ],
       "loop": true
     },
@@ -129,7 +149,13 @@
         "clang",
         "iron",
         "smithy",
-        "bang"
+        "bang",
+        "being",
+        "blunt",
+        "melee",
+        "smith",
+        "struck",
+        "weapon"
       ]
     },
     {
@@ -146,7 +172,15 @@
         "projectile",
         "shot",
         "dodge",
-        "miss"
+        "miss",
+        "archer",
+        "combat",
+        "evade",
+        "near",
+        "ranged",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -163,7 +197,14 @@
         "projectile",
         "dodge",
         "pass",
-        "shot"
+        "shot",
+        "archer",
+        "combat",
+        "evade",
+        "ranged",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -178,8 +219,9 @@
         "peaceful",
         "soothing",
         "soft",
-        "ambient",
-        "relaxing"
+        "relaxing",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -207,7 +249,10 @@
         "intensity",
         "combat",
         "weapon",
-        "war"
+        "war",
+        "battle",
+        "death",
+        "fight"
       ]
     },
     {
@@ -218,11 +263,13 @@
         "calm",
         "gentle",
         "soft",
-        "ambient",
         "neutral",
         "relaxing",
         "background",
-        "music"
+        "beige",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -233,7 +280,8 @@
         "explosion",
         "blast",
         "boom",
-        "bang"
+        "bang",
+        "big"
       ]
     },
     {
@@ -244,7 +292,10 @@
         "bird",
         "chirp",
         "whistle",
-        "nature"
+        "nature",
+        "avian",
+        "chirping",
+        "whistling"
       ]
     },
     {
@@ -256,7 +307,21 @@
         "distant",
         "explosion",
         "blast",
-        "cannon"
+        "cannon",
+        "firearm",
+        "ranged",
+        "siege",
+        "battle",
+        "medieval",
+        "war",
+        "fantasy",
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -282,7 +347,9 @@
         "arrow",
         "shot",
         "twang",
-        "weapon"
+        "weapon",
+        "archer",
+        "ranged"
       ]
     },
     {
@@ -295,7 +362,11 @@
         "underwater",
         "water",
         "fizz",
-        "submerged"
+        "submerged",
+        "ocean",
+        "sea",
+        "nature",
+        "nautical"
       ],
       "loop": false
     },
@@ -309,7 +380,11 @@
         "near miss",
         "whiz",
         "flyby",
-        "weapon"
+        "weapon",
+        "archer",
+        "miss",
+        "near",
+        "ranged"
       ]
     },
     {
@@ -324,7 +399,16 @@
         "comedy",
         "upbeat",
         "playful",
-        "music"
+        "bumper",
+        "car",
+        "light",
+        "modern",
+        "ride",
+        "vehicle",
+        "whimsical",
+        "comedic",
+        "engine",
+        "motor"
       ]
     },
     {
@@ -341,8 +425,8 @@
         "background",
         "door",
         "fire",
-        "ambience",
-        "ambient"
+        "flame",
+        "heat"
       ],
       "loop": true
     },
@@ -354,7 +438,9 @@
         "car",
         "engine",
         "start",
-        "vehicle"
+        "vehicle",
+        "modern",
+        "motor"
       ]
     },
     {
@@ -389,7 +475,9 @@
         "yowl",
         "fight",
         "shriek",
-        "combat"
+        "combat",
+        "battle",
+        "war"
       ]
     },
     {
@@ -400,13 +488,15 @@
         "caught",
         "gust",
         "wind",
-        "music",
         "breezy",
         "mysterious",
-        "ambient",
         "swirling",
         "ethereal",
-        "soft"
+        "soft",
+        "breeze",
+        "intrigue",
+        "mystery",
+        "weather"
       ]
     },
     {
@@ -419,7 +509,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v1",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -432,7 +536,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v2",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -445,7 +563,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v3",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -458,7 +590,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v4",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -471,7 +617,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v5",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -484,7 +644,21 @@
         "screams",
         "creature",
         "scream",
-        "horror"
+        "horror",
+        "beast",
+        "cavern",
+        "creepy",
+        "fear",
+        "scary",
+        "underground",
+        "v6",
+        "dungeon",
+        "eerie",
+        "unsettling",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -501,7 +675,9 @@
         "squawk",
         "rooster",
         "bawk",
-        "animal"
+        "animal",
+        "countryside",
+        "rural"
       ]
     },
     {
@@ -511,9 +687,9 @@
       "keywords": [
         "christmas",
         "celebration",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "winter"
       ]
     },
     {
@@ -523,9 +699,12 @@
       "keywords": [
         "christmas",
         "magic",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "arcane",
+        "celebration",
+        "spell",
+        "winter"
       ]
     },
     {
@@ -539,7 +718,13 @@
         "gentle",
         "calm",
         "festive",
-        "music"
+        "box",
+        "celebration",
+        "peaceful",
+        "quiet",
+        "soft",
+        "winter",
+        "serene"
       ]
     },
     {
@@ -549,9 +734,10 @@
       "keywords": [
         "christmas",
         "parade",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "celebration",
+        "winter"
       ]
     },
     {
@@ -561,11 +747,13 @@
       "keywords": [
         "christmas",
         "piano",
-        "music",
         "holiday",
         "festive",
         "folk",
-        "traditional"
+        "traditional",
+        "acoustic",
+        "celebration",
+        "winter"
       ]
     },
     {
@@ -575,9 +763,10 @@
       "keywords": [
         "christmas",
         "waltz",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "celebration",
+        "winter"
       ]
     },
     {
@@ -590,7 +779,16 @@
         "epic",
         "orchestral",
         "tension",
-        "intense"
+        "intense",
+        "grand",
+        "heavy",
+        "heroic",
+        "powerful",
+        "suspense",
+        "tense",
+        "brave",
+        "majestic",
+        "regal"
       ],
       "loop": true
     },
@@ -603,11 +801,16 @@
         "door",
         "please",
         "scary",
-        "ambience",
-        "music",
         "horror",
         "dark",
-        "ambient"
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -621,7 +824,15 @@
         "hero",
         "quest",
         "orchestral",
-        "music"
+        "begins",
+        "cinematic",
+        "coco",
+        "grand",
+        "heroic",
+        "his",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -682,14 +893,24 @@
       "keywords": [
         "conquer",
         "battle",
-        "music",
         "epic",
         "war",
         "combat",
         "victory",
         "heroic",
         "intense",
-        "triumphant"
+        "triumphant",
+        "brave",
+        "cinematic",
+        "fight",
+        "grand",
+        "heavy",
+        "powerful",
+        "triumph",
+        "celebration",
+        "majestic",
+        "win",
+        "regal"
       ]
     },
     {
@@ -700,7 +921,11 @@
         "cow",
         "moo",
         "farm",
-        "cattle"
+        "cattle",
+        "countryside",
+        "cows",
+        "mooing",
+        "rural"
       ]
     },
     {
@@ -715,7 +940,13 @@
         "monster",
         "devouring",
         "bite",
-        "horror"
+        "horror",
+        "beast",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -732,7 +963,17 @@
         "shriek",
         "undead",
         "horde",
-        "horror"
+        "horror",
+        "creepy",
+        "death",
+        "ext",
+        "fear",
+        "monster",
+        "scary",
+        "beast",
+        "creature",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -749,7 +990,15 @@
         "roaring",
         "creature",
         "monster",
-        "horror"
+        "horror",
+        "beast",
+        "creepy",
+        "fear",
+        "scary",
+        "undead",
+        "death",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -766,7 +1015,17 @@
         "ominous",
         "screech",
         "croak",
-        "animal"
+        "animal",
+        "avian",
+        "evil",
+        "foreboding",
+        "sinister",
+        "horror",
+        "creepy",
+        "eerie",
+        "fear",
+        "scary",
+        "unsettling"
       ]
     },
     {
@@ -793,10 +1052,14 @@
       "keywords": [
         "crowned",
         "kings",
-        "music",
         "fantasy",
         "medieval",
-        "dnd"
+        "dnd",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -813,7 +1076,8 @@
         "power up",
         "level up",
         "achievement",
-        "chime"
+        "chime",
+        "crystal"
       ]
     },
     {
@@ -823,9 +1087,9 @@
       "keywords": [
         "curiosity",
         "kills",
-        "music",
         "suspense",
-        "tension"
+        "tension",
+        "tense"
       ]
     },
     {
@@ -843,7 +1107,16 @@
         "corrupt",
         "fantasy",
         "sinister",
-        "horror"
+        "horror",
+        "arcane",
+        "creepy",
+        "fear",
+        "magical",
+        "medieval",
+        "eerie",
+        "historic",
+        "ominous",
+        "scary"
       ]
     },
     {
@@ -854,11 +1127,16 @@
         "dead",
         "ground",
         "scary",
-        "ambience",
         "horror",
         "dark",
-        "ambient",
-        "music"
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -870,11 +1148,10 @@
         "deep",
         "sea",
         "ocean",
-        "ambience",
         "water",
         "submerged",
-        "ambient",
-        "nature"
+        "nature",
+        "nautical"
       ],
       "loop": true
     },
@@ -890,7 +1167,8 @@
         "arrival",
         "notification",
         "chime",
-        "entrance"
+        "entrance",
+        "v2"
       ]
     },
     {
@@ -921,7 +1199,20 @@
         "roar",
         "creature",
         "fantasy",
-        "horror"
+        "horror",
+        "beast",
+        "boss",
+        "creepy",
+        "fear",
+        "magical",
+        "medieval",
+        "scary",
+        "arcane",
+        "eerie",
+        "historic",
+        "magic",
+        "spell",
+        "unsettling"
       ]
     },
     {
@@ -935,7 +1226,18 @@
         "metal",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -949,7 +1251,10 @@
         "reflection",
         "piano",
         "contemplative",
-        "music"
+        "drifting",
+        "emotions",
+        "reflective",
+        "sorrow"
       ]
     },
     {
@@ -962,7 +1267,19 @@
         "cave",
         "water",
         "echo",
-        "dripping"
+        "dripping",
+        "cavern",
+        "droplets",
+        "underground",
+        "dungeon",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ],
       "loop": false
     },
@@ -972,12 +1289,13 @@
       "file": "Saved sounds/studiokolomna-ramadan-ramadan-music-154006.mp3",
       "keywords": [
         "eastern",
-        "ambient",
         "calm",
         "spiritual",
         "peaceful",
         "gentle",
-        "soft"
+        "soft",
+        "quiet",
+        "serene"
       ],
       "loop": true
     },
@@ -988,11 +1306,16 @@
       "keywords": [
         "ethereal",
         "magical",
-        "ambient",
         "fantasy",
         "mystical",
         "light",
-        "music"
+        "arcane",
+        "echoes",
+        "illumination",
+        "magic",
+        "medieval",
+        "historic",
+        "spell"
       ]
     },
     {
@@ -1006,8 +1329,20 @@
         "fantasy",
         "celtic",
         "folk",
-        "ambience",
-        "music"
+        "acoustic",
+        "bar",
+        "echos",
+        "hall",
+        "historic",
+        "inn",
+        "irish",
+        "magical",
+        "mead",
+        "pub",
+        "arcane",
+        "magic",
+        "traditional",
+        "spell"
       ]
     },
     {
@@ -1017,15 +1352,24 @@
       "keywords": [
         "eerie",
         "forest",
-        "ambience",
-        "ambient",
         "horror",
         "dark",
         "mysterious",
         "dnd",
         "night",
-        "music",
-        "nature"
+        "nature",
+        "creepy",
+        "evil",
+        "fear",
+        "intrigue",
+        "mystery",
+        "ominous",
+        "scary",
+        "sinister",
+        "foreboding",
+        "trees",
+        "unsettling",
+        "woodland"
       ]
     },
     {
@@ -1053,13 +1397,23 @@
         "enter",
         "realm",
         "shadows",
-        "music",
         "horror",
         "dark",
         "scary",
         "fantasy",
         "medieval",
-        "dnd"
+        "dnd",
+        "creepy",
+        "evil",
+        "fear",
+        "historic",
+        "magical",
+        "ominous",
+        "sinister",
+        "arcane",
+        "eerie",
+        "foreboding",
+        "magic"
       ]
     },
     {
@@ -1073,7 +1427,9 @@
         "dramatic",
         "thriller",
         "score",
-        "music"
+        "detail",
+        "every",
+        "tense"
       ]
     },
     {
@@ -1087,7 +1443,12 @@
         "snarl",
         "creature",
         "monster",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -1099,7 +1460,22 @@
         "real",
         "cannon",
         "blast",
-        "airy"
+        "airy",
+        "firearm",
+        "ranged",
+        "siege",
+        "v1",
+        "battle",
+        "medieval",
+        "war",
+        "fantasy",
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -1111,7 +1487,22 @@
         "real",
         "cannon",
         "blast",
-        "airy"
+        "airy",
+        "firearm",
+        "ranged",
+        "siege",
+        "v2",
+        "battle",
+        "medieval",
+        "war",
+        "fantasy",
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -1123,7 +1514,22 @@
         "real",
         "cannon",
         "blast",
-        "airy"
+        "airy",
+        "firearm",
+        "ranged",
+        "siege",
+        "v3",
+        "battle",
+        "medieval",
+        "war",
+        "fantasy",
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -1135,7 +1541,22 @@
         "real",
         "cannon",
         "blast",
-        "airy"
+        "airy",
+        "firearm",
+        "ranged",
+        "siege",
+        "v4",
+        "battle",
+        "medieval",
+        "war",
+        "fantasy",
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -1149,7 +1570,10 @@
         "impact",
         "fireball",
         "cast",
-        "flame"
+        "flame",
+        "arcane",
+        "evocation",
+        "heat"
       ],
       "loop": false
     },
@@ -1168,8 +1592,7 @@
         "cozy",
         "logs",
         "warmth",
-        "ambience",
-        "ambient"
+        "heat"
       ],
       "loop": true
     },
@@ -1202,7 +1625,14 @@
         "peaceful",
         "nature",
         "calm",
-        "music"
+        "fjaril",
+        "haga",
+        "pa",
+        "quiet",
+        "serene",
+        "soft",
+        "syns",
+        "vingad"
       ]
     },
     {
@@ -1214,7 +1644,15 @@
         "fireball",
         "fast",
         "fire",
-        "burst"
+        "burst",
+        "energetic",
+        "evocation",
+        "heat",
+        "magic",
+        "quick",
+        "spell",
+        "x4",
+        "arcane"
       ]
     },
     {
@@ -1226,7 +1664,9 @@
         "large",
         "movement",
         "fire",
-        "burning"
+        "burning",
+        "flame",
+        "heat"
       ]
     },
     {
@@ -1238,7 +1678,12 @@
         "hike",
         "trail",
         "gravel",
-        "walking"
+        "walking",
+        "daytime",
+        "ground",
+        "movement",
+        "outdoor",
+        "walk"
       ]
     },
     {
@@ -1255,7 +1700,9 @@
         "steps",
         "sneaking",
         "stealthy",
-        "nature"
+        "nature",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1268,7 +1715,11 @@
         "forest",
         "crunch",
         "walking",
-        "nature"
+        "nature",
+        "movement",
+        "trees",
+        "walk",
+        "woodland"
       ]
     },
     {
@@ -1285,7 +1736,10 @@
         "soft",
         "steps",
         "shore",
-        "arid"
+        "arid",
+        "dry",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1303,7 +1757,10 @@
         "outdoor",
         "steps",
         "crunching",
-        "weather"
+        "weather",
+        "frozen",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1316,7 +1773,9 @@
         "splash",
         "puddle",
         "walking",
-        "nature"
+        "nature",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1333,7 +1792,9 @@
         "floor",
         "boards",
         "step",
-        "house"
+        "house",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1343,7 +1804,6 @@
       "keywords": [
         "forgotten",
         "castle",
-        "music",
         "medieval",
         "eerie",
         "ruins",
@@ -1351,7 +1811,17 @@
         "mystery",
         "haunting",
         "abandoned",
-        "fantasy"
+        "fantasy",
+        "creepy",
+        "fortress",
+        "historic",
+        "horror",
+        "intrigue",
+        "magical",
+        "arcane",
+        "fear",
+        "magic",
+        "mysterious"
       ]
     },
     {
@@ -1361,11 +1831,16 @@
       "keywords": [
         "forsaken",
         "scary",
-        "ambience",
         "horror",
         "dark",
-        "ambient",
-        "music"
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -1375,9 +1850,11 @@
       "keywords": [
         "frail",
         "photographs",
-        "music",
         "emotional",
-        "sad"
+        "sad",
+        "melancholy",
+        "sorrow",
+        "reflective"
       ]
     },
     {
@@ -1387,13 +1864,19 @@
       "keywords": [
         "fraught",
         "scary",
-        "ambience",
         "horror",
         "dark",
         "suspense",
         "tension",
-        "ambient",
-        "music"
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "tense",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -1411,7 +1894,16 @@
         "transport",
         "medieval",
         "vehicle",
-        "fantasy"
+        "fantasy",
+        "engine",
+        "historic",
+        "magical",
+        "modern",
+        "mount",
+        "arcane",
+        "magic",
+        "motor",
+        "spell"
       ]
     },
     {
@@ -1426,7 +1918,10 @@
         "impact",
         "freeze",
         "cold",
-        "cast"
+        "cast",
+        "arcane",
+        "frozen",
+        "winter"
       ],
       "loop": false
     },
@@ -1439,7 +1934,12 @@
         "explosion",
         "blast",
         "sci-fi",
-        "scifi"
+        "scifi",
+        "science fiction",
+        "space",
+        "v1",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -1451,7 +1951,12 @@
         "explosion",
         "blast",
         "sci-fi",
-        "scifi"
+        "scifi",
+        "science fiction",
+        "space",
+        "v2",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -1463,7 +1968,12 @@
         "explosion",
         "blast",
         "sci-fi",
-        "scifi"
+        "scifi",
+        "science fiction",
+        "space",
+        "v3",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -1480,7 +1990,8 @@
         "massive",
         "terrifying",
         "powerful",
-        "roar"
+        "roar",
+        "humanoid"
       ]
     },
     {
@@ -1521,7 +2032,11 @@
         "sneaker",
         "running",
         "footsteps",
-        "walking"
+        "walking",
+        "ground",
+        "movement",
+        "outdoor",
+        "walk"
       ]
     },
     {
@@ -1538,7 +2053,10 @@
         "bullet",
         "shoot",
         "pop",
-        "blast"
+        "blast",
+        "flame",
+        "heat",
+        "ranged"
       ]
     },
     {
@@ -1566,11 +2084,12 @@
         "hall",
         "calm",
         "gentle",
-        "ambient",
         "peaceful",
         "soft",
         "relaxing",
-        "music"
+        "light",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -1585,7 +2104,9 @@
         "exploration",
         "cheerful",
         "country",
-        "music"
+        "joyful",
+        "trails",
+        "celebration"
       ]
     },
     {
@@ -1596,7 +2117,11 @@
         "hardwood",
         "boots",
         "walking",
-        "footsteps"
+        "footsteps",
+        "floor",
+        "indoor",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -1609,7 +2134,10 @@
         "heels",
         "walk",
         "footsteps",
-        "walking"
+        "walking",
+        "floor",
+        "indoor",
+        "movement"
       ]
     },
     {
@@ -1622,7 +2150,18 @@
         "scary",
         "tension",
         "suspense",
-        "music"
+        "creepy",
+        "evil",
+        "fear",
+        "he",
+        "ominous",
+        "said",
+        "sinister",
+        "tense",
+        "xi",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -1637,7 +2176,10 @@
         "cast",
         "restore",
         "enchant",
-        "divine"
+        "divine",
+        "arcane",
+        "cleric",
+        "holy"
       ],
       "loop": false
     },
@@ -1689,7 +2231,9 @@
         "fear",
         "gasp",
         "labored",
-        "anxious"
+        "anxious",
+        "intense",
+        "powerful"
       ]
     },
     {
@@ -1700,9 +2244,10 @@
         "here",
         "comes",
         "christmas",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "celebration",
+        "winter"
       ]
     },
     {
@@ -1716,7 +2261,9 @@
         "upbeat",
         "dance",
         "havana",
-        "music"
+        "hidden",
+        "jungle",
+        "rainforest"
       ]
     },
     {
@@ -1728,7 +2275,9 @@
         "modern",
         "urban",
         "beat",
-        "rhythm"
+        "rhythm",
+        "hip",
+        "hop"
       ],
       "loop": true
     },
@@ -1744,7 +2293,10 @@
         "heal",
         "divine",
         "light",
-        "enchant"
+        "enchant",
+        "arcane",
+        "cleric",
+        "healing"
       ],
       "loop": false
     },
@@ -1758,7 +2310,20 @@
         "sneaky",
         "stealth",
         "horror",
-        "music"
+        "creepy",
+        "don",
+        "fear",
+        "hope",
+        "rogue",
+        "scary",
+        "see",
+        "sneak",
+        "tense",
+        "they",
+        "us",
+        "eerie",
+        "thief",
+        "unsettling"
       ]
     },
     {
@@ -1770,9 +2335,16 @@
         "suspense",
         "dark",
         "tension",
-        "ambient",
-        "music",
-        "scary"
+        "scary",
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "tense",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -1782,10 +2354,18 @@
       "keywords": [
         "horror",
         "suspense",
-        "music",
         "dark",
         "scary",
-        "tension"
+        "tension",
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "tense",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -1802,7 +2382,8 @@
         "run",
         "hoof",
         "canter",
-        "steed"
+        "steed",
+        "mount"
       ]
     },
     {
@@ -1819,7 +2400,9 @@
         "surprised",
         "alarm",
         "alert",
-        "whinnying"
+        "whinnying",
+        "barn",
+        "mount"
       ]
     },
     {
@@ -1833,7 +2416,8 @@
         "galloping",
         "jennas",
         "laptop",
-        "horse"
+        "horse",
+        "mount"
       ]
     },
     {
@@ -1843,14 +2427,24 @@
       "keywords": [
         "house",
         "horror",
-        "music",
         "scary",
         "haunting",
         "dark",
         "sinister",
         "eerie",
         "creepy",
-        "ghost"
+        "ghost",
+        "evil",
+        "fear",
+        "ominous",
+        "spectral",
+        "spirit",
+        "undead",
+        "unsettling",
+        "death",
+        "foreboding",
+        "monster",
+        "beast"
       ]
     },
     {
@@ -1862,7 +2456,17 @@
         "dark",
         "cinematic",
         "low",
-        "explosive"
+        "explosive",
+        "evil",
+        "ominous",
+        "sinister",
+        "horror",
+        "creepy",
+        "fear",
+        "foreboding",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -1872,10 +2476,17 @@
       "keywords": [
         "name",
         "glory",
-        "music",
         "battle",
         "epic",
-        "combat"
+        "combat",
+        "cinematic",
+        "fight",
+        "grand",
+        "heroic",
+        "war",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -1889,7 +2500,12 @@
         "beyond",
         "discovery",
         "orchestral",
-        "music"
+        "cinematic",
+        "grand",
+        "heroic",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -1902,7 +2518,19 @@
         "epic",
         "western",
         "exploration",
-        "music"
+        "cinematic",
+        "cowboy",
+        "desert",
+        "frontier",
+        "grand",
+        "heroic",
+        "west",
+        "arid",
+        "brave",
+        "dry",
+        "majestic",
+        "regal",
+        "sand"
       ]
     },
     {
@@ -1911,10 +2539,17 @@
       "file": "Saved sounds/ES_Invasion 4-music - Fredrik Ekstrom.mp3",
       "keywords": [
         "invasion",
-        "music",
         "battle",
         "epic",
-        "combat"
+        "combat",
+        "cinematic",
+        "fight",
+        "grand",
+        "heroic",
+        "war",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -1928,7 +2563,15 @@
         "odyssey",
         "orchestral",
         "mystery",
-        "music"
+        "cinematic",
+        "grand",
+        "heroic",
+        "intrigue",
+        "ithaka",
+        "mysterious",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -1943,7 +2586,12 @@
         "gentle",
         "peaceful",
         "nordic",
-        "music"
+        "acoustic",
+        "blakken",
+        "kveldssang",
+        "quiet",
+        "serene",
+        "soft"
       ]
     },
     {
@@ -1960,7 +2608,11 @@
         "guard",
         "growl",
         "aggressive",
-        "bark"
+        "bark",
+        "intense",
+        "powerful",
+        "violent",
+        "heavy"
       ]
     },
     {
@@ -1975,7 +2627,18 @@
         "slash",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -1985,10 +2648,14 @@
       "keywords": [
         "legends",
         "awaken",
-        "music",
         "fantasy",
         "medieval",
-        "dnd"
+        "dnd",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -2005,7 +2672,17 @@
         "mist",
         "patter",
         "drops",
-        "weather"
+        "weather",
+        "calm",
+        "fog",
+        "soft",
+        "storm",
+        "water",
+        "eerie",
+        "creepy",
+        "horror",
+        "peaceful",
+        "quiet"
       ]
     },
     {
@@ -2022,7 +2699,17 @@
         "taser",
         "energy",
         "fantasy",
-        "elemental"
+        "elemental",
+        "arcane",
+        "lightning",
+        "magical",
+        "medieval",
+        "storm",
+        "thunder",
+        "weather",
+        "historic",
+        "rain",
+        "water"
       ]
     },
     {
@@ -2040,7 +2727,13 @@
         "thunder",
         "flash",
         "intense",
-        "weather"
+        "weather",
+        "heavy",
+        "powerful",
+        "rain",
+        "ranged",
+        "weapon",
+        "water"
       ]
     },
     {
@@ -2058,7 +2751,16 @@
         "rumble",
         "gentle",
         "flash",
-        "weather"
+        "weather",
+        "calm",
+        "rain",
+        "ranged",
+        "thunder",
+        "weapon",
+        "peaceful",
+        "quiet",
+        "water",
+        "serene"
       ]
     },
     {
@@ -2072,7 +2774,9 @@
         "beast",
         "creature",
         "animal",
-        "monster"
+        "monster",
+        "gugrling",
+        "like"
       ]
     },
     {
@@ -2082,12 +2786,24 @@
       "keywords": [
         "calm",
         "dark",
-        "ambient",
         "night",
         "peaceful",
         "soft",
         "gentle",
-        "mood"
+        "mood",
+        "evil",
+        "long",
+        "nights",
+        "ominous",
+        "quiet",
+        "serene",
+        "sinister",
+        "horror",
+        "creepy",
+        "eerie",
+        "fear",
+        "foreboding",
+        "scary"
       ],
       "loop": true
     },
@@ -2100,7 +2816,11 @@
         "fireball",
         "spell",
         "fire",
-        "explosion"
+        "explosion",
+        "arcane",
+        "evocation",
+        "flame",
+        "heat"
       ]
     },
     {
@@ -2111,7 +2831,12 @@
         "magic",
         "heal",
         "spell",
-        "chime"
+        "chime",
+        "arcane",
+        "cleric",
+        "divine",
+        "healing",
+        "holy"
       ]
     },
     {
@@ -2122,7 +2847,8 @@
         "magic",
         "missile",
         "spell",
-        "shoot"
+        "shoot",
+        "arcane"
       ]
     },
     {
@@ -2134,7 +2860,8 @@
         "missiles",
         "spell",
         "shoot",
-        "multiple"
+        "multiple",
+        "arcane"
       ]
     },
     {
@@ -2145,7 +2872,8 @@
         "magic",
         "spell",
         "cast",
-        "chime"
+        "chime",
+        "arcane"
       ]
     },
     {
@@ -2159,7 +2887,8 @@
         "portal",
         "warp",
         "spell",
-        "transport"
+        "transport",
+        "arcane"
       ],
       "loop": false
     },
@@ -2176,7 +2905,10 @@
         "fairy",
         "sparkle",
         "fantasy",
-        "arcane"
+        "arcane",
+        "magical",
+        "medieval",
+        "historic"
       ]
     },
     {
@@ -2196,7 +2928,14 @@
         "weapon",
         "scream",
         "fantasy",
-        "horror"
+        "horror",
+        "battle",
+        "blade",
+        "creepy",
+        "death",
+        "eerie",
+        "fear",
+        "fight"
       ]
     },
     {
@@ -2209,7 +2948,11 @@
         "rpg",
         "dnd",
         "orchestral",
-        "music"
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -2220,11 +2963,14 @@
         "medieval",
         "village",
         "atmosphere",
-        "ambient",
         "crowd",
-        "music",
         "fantasy",
-        "dnd"
+        "dnd",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -2243,7 +2989,15 @@
         "combat",
         "weapon",
         "arrow",
-        "fantasy"
+        "fantasy",
+        "archer",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "ranged",
+        "spell"
       ]
     },
     {
@@ -2259,7 +3013,13 @@
         "layer",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -2270,9 +3030,10 @@
         "merry",
         "christmas",
         "day",
-        "music",
         "holiday",
-        "festive"
+        "festive",
+        "celebration",
+        "winter"
       ]
     },
     {
@@ -2289,7 +3050,17 @@
         "clash",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "defense",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "out"
       ]
     },
     {
@@ -2300,11 +3071,19 @@
         "horror",
         "dark",
         "eerie",
-        "ambient",
         "scary",
         "suspense",
         "tension",
-        "music"
+        "creepy",
+        "evil",
+        "fear",
+        "miasma",
+        "ominous",
+        "shapes",
+        "sinister",
+        "tense",
+        "unsettling",
+        "foreboding"
       ]
     },
     {
@@ -2316,7 +3095,8 @@
         "breath",
         "growl",
         "breathing",
-        "creature"
+        "creature",
+        "beast"
       ]
     },
     {
@@ -2346,7 +3126,14 @@
         "creature",
         "horror",
         "shriek",
-        "beast"
+        "beast",
+        "creepy",
+        "fear",
+        "scary",
+        "screams",
+        "vocal",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -2360,7 +3147,12 @@
         "baby",
         "crying",
         "scream",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -2369,11 +3161,13 @@
       "file": "Saved sounds/night_ambience.mp3",
       "keywords": [
         "night",
-        "ambience",
-        "ambient",
         "crickets",
         "calm",
-        "music"
+        "gentle",
+        "peaceful",
+        "quiet",
+        "serene",
+        "soft"
       ]
     },
     {
@@ -2387,7 +3181,10 @@
         "action",
         "dramatic",
         "warning",
-        "music"
+        "now",
+        "suspense",
+        "tension",
+        "that"
       ]
     },
     {
@@ -2398,9 +3195,16 @@
         "one",
         "last",
         "battle",
-        "music",
         "epic",
-        "combat"
+        "combat",
+        "cinematic",
+        "fight",
+        "grand",
+        "heroic",
+        "war",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -2410,10 +3214,16 @@
       "keywords": [
         "only",
         "brave",
-        "music",
         "battle",
         "epic",
-        "combat"
+        "combat",
+        "cinematic",
+        "fight",
+        "grand",
+        "heroic",
+        "war",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -2431,7 +3241,10 @@
         "hunting",
         "feathered",
         "who",
-        "nature"
+        "nature",
+        "avian",
+        "trees",
+        "woodland"
       ]
     },
     {
@@ -2449,7 +3262,10 @@
         "who",
         "hollow",
         "feathered",
-        "nature"
+        "nature",
+        "avian",
+        "trees",
+        "woodland"
       ]
     },
     {
@@ -2459,14 +3275,22 @@
       "keywords": [
         "past",
         "love",
-        "music",
         "romantic",
         "nostalgic",
         "sad",
         "melancholy",
         "bittersweet",
         "piano",
-        "wistful"
+        "wistful",
+        "reflective",
+        "sorrow",
+        "tender",
+        "gentle",
+        "calm",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -2476,10 +3300,17 @@
       "keywords": [
         "path",
         "abyss",
-        "music",
         "horror",
         "dark",
-        "scary"
+        "scary",
+        "creepy",
+        "evil",
+        "fear",
+        "ominous",
+        "sinister",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -2488,13 +3319,14 @@
       "file": "Saved sounds/ES_PAUS-music - 369.mp3",
       "keywords": [
         "calm",
-        "ambient",
         "gentle",
         "quiet",
         "transition",
         "peaceful",
         "relaxing",
-        "music"
+        "paus",
+        "serene",
+        "soft"
       ]
     },
     {
@@ -2505,7 +3337,8 @@
         "pencil",
         "writing",
         "paper",
-        "scribble"
+        "scribble",
+        "foley"
       ]
     },
     {
@@ -2519,7 +3352,10 @@
         "detective",
         "investigation",
         "playful",
-        "music"
+        "light",
+        "pet",
+        "whimsical",
+        "comedic"
       ]
     },
     {
@@ -2549,7 +3385,12 @@
         "boat",
         "ocean",
         "creaking",
-        "nature"
+        "nature",
+        "floating",
+        "nautical",
+        "sailing",
+        "sea",
+        "water"
       ]
     },
     {
@@ -2561,10 +3402,22 @@
         "tavern",
         "crowd",
         "chatter",
-        "music",
         "fantasy",
         "medieval",
-        "dnd"
+        "dnd",
+        "bar",
+        "historic",
+        "inn",
+        "magical",
+        "nautical",
+        "pub",
+        "sailing",
+        "sea",
+        "arcane",
+        "magic",
+        "ocean",
+        "spell",
+        "nature"
       ]
     },
     {
@@ -2575,7 +3428,9 @@
         "poof",
         "magic",
         "smoke",
-        "disappear"
+        "disappear",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -2591,7 +3446,12 @@
         "magic",
         "fantasy",
         "brew",
-        "consume"
+        "consume",
+        "arcane",
+        "magical",
+        "medieval",
+        "spell",
+        "historic"
       ]
     },
     {
@@ -2608,7 +3468,9 @@
         "smack",
         "blow",
         "combat",
-        "connect"
+        "connect",
+        "battle",
+        "war"
       ]
     },
     {
@@ -2625,7 +3487,9 @@
         "smack",
         "blow",
         "combat",
-        "thud"
+        "thud",
+        "battle",
+        "war"
       ]
     },
     {
@@ -2636,10 +3500,11 @@
         "quiet",
         "my",
         "soul",
-        "music",
         "calm",
         "gentle",
-        "peaceful"
+        "peaceful",
+        "serene",
+        "soft"
       ]
     },
     {
@@ -2674,7 +3539,16 @@
         "animal",
         "chitter",
         "dungeon",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -2686,7 +3560,11 @@
         "windows",
         "interior",
         "storm",
-        "weather"
+        "weather",
+        "thunder",
+        "water",
+        "lightning",
+        "electric"
       ]
     },
     {
@@ -2703,7 +3581,9 @@
         "backward",
         "fast",
         "retro",
-        "whirr"
+        "whirr",
+        "energetic",
+        "quick"
       ]
     },
     {
@@ -2719,7 +3599,8 @@
         "high pitch",
         "explosion aftermath",
         "blast damage",
-        "deafened"
+        "deafened",
+        "ears"
       ]
     },
     {
@@ -2732,10 +3613,17 @@
         "peaceful",
         "calm",
         "gentle",
-        "ambient",
         "nature",
-        "music",
-        "weather"
+        "weather",
+        "quiet",
+        "raindrops",
+        "ripples",
+        "serene",
+        "soft",
+        "storm",
+        "thunder",
+        "lightning",
+        "electric"
       ]
     },
     {
@@ -2748,7 +3636,10 @@
         "distant",
         "waterfall",
         "water",
-        "nature"
+        "nature",
+        "cascade",
+        "stream",
+        "creek"
       ]
     },
     {
@@ -2765,7 +3656,9 @@
         "fierce",
         "loud",
         "powerful",
-        "savage"
+        "savage",
+        "intense",
+        "heavy"
       ]
     },
     {
@@ -2782,7 +3675,8 @@
         "fierce",
         "terrifying",
         "wild",
-        "deep"
+        "deep",
+        "v1"
       ]
     },
     {
@@ -2800,7 +3694,16 @@
         "intimidating",
         "savage",
         "loud",
-        "fantasy"
+        "fantasy",
+        "boss",
+        "intense",
+        "magical",
+        "medieval",
+        "v2",
+        "arcane",
+        "heavy",
+        "historic",
+        "magic"
       ]
     },
     {
@@ -2811,11 +3714,22 @@
         "romantic",
         "folksong",
         "piano",
-        "music",
         "folk",
         "traditional",
         "emotional",
-        "sad"
+        "sad",
+        "acoustic",
+        "love",
+        "melancholy",
+        "sorrow",
+        "tender",
+        "gentle",
+        "reflective",
+        "calm",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -2832,7 +3746,9 @@
         "chicken",
         "dawn",
         "sunrise",
-        "cock"
+        "cock",
+        "countryside",
+        "rural"
       ]
     },
     {
@@ -2845,7 +3761,9 @@
         "outdoors",
         "footsteps",
         "walking",
-        "door"
+        "door",
+        "movement",
+        "walk"
       ]
     },
     {
@@ -2857,7 +3775,12 @@
         "christmas",
         "holiday",
         "festive",
-        "music"
+        "baby",
+        "back",
+        "bring",
+        "celebration",
+        "my",
+        "winter"
       ]
     },
     {
@@ -2868,7 +3791,12 @@
         "scratch",
         "window",
         "creepy",
-        "horror"
+        "horror",
+        "eerie",
+        "fear",
+        "scary",
+        "scratching",
+        "unsettling"
       ]
     },
     {
@@ -2893,7 +3821,11 @@
         "whistle",
         "nautical",
         "signal",
-        "blast"
+        "blast",
+        "blasts",
+        "boat",
+        "ships",
+        "three"
       ]
     },
     {
@@ -2919,7 +3851,14 @@
         "calm",
         "holiday",
         "festive",
-        "music"
+        "celebration",
+        "gentle",
+        "peaceful",
+        "quiet",
+        "relaxed",
+        "winter",
+        "serene",
+        "soft"
       ]
     },
     {
@@ -2949,9 +3888,12 @@
         "gentle",
         "soft",
         "piano",
-        "ambient",
         "relaxing",
-        "music"
+        "peaceful",
+        "quiet",
+        "small",
+        "strokes",
+        "serene"
       ]
     },
     {
@@ -2965,7 +3907,12 @@
         "monster",
         "aggressive",
         "feral",
-        "animal"
+        "animal",
+        "beast",
+        "intense",
+        "violent",
+        "heavy",
+        "powerful"
       ]
     },
     {
@@ -2980,7 +3927,19 @@
         "suspense",
         "ghost",
         "haunted",
-        "ambience"
+        "basement",
+        "evil",
+        "fear",
+        "ominous",
+        "scary",
+        "sinister",
+        "something",
+        "spectral",
+        "spirit",
+        "foreboding",
+        "tense",
+        "tension",
+        "undead"
       ]
     },
     {
@@ -2997,7 +3956,8 @@
         "mechanical",
         "start",
         "fail",
-        "rough"
+        "rough",
+        "modern"
       ]
     },
     {
@@ -3014,7 +3974,17 @@
         "invoke",
         "spirit",
         "portal",
-        "creature"
+        "creature",
+        "arcane",
+        "beast",
+        "ghost",
+        "magical",
+        "medieval",
+        "monster",
+        "horror",
+        "creepy",
+        "fear",
+        "historic"
       ]
     },
     {
@@ -3027,9 +3997,20 @@
         "breathing",
         "whisper",
         "ghost",
-        "ambient",
         "haunting",
-        "breath"
+        "breath",
+        "creepy",
+        "fear",
+        "scary",
+        "spectral",
+        "spirit",
+        "static",
+        "undead",
+        "unsettling",
+        "death",
+        "monster",
+        "beast",
+        "creature"
       ]
     },
     {
@@ -3046,7 +4027,13 @@
         "trickled",
         "babbling",
         "brook",
-        "gentle"
+        "gentle",
+        "calm",
+        "creek",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -3060,7 +4047,8 @@
         "neighborhood",
         "casual",
         "kids",
-        "daytime"
+        "daytime",
+        "suburban"
       ]
     },
     {
@@ -3070,12 +4058,19 @@
       "keywords": [
         "light",
         "playful",
-        "ambient",
         "peaceful",
         "bright",
         "dance",
         "nature",
-        "cheerful"
+        "cheerful",
+        "calm",
+        "gentle",
+        "serene",
+        "sunflower",
+        "whimsical",
+        "comedic",
+        "quiet",
+        "soft"
       ]
     },
     {
@@ -3089,7 +4084,15 @@
         "intense",
         "dramatic",
         "adventure",
-        "superhero"
+        "superhero",
+        "brave",
+        "cinematic",
+        "grand",
+        "heavy",
+        "powerful",
+        "story",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -3104,7 +4107,18 @@
         "metal",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3123,7 +4137,15 @@
         "schoeps",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "melee",
+        "war"
       ]
     },
     {
@@ -3138,7 +4160,19 @@
         "metal",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "grinding",
+        "magical",
+        "medieval",
+        "melee",
+        "sharpening",
+        "arcane",
+        "historic",
+        "magic",
+        "war"
       ]
     },
     {
@@ -3153,7 +4187,18 @@
         "strike",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3167,7 +4212,18 @@
         "grind",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3181,7 +4237,18 @@
         "slide",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3195,7 +4262,19 @@
         "impact",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "body",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3209,7 +4288,18 @@
         "slash",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3225,7 +4315,18 @@
         "impact",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3239,7 +4340,18 @@
         "slide",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "fight",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -3252,7 +4364,10 @@
         "clash",
         "metal",
         "combat",
-        "weapon"
+        "weapon",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -3263,9 +4378,16 @@
         "tavern",
         "crowd",
         "chatter",
-        "ambience",
-        "music",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "inn",
+        "magical",
+        "medieval",
+        "pub",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -3278,7 +4400,9 @@
         "fire",
         "inferno",
         "winds",
-        "continuously"
+        "continuously",
+        "flame",
+        "heat"
       ]
     },
     {
@@ -3294,7 +4418,17 @@
         "warrior",
         "combat",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "fight",
+        "fighter",
+        "flame",
+        "heat",
+        "historic",
+        "magical",
+        "war",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -3311,7 +4445,17 @@
         "fantasy",
         "arcane",
         "sinister",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "mage",
+        "magical",
+        "medieval",
+        "ominous",
+        "eerie",
+        "foreboding",
+        "historic",
+        "scary"
       ]
     },
     {
@@ -3326,7 +4470,13 @@
         "fantasy",
         "playful",
         "light",
-        "enchanted"
+        "enchanted",
+        "arcane",
+        "comedic",
+        "magical",
+        "medieval",
+        "spell",
+        "historic"
       ]
     },
     {
@@ -3342,7 +4492,18 @@
         "nautical",
         "haunted",
         "ocean",
-        "nature"
+        "nature",
+        "boat",
+        "creepy",
+        "fear",
+        "sailing",
+        "scary",
+        "sea",
+        "spectral",
+        "spirit",
+        "undead",
+        "unsettling",
+        "water"
       ]
     },
     {
@@ -3356,7 +4517,17 @@
         "military",
         "war",
         "conflict",
-        "intense"
+        "intense",
+        "cinematic",
+        "fight",
+        "grand",
+        "great",
+        "heavy",
+        "heroic",
+        "powerful",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -3371,7 +4542,18 @@
         "dnd",
         "folk",
         "traditional",
-        "music"
+        "acoustic",
+        "historic",
+        "king",
+        "magical",
+        "royal",
+        "throne",
+        "arcane",
+        "magic",
+        "noble",
+        "queen",
+        "spell",
+        "wealthy"
       ]
     },
     {
@@ -3386,8 +4568,10 @@
         "haunted",
         "spooky",
         "eerie",
-        "ambient",
-        "halloween"
+        "halloween",
+        "fear",
+        "scary",
+        "unsettling"
       ]
     },
     {
@@ -3402,7 +4586,19 @@
         "undead",
         "zombie",
         "footsteps",
-        "walking"
+        "walking",
+        "among",
+        "creepy",
+        "death",
+        "fear",
+        "monster",
+        "movement",
+        "scary",
+        "they",
+        "beast",
+        "creature",
+        "unsettling",
+        "us"
       ]
     },
     {
@@ -3415,7 +4611,11 @@
         "wood",
         "thick",
         "heavy",
-        "entrance"
+        "entrance",
+        "front",
+        "intense",
+        "powerful",
+        "variations"
       ]
     },
     {
@@ -3429,7 +4629,10 @@
         "intense",
         "chase",
         "dramatic",
-        "hunt"
+        "hunt",
+        "heavy",
+        "powerful",
+        "thrill"
       ]
     },
     {
@@ -3446,7 +4649,9 @@
         "collision",
         "boom",
         "crash",
-        "heavy"
+        "heavy",
+        "intense",
+        "powerful"
       ]
     },
     {
@@ -3463,7 +4668,17 @@
         "boom",
         "ominous",
         "weather",
-        "rolling"
+        "rolling",
+        "aerial",
+        "air",
+        "dark",
+        "electric",
+        "foreboding",
+        "rain",
+        "evil",
+        "sinister",
+        "water",
+        "horror"
       ]
     },
     {
@@ -3480,7 +4695,17 @@
         "downpour",
         "gale",
         "boom",
-        "dark"
+        "dark",
+        "electric",
+        "evil",
+        "ominous",
+        "sinister",
+        "water",
+        "horror",
+        "creepy",
+        "fear",
+        "foreboding",
+        "scary"
       ]
     },
     {
@@ -3493,7 +4718,9 @@
         "weather",
         "dramatic",
         "rain",
-        "music"
+        "lightning",
+        "water",
+        "electric"
       ]
     },
     {
@@ -3506,7 +4733,9 @@
         "weather",
         "dramatic",
         "rain",
-        "music"
+        "lightning",
+        "water",
+        "electric"
       ]
     },
     {
@@ -3537,7 +4766,8 @@
         "several",
         "intimidated",
         "creature",
-        "monster"
+        "monster",
+        "beast"
       ]
     },
     {
@@ -3551,7 +4781,16 @@
         "acoustic",
         "nordic",
         "calm",
-        "nature"
+        "nature",
+        "fara",
+        "jag",
+        "osterland",
+        "peaceful",
+        "quiet",
+        "soft",
+        "till",
+        "vill",
+        "serene"
       ]
     },
     {
@@ -3565,7 +4804,15 @@
         "giggle",
         "cute",
         "happy",
-        "playful"
+        "playful",
+        "cheerful",
+        "joyful",
+        "light",
+        "male",
+        "months",
+        "whimsical",
+        "celebration",
+        "comedic"
       ]
     },
     {
@@ -3582,7 +4829,12 @@
         "classic",
         "roots",
         "ballad",
-        "simple"
+        "simple",
+        "calm",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -3596,7 +4848,18 @@
         "folk",
         "emotional",
         "sad",
-        "music"
+        "acoustic",
+        "love",
+        "melancholy",
+        "sorrow",
+        "tender",
+        "gentle",
+        "reflective",
+        "calm",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -3628,7 +4891,19 @@
         "eerie",
         "dark",
         "damp",
-        "ambience"
+        "cave",
+        "creepy",
+        "dungeon",
+        "evil",
+        "fear",
+        "ominous",
+        "scary",
+        "sinister",
+        "unsettling",
+        "fantasy",
+        "cavern",
+        "dnd",
+        "foreboding"
       ]
     },
     {
@@ -3638,7 +4913,6 @@
       "keywords": [
         "tree",
         "falling",
-        "down",
         "crash",
         "timber",
         "logging",
@@ -3659,7 +4933,10 @@
         "monster",
         "ogre",
         "beast",
-        "fierce"
+        "fierce",
+        "12st",
+        "mad",
+        "pitchdown"
       ]
     },
     {
@@ -3674,7 +4951,10 @@
         "playful",
         "brass",
         "tango",
-        "music"
+        "light",
+        "trombone",
+        "whimsical",
+        "comedic"
       ]
     },
     {
@@ -3686,7 +4966,9 @@
         "trot",
         "rural",
         "road",
-        "hooves"
+        "hooves",
+        "mount",
+        "trotting"
       ]
     },
     {
@@ -3697,13 +4979,13 @@
         "spotlight",
         "performance",
         "stage",
-        "music",
         "dramatic",
         "theatrical",
         "live",
         "show",
         "performer",
-        "bright"
+        "bright",
+        "under"
       ]
     },
     {
@@ -3712,13 +4994,13 @@
       "file": "Saved sounds/dragon-studio-underwater-ambience-376890.mp3",
       "keywords": [
         "underwater",
-        "ambience",
         "water",
         "ocean",
         "deep",
         "submerged",
-        "ambient",
-        "nature"
+        "nature",
+        "nautical",
+        "sea"
       ],
       "loop": true
     },
@@ -3733,7 +5015,10 @@
         "bubble",
         "ocean",
         "deep",
-        "nature"
+        "nature",
+        "nautical",
+        "sea",
+        "submerged"
       ],
       "loop": false
     },
@@ -3747,7 +5032,13 @@
         "exploration",
         "epic",
         "awakening",
-        "music"
+        "cinematic",
+        "grand",
+        "heroic",
+        "vagabond",
+        "brave",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -3758,9 +5049,21 @@
         "emotional",
         "sad",
         "longing",
-        "ambient",
         "intimate",
-        "tender"
+        "tender",
+        "gentle",
+        "melancholy",
+        "romantic",
+        "sorrow",
+        "waiting",
+        "you",
+        "calm",
+        "love",
+        "reflective",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -3771,7 +5074,10 @@
         "walk",
         "gravel",
         "footsteps",
-        "walking"
+        "walking",
+        "ground",
+        "movement",
+        "outdoor"
       ]
     },
     {
@@ -3784,7 +5090,18 @@
         "dripping",
         "drop",
         "cave",
-        "leak"
+        "leak",
+        "cavern",
+        "underground",
+        "dungeon",
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ],
       "loop": false
     },
@@ -3796,7 +5113,10 @@
         "water",
         "flowing",
         "stream",
-        "nature"
+        "nature",
+        "creek",
+        "river",
+        "small"
       ]
     },
     {
@@ -3808,7 +5128,8 @@
         "drop",
         "drip",
         "splash",
-        "droplet"
+        "droplet",
+        "waterdrop"
       ],
       "loop": false
     },
@@ -3821,7 +5142,9 @@
         "sea",
         "shore",
         "water",
-        "nature"
+        "nature",
+        "nautical",
+        "ocean"
       ]
     },
     {
@@ -3833,9 +5156,22 @@
         "eerie",
         "alien",
         "sci-fi",
-        "ambient",
         "approaching",
-        "scifi"
+        "scifi",
+        "are",
+        "creepy",
+        "futuristic",
+        "horror",
+        "intrigue",
+        "mystery",
+        "science fiction",
+        "space",
+        "unsettling",
+        "visitors",
+        "cosmic",
+        "fear",
+        "scary",
+        "stars"
       ]
     },
     {
@@ -3869,7 +5205,11 @@
         "speed",
         "fly",
         "gust",
-        "movement"
+        "movement",
+        "breeze",
+        "energetic",
+        "quick",
+        "weather"
       ]
     },
     {
@@ -3900,7 +5240,16 @@
         "whistle",
         "haunting",
         "breeze",
-        "weather"
+        "weather",
+        "creepy",
+        "horror",
+        "rain",
+        "thunder",
+        "unsettling",
+        "fear",
+        "lightning",
+        "scary",
+        "water"
       ]
     },
     {
@@ -3918,7 +5267,16 @@
         "eerie",
         "storm",
         "breeze",
-        "weather"
+        "weather",
+        "creepy",
+        "horror",
+        "rain",
+        "thunder",
+        "unsettling",
+        "fear",
+        "lightning",
+        "scary",
+        "water"
       ]
     },
     {
@@ -3934,7 +5292,6 @@
         "outdoor",
         "weather",
         "howling",
-        "ambient",
         "whoosh"
       ]
     },
@@ -3952,7 +5309,17 @@
         "crowd",
         "victory",
         "joy",
-        "shout"
+        "shout",
+        "cheerful",
+        "heroic",
+        "joyful",
+        "people",
+        "triumph",
+        "win",
+        "brave",
+        "epic",
+        "cinematic",
+        "grand"
       ]
     },
     {
@@ -3969,7 +5336,9 @@
         "beast",
         "menacing",
         "predator",
-        "low"
+        "low",
+        "creature",
+        "monster"
       ]
     },
     {
@@ -3987,7 +5356,12 @@
         "canine",
         "bay",
         "mournful",
-        "nature"
+        "nature",
+        "beast",
+        "trees",
+        "woodland",
+        "creature",
+        "monster"
       ]
     },
     {
@@ -4005,7 +5379,13 @@
         "howling",
         "lonesome",
         "night",
-        "nature"
+        "nature",
+        "beast",
+        "canine",
+        "trees",
+        "woodland",
+        "creature",
+        "monster"
       ]
     },
     {
@@ -4022,7 +5402,11 @@
         "terrified",
         "yell",
         "panic",
-        "piercing"
+        "piercing",
+        "creepy",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4036,7 +5420,10 @@
         "floating",
         "ocean",
         "creak",
-        "nature"
+        "nature",
+        "nautical",
+        "sea",
+        "water"
       ]
     },
     {
@@ -4064,7 +5451,10 @@
         "gentle",
         "flute",
         "nature",
-        "music"
+        "calm",
+        "reviere",
+        "soft",
+        "quiet"
       ]
     },
     {
@@ -4077,7 +5467,16 @@
         "eerie",
         "suspense",
         "close",
-        "presence"
+        "presence",
+        "are",
+        "creepy",
+        "fear",
+        "near",
+        "scary",
+        "tense",
+        "tension",
+        "unsettling",
+        "you"
       ]
     },
     {
@@ -4090,7 +5489,14 @@
         "monster",
         "undead",
         "creature",
-        "horror"
+        "horror",
+        "beast",
+        "creepy",
+        "death",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4103,7 +5509,14 @@
         "undead",
         "horror",
         "creature",
-        "monster"
+        "monster",
+        "beast",
+        "creepy",
+        "death",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4118,7 +5531,14 @@
         "creature",
         "monster",
         "undead",
-        "horror"
+        "horror",
+        "beast",
+        "creepy",
+        "death",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4135,7 +5555,15 @@
         "underwater",
         "beast",
         "horror",
-        "nature"
+        "nature",
+        "creepy",
+        "fear",
+        "nautical",
+        "scary",
+        "submerged",
+        "water",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4148,7 +5576,14 @@
         "creature",
         "beast",
         "monster",
-        "fantasy"
+        "fantasy",
+        "boss",
+        "magical",
+        "medieval",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -4162,7 +5597,20 @@
         "creature",
         "beast",
         "monster",
-        "fantasy"
+        "fantasy",
+        "boss",
+        "cinematic",
+        "grand",
+        "heroic",
+        "magical",
+        "medieval",
+        "arcane",
+        "brave",
+        "historic",
+        "magic",
+        "majestic",
+        "spell",
+        "regal"
       ]
     },
     {
@@ -4178,7 +5626,13 @@
         "signal",
         "fanfare",
         "fantasy",
-        "combat"
+        "combat",
+        "fight",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -4191,7 +5645,10 @@
         "thunder",
         "storm",
         "electric",
-        "weather"
+        "weather",
+        "quick",
+        "rain",
+        "water"
       ]
     },
     {
@@ -4205,7 +5662,15 @@
         "signal",
         "warning",
         "fog",
-        "brass"
+        "brass",
+        "eerie",
+        "mist",
+        "weather",
+        "creepy",
+        "horror",
+        "unsettling",
+        "fear",
+        "scary"
       ]
     },
     {
@@ -4221,7 +5686,18 @@
         "epic",
         "fight",
         "warrior",
-        "horror"
+        "horror",
+        "cinematic",
+        "creepy",
+        "fear",
+        "fighter",
+        "grand",
+        "heroic",
+        "scary",
+        "brave",
+        "eerie",
+        "majestic",
+        "unsettling"
       ]
     },
     {
@@ -4237,7 +5713,15 @@
         "battle",
         "warrior",
         "horror",
-        "combat"
+        "combat",
+        "creepy",
+        "fear",
+        "fight",
+        "fighter",
+        "scary",
+        "war",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4252,7 +5736,14 @@
         "tribal",
         "epic",
         "march",
-        "combat"
+        "combat",
+        "cinematic",
+        "fight",
+        "grand",
+        "heroic",
+        "brave",
+        "majestic",
+        "regal"
       ],
       "loop": true
     },
@@ -4267,7 +5758,10 @@
         "foghorn",
         "nautical",
         "harbour",
-        "sea"
+        "sea",
+        "ocean",
+        "water",
+        "nature"
       ]
     },
     {
@@ -4283,7 +5777,12 @@
         "water",
         "crashing",
         "nature",
-        "weather"
+        "weather",
+        "nautical",
+        "rain",
+        "thunder",
+        "lightning",
+        "electric"
       ],
       "loop": true
     },
@@ -4297,7 +5796,14 @@
         "fight",
         "combat",
         "swords",
-        "clash"
+        "clash",
+        "nautical",
+        "sailing",
+        "sea",
+        "war",
+        "ocean",
+        "water",
+        "nature"
       ]
     },
     {
@@ -4311,7 +5817,14 @@
         "ocean",
         "sailing",
         "gentle",
-        "nature"
+        "nature",
+        "calm",
+        "nautical",
+        "sea",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -4349,7 +5862,13 @@
         "yelling",
         "shout",
         "crew",
-        "sailor"
+        "sailor",
+        "nautical",
+        "sailing",
+        "sea",
+        "ocean",
+        "water",
+        "nature"
       ]
     },
     {
@@ -4364,7 +5883,18 @@
         "fight",
         "action",
         "fantasy",
-        "combat"
+        "combat",
+        "battle",
+        "blade",
+        "magical",
+        "medieval",
+        "melee",
+        "weapon",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -4380,7 +5910,11 @@
         "creepy",
         "haunted",
         "horror",
-        "thud"
+        "thud",
+        "eerie",
+        "fear",
+        "scary",
+        "unsettling"
       ]
     },
     {
@@ -4396,7 +5930,13 @@
         "winter",
         "festive",
         "bells",
-        "holiday"
+        "holiday",
+        "arcane",
+        "breeze",
+        "celebration",
+        "chimes",
+        "spell",
+        "weather"
       ]
     },
     {
@@ -4411,7 +5951,15 @@
         "swoosh",
         "magical",
         "gust",
-        "blustery"
+        "blustery",
+        "arcane",
+        "breeze",
+        "festive",
+        "holiday",
+        "magic",
+        "weather",
+        "celebration",
+        "spell"
       ]
     },
     {
@@ -4426,7 +5974,16 @@
         "spirit",
         "apparition",
         "eerie",
-        "otherworldly"
+        "otherworldly",
+        "creepy",
+        "fear",
+        "spectral",
+        "undead",
+        "unsettling",
+        "death",
+        "monster",
+        "beast",
+        "creature"
       ]
     },
     {
@@ -4442,7 +5999,16 @@
         "screech",
         "eerie",
         "wail",
-        "specter"
+        "specter",
+        "creepy",
+        "fear",
+        "spectral",
+        "undead",
+        "unsettling",
+        "death",
+        "monster",
+        "beast",
+        "creature"
       ]
     },
     {
@@ -4458,9 +6024,12 @@
         "whoosh",
         "breeze",
         "moaning",
-        "ambient",
         "horror",
-        "halloween"
+        "halloween",
+        "fear",
+        "scary",
+        "unsettling",
+        "weather"
       ]
     },
     {
@@ -4476,7 +6045,9 @@
         "chime",
         "winter",
         "holiday",
-        "tinkling"
+        "tinkling",
+        "bell",
+        "celebration"
       ]
     },
     {
@@ -4509,7 +6080,16 @@
         "horror",
         "maniacal",
         "fantasy",
-        "halloween"
+        "halloween",
+        "arcane",
+        "creepy",
+        "fear",
+        "mage",
+        "magical",
+        "eerie",
+        "medieval",
+        "scary",
+        "spell"
       ]
     },
     {
@@ -4527,7 +6107,16 @@
         "clank",
         "captive",
         "shackle",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "rattling",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "magic"
       ]
     },
     {
@@ -4545,7 +6134,14 @@
         "menacing",
         "mad",
         "wicked",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "ominous",
+        "scary",
+        "eerie",
+        "foreboding",
+        "unsettling"
       ]
     },
     {
@@ -4562,7 +6158,13 @@
         "haunted",
         "wooden",
         "horror",
-        "entrance"
+        "entrance",
+        "creaking",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4597,7 +6199,16 @@
         "rumble",
         "heavy",
         "temple",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "holy",
+        "intense",
+        "magical",
+        "medieval",
+        "arcane",
+        "cleric",
+        "divine",
+        "historic"
       ]
     },
     {
@@ -4614,7 +6225,9 @@
         "tumbler",
         "sneak",
         "picking",
-        "subtle"
+        "subtle",
+        "clicking",
+        "stealth"
       ]
     },
     {
@@ -4632,7 +6245,16 @@
         "wall",
         "light",
         "cave",
-        "fantasy"
+        "fantasy",
+        "cavern",
+        "dnd",
+        "heat",
+        "magical",
+        "medieval",
+        "arcane",
+        "historic",
+        "magic",
+        "underground"
       ]
     },
     {
@@ -4665,7 +6287,9 @@
         "dimensional",
         "swirl",
         "gateway",
-        "energy"
+        "energy",
+        "spell",
+        "teleport"
       ]
     },
     {
@@ -4684,7 +6308,15 @@
         "giggle",
         "evil",
         "fantasy",
-        "horror"
+        "horror",
+        "beast",
+        "chittering",
+        "creepy",
+        "fear",
+        "eerie",
+        "humanoid",
+        "magical",
+        "medieval"
       ]
     },
     {
@@ -4717,7 +6349,18 @@
         "dark",
         "vampire",
         "cavern",
-        "swarm"
+        "swarm",
+        "evil",
+        "gothic",
+        "monster",
+        "ominous",
+        "sinister",
+        "undead",
+        "underground",
+        "horror",
+        "beast",
+        "creature",
+        "creepy"
       ]
     },
     {
@@ -4734,7 +6377,17 @@
         "cave",
         "debris",
         "disaster",
-        "quake"
+        "quake",
+        "cavern",
+        "underground",
+        "dungeon",
+        "fantasy",
+        "dnd",
+        "magical",
+        "arcane",
+        "magic",
+        "medieval",
+        "historic"
       ]
     },
     {
@@ -4751,7 +6404,12 @@
         "reaction",
         "disbelief",
         "horror",
-        "reveal"
+        "reveal",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -4769,7 +6427,16 @@
         "complete",
         "celebration",
         "brass",
-        "christmas"
+        "christmas",
+        "festive",
+        "heroic",
+        "holiday",
+        "winter",
+        "brave",
+        "epic",
+        "cinematic",
+        "grand",
+        "majestic"
       ]
     },
     {
@@ -4786,7 +6453,11 @@
         "block",
         "slam",
         "metal",
-        "defensive"
+        "defensive",
+        "battle",
+        "defense",
+        "fight",
+        "war"
       ]
     },
     {
@@ -4803,7 +6474,14 @@
         "break",
         "brutal",
         "combat",
-        "grim"
+        "grim",
+        "battle",
+        "death",
+        "fight",
+        "monster",
+        "beast",
+        "creature",
+        "war"
       ]
     },
     {
@@ -4821,7 +6499,16 @@
         "metal",
         "assassin",
         "pull",
-        "combat"
+        "combat",
+        "battle",
+        "fight",
+        "melee",
+        "stealth",
+        "sword",
+        "fantasy",
+        "magical",
+        "medieval",
+        "sneak"
       ]
     },
     {
@@ -4838,7 +6525,8 @@
         "cancel",
         "crack",
         "dismiss",
-        "break"
+        "break",
+        "spell"
       ]
     },
     {
@@ -4864,7 +6552,6 @@
       "file": "Saved sounds/tavern-ambience.mp3",
       "keywords": [
         "tavern",
-        "ambience",
         "inn",
         "background",
         "patrons",
@@ -4873,8 +6560,14 @@
         "warm",
         "medieval",
         "crowd",
-        "ambient",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "historic",
+        "magical",
+        "pub",
+        "arcane",
+        "magic",
+        "spell"
       ],
       "loop": true
     },
@@ -4893,7 +6586,16 @@
         "birds",
         "startled",
         "ravens",
-        "nature"
+        "nature",
+        "evil",
+        "foreboding",
+        "sinister",
+        "horror",
+        "creepy",
+        "eerie",
+        "fear",
+        "scary",
+        "unsettling"
       ]
     },
     {
@@ -4911,7 +6613,15 @@
         "pew",
         "futuristic",
         "fire",
-        "scifi"
+        "scifi",
+        "flame",
+        "heat",
+        "ranged",
+        "science fiction",
+        "space",
+        "cosmic",
+        "stars",
+        "weapon"
       ]
     },
     {
@@ -4922,14 +6632,23 @@
         "spaceship",
         "engine",
         "hum",
-        "ambient",
         "space",
         "vessel",
         "drone",
         "vibration",
         "ship",
         "rumble",
-        "scifi"
+        "scifi",
+        "boat",
+        "cosmic",
+        "futuristic",
+        "motor",
+        "nautical",
+        "sci-fi",
+        "science fiction",
+        "stars",
+        "vehicle",
+        "modern"
       ]
     },
     {
@@ -4947,7 +6666,16 @@
         "buzz",
         "dome",
         "protect",
-        "scifi"
+        "scifi",
+        "block",
+        "defense",
+        "futuristic",
+        "science fiction",
+        "space",
+        "combat",
+        "cosmic",
+        "stars",
+        "battle"
       ]
     },
     {
@@ -4965,7 +6693,12 @@
         "light",
         "whoosh",
         "acceleration",
-        "scifi"
+        "scifi",
+        "cosmic",
+        "futuristic",
+        "sci-fi",
+        "stars",
+        "science fiction"
       ]
     },
     {
@@ -4983,7 +6716,13 @@
         "xenomorph",
         "screaming",
         "beast",
-        "scifi"
+        "scifi",
+        "futuristic",
+        "sci-fi",
+        "science fiction",
+        "space",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -5001,7 +6740,11 @@
         "panel",
         "futuristic",
         "digital",
-        "scifi"
+        "scifi",
+        "science fiction",
+        "space",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -5019,7 +6762,15 @@
         "whirr",
         "machine",
         "stomp",
-        "scifi"
+        "scifi",
+        "futuristic",
+        "movement",
+        "sci-fi",
+        "walking",
+        "science fiction",
+        "space",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -5037,7 +6788,13 @@
         "spaceship",
         "danger",
         "blare",
-        "scifi"
+        "scifi",
+        "futuristic",
+        "sci-fi",
+        "science fiction",
+        "space",
+        "cosmic",
+        "stars"
       ]
     },
     {
@@ -5054,7 +6811,12 @@
         "ping",
         "deflect",
         "revolver",
-        "shot"
+        "shot",
+        "desert",
+        "frontier",
+        "arid",
+        "dry",
+        "sand"
       ]
     },
     {
@@ -5072,7 +6834,16 @@
         "metal",
         "clink",
         "footstep",
-        "christmas"
+        "christmas",
+        "desert",
+        "festive",
+        "footsteps",
+        "frontier",
+        "holiday",
+        "arid",
+        "celebration",
+        "dry",
+        "movement"
       ]
     },
     {
@@ -5081,7 +6852,6 @@
       "file": "Saved sounds/saloon-ambience.mp3",
       "keywords": [
         "saloon",
-        "ambience",
         "western",
         "piano",
         "bar",
@@ -5090,7 +6860,11 @@
         "glasses",
         "old",
         "west",
-        "ambient"
+        "desert",
+        "frontier",
+        "arid",
+        "dry",
+        "sand"
       ],
       "loop": true
     },
@@ -5108,7 +6882,13 @@
         "dusty",
         "brush",
         "desolate",
-        "classic"
+        "classic",
+        "arid",
+        "breeze",
+        "cowboy",
+        "frontier",
+        "sand",
+        "weather"
       ]
     },
     {
@@ -5126,7 +6906,16 @@
         "hell",
         "snarl",
         "creature",
-        "horror"
+        "horror",
+        "beast",
+        "creepy",
+        "demonic",
+        "fear",
+        "monster",
+        "eerie",
+        "ominous",
+        "scary",
+        "sinister"
       ]
     },
     {
@@ -5143,7 +6932,17 @@
         "worship",
         "group",
         "summoning",
-        "prayer"
+        "prayer",
+        "ceremonial",
+        "evil",
+        "magic",
+        "ominous",
+        "sinister",
+        "summon",
+        "horror",
+        "arcane",
+        "creepy",
+        "fear"
       ]
     },
     {
@@ -5160,7 +6959,17 @@
         "bones",
         "earth",
         "crack",
-        "rise"
+        "rise",
+        "arcane",
+        "death",
+        "evil",
+        "monster",
+        "ominous",
+        "sinister",
+        "horror",
+        "beast",
+        "creature",
+        "creepy"
       ]
     },
     {
@@ -5178,7 +6987,16 @@
         "voice",
         "breathe",
         "disturbing",
-        "horror"
+        "horror",
+        "fear",
+        "scary",
+        "spectral",
+        "spirit",
+        "undead",
+        "death",
+        "monster",
+        "unsettling",
+        "beast"
       ]
     },
     {
@@ -5195,7 +7013,17 @@
         "knell",
         "tower",
         "funeral",
-        "dark"
+        "dark",
+        "curse",
+        "evil",
+        "foreboding",
+        "magic",
+        "sinister",
+        "horror",
+        "arcane",
+        "creepy",
+        "fear",
+        "scary"
       ]
     },
     {
@@ -5213,7 +7041,16 @@
         "power",
         "demon",
         "electricity",
-        "horror"
+        "horror",
+        "ceremonial",
+        "creepy",
+        "fear",
+        "magic",
+        "monster",
+        "arcane",
+        "beast",
+        "creature",
+        "eerie"
       ]
     },
     {
@@ -5230,7 +7067,16 @@
         "crimson",
         "puddle",
         "drops",
-        "grim"
+        "grim",
+        "creepy",
+        "fear",
+        "peaceful",
+        "scary",
+        "soft",
+        "unsettling",
+        "calm",
+        "gentle",
+        "serene"
       ]
     },
     {
@@ -5247,7 +7093,12 @@
         "dramatic",
         "chord",
         "reveal",
-        "sinister"
+        "sinister",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -5265,7 +7116,16 @@
         "metal",
         "spike",
         "trigger",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -5283,7 +7143,16 @@
         "castle",
         "activate",
         "click",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "fortress",
+        "magical",
+        "medieval",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "magic"
       ]
     },
     {
@@ -5301,7 +7170,13 @@
         "trap",
         "medieval",
         "slam",
-        "fantasy"
+        "fantasy",
+        "fortress",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -5319,7 +7194,16 @@
         "dungeon",
         "clang",
         "locked",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -5337,7 +7221,13 @@
         "mechanism",
         "entrance",
         "creak",
-        "fantasy"
+        "fantasy",
+        "fortress",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -5356,7 +7246,15 @@
         "dark",
         "sinister",
         "horror",
-        "halloween"
+        "halloween",
+        "breeze",
+        "creepy",
+        "dead",
+        "evil",
+        "fear",
+        "ominous",
+        "scary",
+        "weather"
       ]
     },
     {
@@ -5365,7 +7263,6 @@
       "file": "Saved sounds/swamp-ambience.mp3",
       "keywords": [
         "swamp",
-        "ambience",
         "marsh",
         "frogs",
         "insects",
@@ -5374,7 +7271,17 @@
         "water",
         "drip",
         "mysterious",
-        "ambient"
+        "bog",
+        "evil",
+        "intrigue",
+        "mystery",
+        "ominous",
+        "sinister",
+        "wetland",
+        "horror",
+        "creepy",
+        "fear",
+        "foreboding"
       ],
       "loop": true
     },
@@ -5384,7 +7291,6 @@
       "file": "Saved sounds/jungle-ambience.mp3",
       "keywords": [
         "jungle",
-        "ambience",
         "tropical",
         "rainforest",
         "birds",
@@ -5392,8 +7298,7 @@
         "insects",
         "lush",
         "exotic",
-        "nature",
-        "ambient"
+        "nature"
       ],
       "loop": true
     },
@@ -5411,7 +7316,11 @@
         "organ",
         "echo",
         "vast",
-        "holy"
+        "holy",
+        "cleric",
+        "divine",
+        "heal",
+        "healing"
       ]
     },
     {
@@ -5428,7 +7337,12 @@
         "craft",
         "bellows",
         "workshop",
-        "smith"
+        "smith",
+        "blunt",
+        "flame",
+        "heat",
+        "melee",
+        "weapon"
       ]
     },
     {
@@ -5446,8 +7360,16 @@
         "water",
         "passage",
         "grim",
-        "ambience",
-        "ambient"
+        "cave",
+        "dungeon",
+        "evil",
+        "ominous",
+        "sinister",
+        "fantasy",
+        "horror",
+        "cavern",
+        "creepy",
+        "dnd"
       ],
       "loop": true
     },
@@ -5466,7 +7388,14 @@
         "medieval",
         "vendors",
         "lively",
-        "fantasy"
+        "fantasy",
+        "exotic",
+        "historic",
+        "magical",
+        "marketplace",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -5483,7 +7412,13 @@
         "study",
         "silence",
         "read",
-        "scroll"
+        "scroll",
+        "peaceful",
+        "scholar",
+        "soft",
+        "calm",
+        "gentle",
+        "serene"
       ]
     },
     {
@@ -5501,7 +7436,16 @@
         "gale",
         "whiteout",
         "winter",
-        "weather"
+        "weather",
+        "breeze",
+        "cold",
+        "rain",
+        "thunder",
+        "tundra",
+        "ice",
+        "lightning",
+        "water",
+        "electric"
       ]
     },
     {
@@ -5518,7 +7462,10 @@
         "scorching",
         "wilderness",
         "hissing",
-        "desolate"
+        "desolate",
+        "arid",
+        "breeze",
+        "weather"
       ]
     },
     {
@@ -5536,7 +7483,13 @@
         "disaster",
         "catastrophic",
         "deep",
-        "weather"
+        "weather",
+        "altitude",
+        "cold",
+        "peak",
+        "winter",
+        "ice",
+        "frozen"
       ]
     },
     {
@@ -5554,7 +7507,16 @@
         "mist",
         "powerful",
         "nature",
-        "weather"
+        "weather",
+        "fog",
+        "lightning",
+        "storm",
+        "eerie",
+        "electric",
+        "creepy",
+        "horror",
+        "rain",
+        "unsettling"
       ]
     },
     {
@@ -5571,7 +7533,17 @@
         "horn",
         "warning",
         "sea",
-        "haunting"
+        "haunting",
+        "boat",
+        "docks",
+        "eerie",
+        "nautical",
+        "ocean",
+        "port",
+        "nature",
+        "creepy",
+        "horror",
+        "weather"
       ]
     },
     {
@@ -5589,7 +7561,10 @@
         "tense",
         "break",
         "woodland",
-        "nature"
+        "nature",
+        "suspense",
+        "tension",
+        "trees"
       ]
     },
     {
@@ -5606,7 +7581,14 @@
         "attack",
         "warning",
         "fierce",
-        "wild"
+        "wild",
+        "beast",
+        "combat",
+        "battle",
+        "creature",
+        "fight",
+        "monster",
+        "war"
       ]
     },
     {
@@ -5623,7 +7605,14 @@
         "prey",
         "majestic",
         "freedom",
-        "piercing"
+        "piercing",
+        "avian",
+        "grand",
+        "regal",
+        "epic",
+        "cinematic",
+        "heroic",
+        "brave"
       ]
     },
     {
@@ -5640,7 +7629,11 @@
         "predator",
         "group",
         "choir",
-        "valley"
+        "valley",
+        "beast",
+        "canine",
+        "creature",
+        "monster"
       ]
     },
     {
@@ -5658,7 +7651,14 @@
         "call",
         "foreboding",
         "sinister",
-        "horror"
+        "horror",
+        "avian",
+        "creepy",
+        "evil",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -5675,7 +7675,9 @@
         "squeak",
         "livestock",
         "barnyard",
-        "surprise"
+        "surprise",
+        "countryside",
+        "rural"
       ]
     },
     {
@@ -5692,7 +7694,8 @@
         "spook",
         "rear",
         "startled",
-        "animal"
+        "animal",
+        "mount"
       ]
     },
     {
@@ -5709,7 +7712,10 @@
         "damage",
         "warrior",
         "fighter",
-        "impact"
+        "impact",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -5743,7 +7749,10 @@
         "strike",
         "fast",
         "lash",
-        "indiana"
+        "indiana",
+        "energetic",
+        "quick",
+        "weapon"
       ]
     },
     {
@@ -5761,7 +7770,16 @@
         "thud",
         "heavy",
         "buried",
-        "combat"
+        "combat",
+        "battle",
+        "fight",
+        "intense",
+        "melee",
+        "powerful",
+        "sword",
+        "war",
+        "fantasy",
+        "magical"
       ]
     },
     {
@@ -5797,7 +7815,15 @@
         "chaotic",
         "melee",
         "fantasy",
-        "combat"
+        "combat",
+        "bar",
+        "battle",
+        "inn",
+        "magical",
+        "arcane",
+        "magic",
+        "medieval",
+        "war"
       ]
     },
     {
@@ -5814,7 +7840,10 @@
         "archery",
         "bolt",
         "impact",
-        "brutal"
+        "brutal",
+        "archer",
+        "ranged",
+        "weapon"
       ]
     },
     {
@@ -5831,7 +7860,10 @@
         "cryo",
         "cold",
         "shards",
-        "spell"
+        "spell",
+        "arcane",
+        "frozen",
+        "winter"
       ]
     },
     {
@@ -5848,7 +7880,10 @@
         "seismic",
         "crack",
         "heave",
-        "druid"
+        "druid",
+        "arcane",
+        "magic",
+        "nature"
       ]
     },
     {
@@ -5865,7 +7900,8 @@
         "clock",
         "silence",
         "reality",
-        "spell"
+        "spell",
+        "arcane"
       ]
     },
     {
@@ -5882,7 +7918,10 @@
         "fade",
         "rogue",
         "spell",
-        "magic"
+        "magic",
+        "invisibility",
+        "sneak",
+        "thief"
       ]
     },
     {
@@ -5899,7 +7938,10 @@
         "force",
         "element",
         "whoosh",
-        "gale"
+        "gale",
+        "arcane",
+        "breeze",
+        "weather"
       ]
     },
     {
@@ -5916,7 +7958,9 @@
         "rustle",
         "grimoire",
         "dusty",
-        "creak"
+        "creak",
+        "historic",
+        "old"
       ]
     },
     {
@@ -5933,7 +7977,17 @@
         "flame",
         "out",
         "light",
-        "dying"
+        "dying",
+        "evil",
+        "fire",
+        "heat",
+        "ominous",
+        "sinister",
+        "horror",
+        "creepy",
+        "fear",
+        "foreboding",
+        "scary"
       ]
     },
     {
@@ -5950,7 +8004,9 @@
         "fray",
         "sharp",
         "taut",
-        "give"
+        "give",
+        "suspense",
+        "tense"
       ]
     },
     {
@@ -5967,7 +8023,9 @@
         "uncork",
         "magic",
         "open",
-        "brew"
+        "brew",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -5985,7 +8043,11 @@
         "pouch",
         "clink",
         "rattle",
-        "christmas"
+        "christmas",
+        "festive",
+        "holiday",
+        "winter",
+        "celebration"
       ]
     },
     {
@@ -6019,7 +8081,10 @@
         "ceremony",
         "sad",
         "grief",
-        "solemn"
+        "solemn",
+        "melancholy",
+        "sorrow",
+        "reflective"
       ]
     },
     {
@@ -6036,7 +8101,10 @@
         "cadence",
         "advance",
         "drum",
-        "synchronized"
+        "synchronized",
+        "movement",
+        "walking",
+        "walk"
       ]
     },
     {
@@ -6053,7 +8121,11 @@
         "friendly",
         "wares",
         "shop",
-        "vendor"
+        "vendor",
+        "bazaar",
+        "marketplace",
+        "vendors",
+        "exotic"
       ]
     },
     {
@@ -6070,7 +8142,11 @@
         "holy",
         "worship",
         "ceremony",
-        "devout"
+        "devout",
+        "cleric",
+        "divine",
+        "heal",
+        "healing"
       ]
     },
     {
@@ -6088,7 +8164,16 @@
         "triumphant",
         "flourish",
         "short",
-        "christmas"
+        "christmas",
+        "festive",
+        "heroic",
+        "holiday",
+        "triumph",
+        "victory",
+        "brave",
+        "celebration",
+        "epic",
+        "win"
       ]
     },
     {
@@ -6103,9 +8188,11 @@
         "loss",
         "game",
         "over",
-        "music",
         "short",
-        "somber"
+        "somber",
+        "melancholy",
+        "sorrow",
+        "reflective"
       ]
     },
     {
@@ -6122,7 +8209,15 @@
         "strings",
         "sinister",
         "drone",
-        "approaching"
+        "approaching",
+        "creepy",
+        "fear",
+        "intrigue",
+        "mysterious",
+        "scary",
+        "tense",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6139,7 +8234,17 @@
         "witching",
         "hour",
         "ominous",
-        "bell"
+        "bell",
+        "dark",
+        "foreboding",
+        "evil",
+        "sinister",
+        "horror",
+        "creepy",
+        "eerie",
+        "fear",
+        "scary",
+        "unsettling"
       ]
     },
     {
@@ -6157,7 +8262,13 @@
         "medieval",
         "inn",
         "celebration",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -6174,7 +8285,11 @@
         "roar",
         "intense",
         "consume",
-        "inferno"
+        "inferno",
+        "flame",
+        "heat",
+        "heavy",
+        "powerful"
       ]
     },
     {
@@ -6191,7 +8306,17 @@
         "submarine",
         "hull",
         "dark",
-        "sea"
+        "sea",
+        "evil",
+        "nautical",
+        "ocean",
+        "ominous",
+        "sinister",
+        "submerged",
+        "horror",
+        "nature",
+        "creepy",
+        "fear"
       ]
     },
     {
@@ -6207,8 +8332,18 @@
         "resonance",
         "stalactite",
         "underground",
-        "ambient",
-        "dark"
+        "dark",
+        "dungeon",
+        "evil",
+        "ominous",
+        "sinister",
+        "fantasy",
+        "horror",
+        "creepy",
+        "dnd",
+        "eerie",
+        "fear",
+        "foreboding"
       ]
     },
     {
@@ -6225,7 +8360,17 @@
         "wooden",
         "tense",
         "dark",
-        "death"
+        "death",
+        "evil",
+        "foreboding",
+        "sinister",
+        "suspense",
+        "tension",
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie"
       ]
     },
     {
@@ -6242,7 +8387,12 @@
         "reveal",
         "mechanism",
         "quiet",
-        "unlock"
+        "unlock",
+        "peaceful",
+        "soft",
+        "calm",
+        "gentle",
+        "serene"
       ]
     },
     {
@@ -6259,7 +8409,8 @@
         "flick",
         "small",
         "fire",
-        "quick"
+        "quick",
+        "heat"
       ]
     },
     {
@@ -6276,7 +8427,12 @@
         "soft",
         "quiet",
         "glow",
-        "wick"
+        "wick",
+        "calm",
+        "fire",
+        "heat",
+        "peaceful",
+        "serene"
       ]
     },
     {
@@ -6294,7 +8450,16 @@
         "light",
         "cave",
         "fire",
-        "fantasy"
+        "fantasy",
+        "cavern",
+        "dnd",
+        "flame",
+        "heat",
+        "magical",
+        "arcane",
+        "magic",
+        "medieval",
+        "underground"
       ]
     },
     {
@@ -6312,8 +8477,8 @@
         "fire",
         "night",
         "nature",
-        "ambience",
-        "ambient"
+        "flame",
+        "heat"
       ],
       "loop": true
     },
@@ -6331,9 +8496,7 @@
         "crackling",
         "cozy",
         "home",
-        "flames",
-        "ambience",
-        "ambient"
+        "flames"
       ],
       "loop": true
     },
@@ -6347,7 +8510,6 @@
         "hearth",
         "fire",
         "crackle",
-        "ambient",
         "gentle",
         "cozy",
         "warm",
@@ -6356,7 +8518,12 @@
         "soothing",
         "logs",
         "burning",
-        "ambience"
+        "calm",
+        "flame",
+        "heat",
+        "peaceful",
+        "quiet",
+        "serene"
       ],
       "loop": true
     },
@@ -6376,7 +8543,15 @@
         "battle",
         "ignite",
         "pyrotechnic",
-        "combat"
+        "combat",
+        "fight",
+        "firearm",
+        "nautical",
+        "ranged",
+        "sailing",
+        "sea",
+        "siege",
+        "war"
       ]
     },
     {
@@ -6393,7 +8568,11 @@
         "crowd",
         "bright",
         "fire",
-        "massive"
+        "massive",
+        "flame",
+        "heat",
+        "heavy",
+        "powerful"
       ]
     },
     {
@@ -6410,7 +8589,14 @@
         "quiet",
         "end",
         "fire",
-        "remnants"
+        "remnants",
+        "flame",
+        "heat",
+        "peaceful",
+        "soft",
+        "calm",
+        "gentle",
+        "serene"
       ]
     },
     {
@@ -6427,7 +8613,9 @@
         "flame",
         "quick",
         "light",
-        "pop"
+        "pop",
+        "fire",
+        "heat"
       ]
     },
     {
@@ -6462,7 +8650,13 @@
         "fire",
         "uncontrolled",
         "catastrophic",
-        "nature"
+        "nature",
+        "flame",
+        "heat",
+        "heavy",
+        "powerful",
+        "trees",
+        "woodland"
       ]
     },
     {
@@ -6479,7 +8673,12 @@
         "high",
         "pitched",
         "frightened",
-        "helpless"
+        "helpless",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6497,7 +8696,16 @@
         "suffering",
         "hit",
         "warrior",
-        "horror"
+        "horror",
+        "combat",
+        "creepy",
+        "fear",
+        "fighter",
+        "scary",
+        "battle",
+        "eerie",
+        "fight",
+        "unsettling"
       ]
     },
     {
@@ -6515,7 +8723,11 @@
         "innocent",
         "small",
         "cry",
-        "horror"
+        "horror",
+        "creepy",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6533,7 +8745,13 @@
         "pitched",
         "scream",
         "panic",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "terror",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6567,7 +8785,8 @@
         "crying",
         "female",
         "despair",
-        "mourning"
+        "mourning",
+        "wailing"
       ]
     },
     {
@@ -6585,7 +8804,12 @@
         "grunt",
         "loud",
         "male",
-        "combat"
+        "combat",
+        "fight",
+        "intense",
+        "powerful",
+        "war",
+        "heavy"
       ]
     },
     {
@@ -6602,7 +8826,12 @@
         "voices",
         "flee",
         "mass",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6620,7 +8849,12 @@
         "helpless",
         "distress",
         "small",
-        "horror"
+        "horror",
+        "creepy",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6637,7 +8871,10 @@
         "aggression",
         "attack",
         "powerful",
-        "male"
+        "male",
+        "fight",
+        "fighter",
+        "war"
       ]
     },
     {
@@ -6656,7 +8893,15 @@
         "gothic",
         "horror",
         "haunted",
-        "entrance"
+        "entrance",
+        "creepy",
+        "dark",
+        "fear",
+        "scary",
+        "eerie",
+        "evil",
+        "ominous",
+        "sinister"
       ]
     },
     {
@@ -6692,7 +8937,11 @@
         "calm",
         "nature",
         "peaceful",
-        "ambient"
+        "field",
+        "grass",
+        "quiet",
+        "serene",
+        "weather"
       ]
     },
     {
@@ -6710,7 +8959,16 @@
         "feminine",
         "cheerful",
         "bright",
-        "delight"
+        "delight",
+        "calm",
+        "celebration",
+        "gentle",
+        "royal",
+        "soft",
+        "king",
+        "noble",
+        "peaceful",
+        "quiet"
       ]
     },
     {
@@ -6719,7 +8977,6 @@
       "file": "Saved sounds/silence_ambience_room.mp3",
       "keywords": [
         "silence",
-        "ambience",
         "quiet",
         "empty",
         "room",
@@ -6728,7 +8985,9 @@
         "indoor",
         "peaceful",
         "tone",
-        "ambient"
+        "gentle",
+        "serene",
+        "soft"
       ],
       "loop": true
     },
@@ -6780,7 +9039,15 @@
         "rattling",
         "water",
         "harbor",
-        "heavy"
+        "heavy",
+        "boat",
+        "docks",
+        "intense",
+        "port",
+        "powerful",
+        "sea",
+        "ocean",
+        "nature"
       ]
     },
     {
@@ -6797,7 +9064,11 @@
         "twinkle",
         "fantasy",
         "crystal",
-        "spell"
+        "spell",
+        "arcane",
+        "magical",
+        "medieval",
+        "historic"
       ]
     },
     {
@@ -6816,7 +9087,13 @@
         "mad",
         "theatrical",
         "horror",
-        "halloween"
+        "halloween",
+        "creepy",
+        "fear",
+        "scary",
+        "spooky",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -6833,7 +9110,12 @@
         "release",
         "flight",
         "archery",
-        "fast"
+        "fast",
+        "archer",
+        "energetic",
+        "quick",
+        "ranged",
+        "weapon"
       ]
     },
     {
@@ -6851,7 +9133,16 @@
         "combat",
         "fight",
         "weapon",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "magical",
+        "medieval",
+        "melee",
+        "arcane",
+        "historic",
+        "magic",
+        "spell",
+        "war"
       ]
     },
     {
@@ -6877,7 +9168,6 @@
       "file": "Saved sounds/forest_ambience_daytime.mp3",
       "keywords": [
         "forest",
-        "ambience",
         "daytime",
         "birds",
         "wind",
@@ -6886,7 +9176,15 @@
         "outdoor",
         "peaceful",
         "woods",
-        "ambient"
+        "breeze",
+        "calm",
+        "gentle",
+        "serene",
+        "trees",
+        "weather",
+        "woodland",
+        "quiet",
+        "soft"
       ],
       "loop": true
     },
@@ -6897,7 +9195,6 @@
       "keywords": [
         "mountain",
         "wind",
-        "ambience",
         "howling",
         "cold",
         "peak",
@@ -6905,7 +9202,11 @@
         "outdoor",
         "nature",
         "gusting",
-        "ambient"
+        "breeze",
+        "ice",
+        "weather",
+        "winter",
+        "frozen"
       ],
       "loop": true
     },
@@ -6922,9 +9223,14 @@
         "outdoor",
         "fire",
         "peaceful",
-        "ambient",
         "nature",
-        "ambience"
+        "calm",
+        "flame",
+        "gentle",
+        "heat",
+        "serene",
+        "quiet",
+        "soft"
       ],
       "loop": true
     },
@@ -6935,7 +9241,6 @@
       "keywords": [
         "dungeon",
         "stone",
-        "ambience",
         "dripping",
         "echo",
         "underground",
@@ -6943,8 +9248,17 @@
         "hollow",
         "ominous",
         "cavern",
-        "ambient",
-        "fantasy"
+        "fantasy",
+        "cave",
+        "dnd",
+        "evil",
+        "foreboding",
+        "magical",
+        "medieval",
+        "horror",
+        "arcane",
+        "creepy",
+        "fear"
       ],
       "loop": true
     },
@@ -6955,7 +9269,6 @@
       "keywords": [
         "castle",
         "courtyard",
-        "ambience",
         "medieval",
         "outdoor",
         "horses",
@@ -6963,8 +9276,15 @@
         "wind",
         "fantasy",
         "atmosphere",
-        "ambient",
-        "nature"
+        "nature",
+        "breeze",
+        "fortress",
+        "historic",
+        "magical",
+        "weather",
+        "arcane",
+        "magic",
+        "spell"
       ],
       "loop": true
     },
@@ -6975,7 +9295,6 @@
       "keywords": [
         "ocean",
         "harbor",
-        "ambience",
         "seagulls",
         "waves",
         "nautical",
@@ -6983,8 +9302,10 @@
         "dock",
         "sea",
         "ship",
-        "ambient",
-        "nature"
+        "nature",
+        "boat",
+        "docks",
+        "water"
       ],
       "loop": true
     },
@@ -6995,7 +9316,6 @@
       "keywords": [
         "rain",
         "forest",
-        "ambience",
         "downpour",
         "nature",
         "dripping",
@@ -7003,8 +9323,14 @@
         "outdoor",
         "storm",
         "wet",
-        "ambient",
-        "weather"
+        "weather",
+        "rainy",
+        "thunder",
+        "trees",
+        "water",
+        "woodland",
+        "lightning",
+        "electric"
       ],
       "loop": true
     },
@@ -7023,7 +9349,16 @@
         "outdoor",
         "eerie",
         "quiet",
-        "weather"
+        "weather",
+        "breeze",
+        "creepy",
+        "horror",
+        "ice",
+        "peaceful",
+        "calm",
+        "fear",
+        "frozen",
+        "gentle"
       ],
       "loop": true
     },
@@ -7041,7 +9376,13 @@
         "nature",
         "outdoor",
         "warm",
-        "ambience"
+        "calm",
+        "field",
+        "gentle",
+        "grass",
+        "serene",
+        "quiet",
+        "soft"
       ],
       "loop": true
     },
@@ -7059,8 +9400,17 @@
         "dark",
         "subterranean",
         "cavern",
-        "ambient",
-        "nature"
+        "nature",
+        "dungeon",
+        "evil",
+        "ominous",
+        "sinister",
+        "stream",
+        "fantasy",
+        "horror",
+        "creek",
+        "creepy",
+        "dnd"
       ],
       "loop": true
     },
@@ -7080,7 +9430,14 @@
         "maritime",
         "storm",
         "nature",
-        "weather"
+        "weather",
+        "breeze",
+        "nautical",
+        "rain",
+        "thunder",
+        "lightning",
+        "water",
+        "electric"
       ],
       "loop": true
     },
@@ -7091,7 +9448,6 @@
       "keywords": [
         "desert",
         "night",
-        "ambience",
         "crickets",
         "wind",
         "arid",
@@ -7099,7 +9455,14 @@
         "quiet",
         "outdoor",
         "sandstorm",
-        "ambient"
+        "breeze",
+        "peaceful",
+        "sand",
+        "soft",
+        "weather",
+        "calm",
+        "gentle",
+        "serene"
       ],
       "loop": true
     },
@@ -7110,7 +9473,6 @@
       "keywords": [
         "village",
         "morning",
-        "ambience",
         "bells",
         "birds",
         "rooster",
@@ -7118,9 +9480,17 @@
         "medieval",
         "outdoor",
         "dawn",
-        "ambient",
         "fantasy",
-        "nature"
+        "nature",
+        "calm",
+        "gentle",
+        "historic",
+        "magical",
+        "serene",
+        "arcane",
+        "magic",
+        "quiet",
+        "soft"
       ],
       "loop": true
     },
@@ -7139,7 +9509,16 @@
         "rattling",
         "medieval",
         "warrior",
-        "fantasy"
+        "fantasy",
+        "combat",
+        "fighter",
+        "historic",
+        "magical",
+        "movement",
+        "arcane",
+        "battle",
+        "fight",
+        "magic"
       ]
     },
     {
@@ -7157,7 +9536,16 @@
         "impact",
         "combat",
         "clang",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "blade",
+        "defense",
+        "fight",
+        "magical",
+        "arcane",
+        "magic",
+        "medieval",
+        "melee"
       ]
     },
     {
@@ -7174,7 +9562,9 @@
         "boiling",
         "magic",
         "laboratory",
-        "concoction"
+        "concoction",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -7191,7 +9581,12 @@
         "magic",
         "pure",
         "blessing",
-        "celestial"
+        "celestial",
+        "arcane",
+        "cleric",
+        "spell",
+        "heal",
+        "healing"
       ]
     },
     {
@@ -7209,7 +9604,16 @@
         "hex",
         "wicked",
         "occult",
-        "horror"
+        "horror",
+        "arcane",
+        "creepy",
+        "fear",
+        "ominous",
+        "scary",
+        "eerie",
+        "foreboding",
+        "spell",
+        "unsettling"
       ]
     },
     {
@@ -7226,7 +9630,10 @@
         "stone",
         "inscription",
         "arcane",
-        "awakening"
+        "awakening",
+        "historic",
+        "old",
+        "spell"
       ]
     },
     {
@@ -7241,7 +9648,14 @@
         "thief",
         "infiltration",
         "quiet",
-        "tension"
+        "tension",
+        "peaceful",
+        "sneak",
+        "soft",
+        "tense",
+        "calm",
+        "gentle",
+        "serene"
       ]
     },
     {
@@ -7256,7 +9670,12 @@
         "maritime",
         "adventure",
         "nautical",
-        "folk"
+        "folk",
+        "acoustic",
+        "ocean",
+        "traditional",
+        "water",
+        "nature"
       ]
     },
     {
@@ -7271,7 +9690,9 @@
         "middle eastern",
         "sand",
         "dunes",
-        "oud"
+        "oud",
+        "arid",
+        "dry"
       ]
     },
     {
@@ -7286,7 +9707,18 @@
         "foggy",
         "damp",
         "murky",
-        "dark"
+        "dark",
+        "bog",
+        "creepy",
+        "evil",
+        "horror",
+        "ominous",
+        "sinister",
+        "unsettling",
+        "wetland",
+        "fear",
+        "foreboding",
+        "scary"
       ]
     },
     {
@@ -7301,7 +9733,13 @@
         "fanfare",
         "win",
         "glory",
-        "uplifting"
+        "uplifting",
+        "brave",
+        "epic",
+        "cinematic",
+        "grand",
+        "majestic",
+        "regal"
       ]
     },
     {
@@ -7316,7 +9754,11 @@
         "escape",
         "urgent",
         "fast",
-        "intense"
+        "intense",
+        "energetic",
+        "heavy",
+        "powerful",
+        "quick"
       ]
     },
     {
@@ -7331,7 +9773,8 @@
         "puzzle",
         "noir",
         "curious",
-        "intrigue"
+        "intrigue",
+        "mysterious"
       ]
     },
     {
@@ -7346,7 +9789,12 @@
         "rainforest",
         "exotic",
         "ritual",
-        "native"
+        "native",
+        "ceremonial",
+        "magic",
+        "tropical",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -7360,9 +9808,14 @@
         "mysterious",
         "submerged",
         "abyss",
-        "ambient",
         "ethereal",
-        "nature"
+        "nature",
+        "depths",
+        "intrigue",
+        "mystery",
+        "nautical",
+        "sea",
+        "water"
       ]
     },
     {
@@ -7378,7 +9831,8 @@
         "king",
         "queen",
         "baroque",
-        "elegant"
+        "elegant",
+        "wealthy"
       ]
     },
     {
@@ -7408,7 +9862,11 @@
         "new beginning",
         "warm",
         "peaceful",
-        "gentle"
+        "gentle",
+        "calm",
+        "serene",
+        "soft",
+        "quiet"
       ]
     },
     {
@@ -7438,7 +9896,19 @@
         "underground",
         "intense",
         "ominous",
-        "magma"
+        "magma",
+        "cave",
+        "dark",
+        "dungeon",
+        "flame",
+        "foreboding",
+        "heat",
+        "heavy",
+        "powerful",
+        "fantasy",
+        "dnd",
+        "evil",
+        "horror"
       ]
     },
     {
@@ -7449,12 +9919,13 @@
         "space",
         "cosmic",
         "sci-fi",
-        "ambient",
         "stars",
         "galaxy",
         "ethereal",
         "vast",
-        "scifi"
+        "scifi",
+        "futuristic",
+        "science fiction"
       ]
     },
     {
@@ -7469,7 +9940,14 @@
         "vast",
         "panoramic",
         "achievement",
-        "awe"
+        "awe",
+        "altitude",
+        "cinematic",
+        "grand",
+        "heroic",
+        "peak",
+        "regal",
+        "brave"
       ]
     },
     {
@@ -7484,7 +9962,8 @@
         "exotic",
         "colorful",
         "busy",
-        "lively"
+        "lively",
+        "vendors"
       ]
     },
     {
@@ -7499,7 +9978,12 @@
         "intimate",
         "gentle",
         "beautiful",
-        "warm"
+        "warm",
+        "calm",
+        "soft",
+        "peaceful",
+        "quiet",
+        "serene"
       ]
     },
     {
@@ -7515,7 +9999,18 @@
         "claustrophobic",
         "dnd",
         "exploration",
-        "fantasy"
+        "fantasy",
+        "cave",
+        "evil",
+        "magical",
+        "medieval",
+        "ominous",
+        "sinister",
+        "horror",
+        "arcane",
+        "cavern",
+        "creepy",
+        "fear"
       ]
     },
     {
@@ -7530,7 +10025,11 @@
         "loss",
         "reflection",
         "battlefield",
-        "emotional"
+        "emotional",
+        "battle",
+        "combat",
+        "death",
+        "fight"
       ]
     },
     {
@@ -7545,7 +10044,18 @@
         "whimsical",
         "dreamy",
         "woodland",
-        "fantasy"
+        "fantasy",
+        "arcane",
+        "comedic",
+        "forest",
+        "light",
+        "magic",
+        "medieval",
+        "nature",
+        "playful",
+        "historic",
+        "spell",
+        "trees"
       ]
     },
     {
@@ -7560,7 +10070,19 @@
         "monks",
         "chanting",
         "mysterious",
-        "ritual"
+        "ritual",
+        "ceremonial",
+        "historic",
+        "holy",
+        "intrigue",
+        "magic",
+        "mystery",
+        "old",
+        "religious",
+        "arcane",
+        "cleric",
+        "divine",
+        "spell"
       ]
     },
     {
@@ -7575,7 +10097,14 @@
         "attack",
         "chaotic",
         "aggressive",
-        "combat"
+        "combat",
+        "battle",
+        "fight",
+        "intense",
+        "violent",
+        "heavy",
+        "powerful",
+        "war"
       ]
     },
     {
@@ -7592,7 +10121,15 @@
         "rowdy",
         "medieval",
         "jolly",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "drunken",
+        "historic",
+        "inn",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7608,7 +10145,18 @@
         "epic",
         "fantasy",
         "boss",
-        "dnd"
+        "dnd",
+        "beast",
+        "cinematic",
+        "dark",
+        "foreboding",
+        "grand",
+        "heroic",
+        "magical",
+        "arcane",
+        "brave",
+        "creature",
+        "horror"
       ]
     },
     {
@@ -7622,7 +10170,8 @@
         "swarm",
         "wasp",
         "hive",
-        "flies"
+        "flies",
+        "bug"
       ]
     },
     {
@@ -7636,7 +10185,11 @@
         "pond",
         "swamp",
         "ribbit",
-        "night"
+        "night",
+        "bog",
+        "croaking",
+        "marsh",
+        "wetland"
       ]
     },
     {
@@ -7651,7 +10204,8 @@
         "raptor",
         "bird",
         "prey",
-        "hunting"
+        "hunting",
+        "avian"
       ]
     },
     {
@@ -7666,7 +10220,17 @@
         "mournful",
         "underwater",
         "majestic",
-        "nature"
+        "nature",
+        "grand",
+        "nautical",
+        "regal",
+        "sea",
+        "submerged",
+        "water",
+        "epic",
+        "cinematic",
+        "heroic",
+        "brave"
       ]
     },
     {
@@ -7682,7 +10246,15 @@
         "ocean",
         "bird",
         "squawk",
-        "nature"
+        "nature",
+        "avian",
+        "calls",
+        "coastal",
+        "docks",
+        "nautical",
+        "port",
+        "sea",
+        "water"
       ]
     },
     {
@@ -7697,7 +10269,19 @@
         "jungle",
         "majestic",
         "beast",
-        "loud"
+        "loud",
+        "creature",
+        "grand",
+        "intense",
+        "monster",
+        "powerful",
+        "rainforest",
+        "regal",
+        "tropical",
+        "epic",
+        "heavy",
+        "cinematic",
+        "heroic"
       ]
     },
     {
@@ -7712,7 +10296,8 @@
         "primate",
         "chatter",
         "tropical",
-        "canopy"
+        "canopy",
+        "rainforest"
       ]
     },
     {
@@ -7728,7 +10313,8 @@
         "forest",
         "rutting",
         "woodland",
-        "nature"
+        "nature",
+        "trees"
       ]
     },
     {
@@ -7743,8 +10329,7 @@
         "summer",
         "evening",
         "chorus",
-        "ambience",
-        "ambient"
+        "bug"
       ],
       "loop": true
     },
@@ -7760,7 +10345,9 @@
         "kids",
         "giggle",
         "innocent",
-        "happy"
+        "happy",
+        "celebration",
+        "cheerful"
       ]
     },
     {
@@ -7776,7 +10363,15 @@
         "ranged",
         "medieval",
         "fire",
-        "fantasy"
+        "fantasy",
+        "archer",
+        "flame",
+        "heat",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7791,7 +10386,10 @@
         "blunt",
         "weapon",
         "hit",
-        "armor"
+        "armor",
+        "intense",
+        "melee",
+        "powerful"
       ]
     },
     {
@@ -7807,7 +10405,14 @@
         "magic",
         "stone",
         "impact",
-        "fantasy"
+        "fantasy",
+        "arcane",
+        "mage",
+        "magical",
+        "medieval",
+        "spell",
+        "weapon",
+        "historic"
       ]
     },
     {
@@ -7825,7 +10430,16 @@
         "war",
         "fantasy",
         "combat",
-        "weather"
+        "weather",
+        "archer",
+        "fight",
+        "historic",
+        "magical",
+        "ranged",
+        "arcane",
+        "magic",
+        "storm",
+        "water"
       ]
     },
     {
@@ -7841,7 +10455,10 @@
         "galloping",
         "battle",
         "thundering",
-        "combat"
+        "combat",
+        "attack",
+        "fight",
+        "war"
       ]
     },
     {
@@ -7857,7 +10474,15 @@
         "projectile",
         "medieval",
         "war",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "combat",
+        "historic",
+        "magical",
+        "arcane",
+        "fight",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7873,7 +10498,17 @@
         "impact",
         "war",
         "breach",
-        "fantasy"
+        "fantasy",
+        "battle",
+        "combat",
+        "fortress",
+        "magical",
+        "medieval",
+        "arcane",
+        "fight",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7889,7 +10524,15 @@
         "medieval",
         "spiked",
         "heavy",
-        "fantasy"
+        "fantasy",
+        "historic",
+        "intense",
+        "magical",
+        "melee",
+        "powerful",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7904,7 +10547,12 @@
         "soldiers",
         "defense",
         "brace",
-        "lock"
+        "lock",
+        "block",
+        "combat",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -7919,7 +10567,11 @@
         "creak",
         "bow",
         "archer",
-        "ready"
+        "ready",
+        "ranged",
+        "suspense",
+        "tense",
+        "weapon"
       ]
     },
     {
@@ -7935,7 +10587,9 @@
         "charge",
         "command",
         "resonating",
-        "combat"
+        "combat",
+        "attack",
+        "fight"
       ]
     },
     {
@@ -7951,7 +10605,13 @@
         "final",
         "beast",
         "kill",
-        "horror"
+        "horror",
+        "creepy",
+        "cry",
+        "fear",
+        "scary",
+        "eerie",
+        "unsettling"
       ]
     },
     {
@@ -7967,7 +10627,18 @@
         "roar",
         "devastating",
         "attack",
-        "fantasy"
+        "fantasy",
+        "beast",
+        "boss",
+        "combat",
+        "dragonfire",
+        "heat",
+        "magical",
+        "medieval",
+        "arcane",
+        "battle",
+        "creature",
+        "fight"
       ]
     },
     {
@@ -7983,7 +10654,13 @@
         "chainmail",
         "knight",
         "plate",
-        "fantasy"
+        "fantasy",
+        "magical",
+        "medieval",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -7999,7 +10676,18 @@
         "battle",
         "volley",
         "blast",
-        "combat"
+        "combat",
+        "boat",
+        "fight",
+        "firearm",
+        "nautical",
+        "ranged",
+        "sailing",
+        "sea",
+        "ocean",
+        "siege",
+        "war",
+        "nature"
       ]
     },
     {
@@ -8014,7 +10702,13 @@
         "holy",
         "restore",
         "raise",
-        "death"
+        "death",
+        "arcane",
+        "cleric",
+        "magic",
+        "spell",
+        "heal",
+        "healing"
       ]
     },
     {
@@ -8029,7 +10723,12 @@
         "change",
         "druid",
         "werewolf",
-        "form"
+        "form",
+        "magic",
+        "nature",
+        "shapeshifting",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -8044,7 +10743,9 @@
         "distortion",
         "halt",
         "pause",
-        "spell"
+        "spell",
+        "arcane",
+        "magic"
       ]
     },
     {
@@ -8074,7 +10775,12 @@
         "arcane",
         "runes",
         "energy",
-        "conjure"
+        "conjure",
+        "ceremonial",
+        "magic",
+        "spell",
+        "summon",
+        "teleport"
       ]
     },
     {
@@ -8089,7 +10795,9 @@
         "sparkle",
         "resonating",
         "enchanted",
-        "mystical"
+        "mystical",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -8105,7 +10813,18 @@
         "necromantic",
         "force",
         "blast",
-        "horror"
+        "horror",
+        "creepy",
+        "death",
+        "fear",
+        "ominous",
+        "scary",
+        "sinister",
+        "undead",
+        "eerie",
+        "foreboding",
+        "monster",
+        "unsettling"
       ]
     },
     {
@@ -8120,7 +10839,9 @@
         "weapon",
         "item",
         "shimmer",
-        "magic"
+        "magic",
+        "arcane",
+        "spell"
       ]
     },
     {
@@ -8135,7 +10856,14 @@
         "force",
         "defense",
         "activate",
-        "spell"
+        "spell",
+        "arcane",
+        "block",
+        "magic",
+        "combat",
+        "battle",
+        "fight",
+        "war"
       ]
     },
     {
@@ -8151,7 +10879,18 @@
         "evil",
         "necromantic",
         "death",
-        "horror"
+        "horror",
+        "arcane",
+        "creepy",
+        "fear",
+        "magic",
+        "ominous",
+        "scary",
+        "sinister",
+        "eerie",
+        "foreboding",
+        "spell",
+        "undead"
       ]
     },
     {
@@ -8166,7 +10905,11 @@
         "explosion",
         "catastrophic",
         "disaster",
-        "earth"
+        "earth",
+        "fire",
+        "heat",
+        "volcanic",
+        "flame"
       ]
     },
     {
@@ -8181,7 +10924,11 @@
         "molten",
         "flow",
         "hot",
-        "gurgling"
+        "gurgling",
+        "fire",
+        "heat",
+        "volcano",
+        "flame"
       ],
       "loop": true
     },
@@ -8198,7 +10945,12 @@
         "deluge",
         "storm",
         "intense",
-        "weather"
+        "weather",
+        "powerful",
+        "thunder",
+        "water",
+        "lightning",
+        "electric"
       ],
       "loop": true
     },
@@ -8214,7 +10966,14 @@
         "frozen",
         "precipitation",
         "harsh",
-        "weather"
+        "weather",
+        "cold",
+        "rain",
+        "thunder",
+        "winter",
+        "lightning",
+        "water",
+        "electric"
       ]
     },
     {
@@ -8230,7 +10989,9 @@
         "lake",
         "shatter",
         "cold",
-        "nature"
+        "nature",
+        "water",
+        "winter"
       ]
     },
     {
@@ -8245,7 +11006,16 @@
         "debris",
         "mountain",
         "collapse",
-        "rumble"
+        "rumble",
+        "altitude",
+        "disaster",
+        "peak",
+        "snow",
+        "weather",
+        "cold",
+        "winter",
+        "ice",
+        "frozen"
       ]
     },
     {
@@ -8276,7 +11046,9 @@
         "lake",
         "river",
         "impact",
-        "nature"
+        "nature",
+        "stream",
+        "creek"
       ]
     },
     {
@@ -8292,7 +11064,13 @@
         "creek",
         "peaceful",
         "water",
-        "nature"
+        "nature",
+        "bubbling",
+        "calm",
+        "river",
+        "serene",
+        "soft",
+        "quiet"
       ],
       "loop": true
     },
@@ -8308,7 +11086,11 @@
         "ship",
         "fabric",
         "flapping",
-        "nautical"
+        "nautical",
+        "boat",
+        "breeze",
+        "unfurling",
+        "weather"
       ]
     },
     {
@@ -8338,7 +11120,11 @@
         "garden",
         "peaceful",
         "tinkling",
-        "soft"
+        "soft",
+        "calm",
+        "serene",
+        "weather",
+        "quiet"
       ],
       "loop": true
     },
@@ -8355,7 +11141,13 @@
         "guard",
         "castle",
         "urgent",
-        "fantasy"
+        "fantasy",
+        "fortress",
+        "historic",
+        "magical",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8386,7 +11178,17 @@
         "dungeon",
         "danger",
         "crushing",
-        "fantasy"
+        "fantasy",
+        "dnd",
+        "magical",
+        "medieval",
+        "underground",
+        "arcane",
+        "cave",
+        "historic",
+        "cavern",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8431,7 +11233,9 @@
         "stone",
         "tumbling",
         "cobblestone",
-        "heavy"
+        "heavy",
+        "intense",
+        "powerful"
       ]
     },
     {
@@ -8446,7 +11250,9 @@
         "hidden",
         "mechanism",
         "grinding",
-        "ancient"
+        "ancient",
+        "historic",
+        "old"
       ]
     },
     {
@@ -8462,7 +11268,18 @@
         "pressure",
         "mechanism",
         "trigger",
-        "fantasy"
+        "fantasy",
+        "dark",
+        "dnd",
+        "magical",
+        "medieval",
+        "toxic",
+        "underground",
+        "arcane",
+        "cave",
+        "evil",
+        "historic",
+        "horror"
       ]
     },
     {
@@ -8478,7 +11295,14 @@
         "tabletop",
         "tumble",
         "chance",
-        "fantasy"
+        "fantasy",
+        "magical",
+        "medieval",
+        "rolling",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8508,7 +11332,10 @@
         "ink",
         "scribble",
         "scholar",
-        "pen"
+        "pen",
+        "foley",
+        "paper",
+        "pencil"
       ]
     },
     {
@@ -8523,7 +11350,13 @@
         "open",
         "ancient",
         "document",
-        "reveal"
+        "reveal",
+        "foley",
+        "historic",
+        "old",
+        "unfurling",
+        "writing",
+        "pencil"
       ]
     },
     {
@@ -8539,7 +11372,16 @@
         "drink",
         "celebration",
         "tavern",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "inn",
+        "magical",
+        "medieval",
+        "pub",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8554,7 +11396,9 @@
         "meat",
         "kitchen",
         "frying",
-        "grilling"
+        "grilling",
+        "flame",
+        "heat"
       ]
     },
     {
@@ -8569,7 +11413,9 @@
         "firewood",
         "split",
         "log",
-        "chop"
+        "chop",
+        "melee",
+        "weapon"
       ]
     },
     {
@@ -8600,7 +11446,9 @@
         "bang",
         "loud",
         "force",
-        "dramatic"
+        "dramatic",
+        "intense",
+        "powerful"
       ]
     },
     {
@@ -8615,7 +11463,19 @@
         "break",
         "ominous",
         "supernatural",
-        "bad luck"
+        "bad luck",
+        "curse",
+        "dark",
+        "foreboding",
+        "magic",
+        "arcane",
+        "evil",
+        "sinister",
+        "spell",
+        "horror",
+        "creepy",
+        "fear",
+        "scary"
       ]
     },
     {
@@ -8630,7 +11490,12 @@
         "background",
         "gathering",
         "audience",
-        "whisper"
+        "whisper",
+        "peaceful",
+        "soft",
+        "calm",
+        "gentle",
+        "serene"
       ],
       "loop": true
     },
@@ -8647,7 +11512,16 @@
         "ale",
         "tavern",
         "thirsty",
-        "fantasy"
+        "fantasy",
+        "bar",
+        "inn",
+        "magical",
+        "medieval",
+        "pub",
+        "arcane",
+        "historic",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8662,7 +11536,10 @@
         "breathing",
         "sleep",
         "night",
-        "camp"
+        "camp",
+        "intense",
+        "powerful",
+        "heavy"
       ]
     },
     {
@@ -8677,7 +11554,9 @@
         "dust",
         "struggle",
         "breath",
-        "sick"
+        "sick",
+        "choking",
+        "coughing"
       ]
     },
     {
@@ -8693,7 +11572,13 @@
         "medieval",
         "transport",
         "rattling",
-        "fantasy"
+        "fantasy",
+        "historic",
+        "magical",
+        "mount",
+        "arcane",
+        "magic",
+        "spell"
       ]
     },
     {
@@ -8706,7 +11591,16 @@
         "gunshot",
         "shot",
         "pirate",
-        "weapon"
+        "weapon",
+        "firearm",
+        "gun",
+        "nautical",
+        "ranged",
+        "sailing",
+        "sea",
+        "ocean",
+        "water",
+        "nature"
       ]
     },
     {
@@ -8725,7 +11619,9 @@
         "inferno",
         "hearth",
         "fireplace",
-        "roaring fire"
+        "roaring fire",
+        "heat",
+        "professional"
       ]
     },
     {
@@ -8744,7 +11640,15 @@
         "bpm-70",
         "tempo-slow",
         "gentle",
-        "romantic"
+        "romantic",
+        "calm",
+        "love",
+        "relaxed",
+        "soft",
+        "peaceful",
+        "quiet",
+        "tender",
+        "serene"
       ],
       "loop": true,
       "bpm": 70
@@ -8765,7 +11669,8 @@
         "bpm-72",
         "tempo-slow",
         "intimate",
-        "warm"
+        "warm",
+        "relaxed"
       ],
       "loop": true,
       "bpm": 72
@@ -8786,7 +11691,11 @@
         "bpm-68",
         "tempo-slow",
         "emotional",
-        "sad"
+        "sad",
+        "melancholy",
+        "relaxed",
+        "sorrow",
+        "reflective"
       ],
       "loop": true,
       "bpm": 68
@@ -8806,7 +11715,8 @@
         "bpm-96",
         "tempo-mid",
         "warm",
-        "modern"
+        "modern",
+        "mid"
       ],
       "loop": true,
       "bpm": 96
@@ -8826,7 +11736,8 @@
         "funk",
         "bpm-92",
         "tempo-mid",
-        "smooth"
+        "smooth",
+        "mid"
       ],
       "loop": true,
       "bpm": 92
@@ -8847,7 +11758,12 @@
         "bpm-100",
         "tempo-mid",
         "happy",
-        "uplifting"
+        "uplifting",
+        "cheerful",
+        "joyful",
+        "mid",
+        "traditional",
+        "celebration"
       ],
       "loop": true,
       "bpm": 100
@@ -8865,7 +11781,8 @@
         "twang",
         "honky-tonk",
         "bpm-104",
-        "tempo-mid"
+        "tempo-mid",
+        "mid"
       ],
       "loop": true,
       "bpm": 104
@@ -8886,7 +11803,10 @@
         "bpm-118",
         "tempo-upbeat",
         "happy",
-        "summer"
+        "summer",
+        "cheerful",
+        "joyful",
+        "celebration"
       ],
       "loop": true,
       "bpm": 118
@@ -8906,7 +11826,8 @@
         "powerful",
         "bpm-124",
         "tempo-upbeat",
-        "energetic"
+        "energetic",
+        "upbeat"
       ],
       "loop": true,
       "bpm": 124
@@ -8925,7 +11846,8 @@
         "dance",
         "retro",
         "bpm-120",
-        "tempo-upbeat"
+        "tempo-upbeat",
+        "upbeat"
       ],
       "loop": true,
       "bpm": 120
@@ -8946,7 +11868,15 @@
         "bpm-128",
         "tempo-upbeat",
         "synth",
-        "scifi"
+        "scifi",
+        "energetic",
+        "fast",
+        "futuristic",
+        "quick",
+        "sci-fi",
+        "science fiction",
+        "space",
+        "cosmic"
       ],
       "loop": true,
       "bpm": 128
@@ -8985,7 +11915,8 @@
         "organ",
         "bpm-88",
         "tempo-mid",
-        "hopeful"
+        "hopeful",
+        "uplift"
       ],
       "loop": true,
       "bpm": 88
@@ -9004,7 +11935,8 @@
         "island",
         "laid-back",
         "bpm-76",
-        "tempo-slow"
+        "tempo-slow",
+        "relaxed"
       ],
       "loop": true,
       "bpm": 76
@@ -9023,7 +11955,8 @@
         "sing",
         "song-end",
         "arena",
-        "stadium"
+        "stadium",
+        "big"
       ]
     },
     {
@@ -9071,7 +12004,9 @@
         "fast",
         "energetic",
         "bpm-150",
-        "tempo-fast"
+        "tempo-fast",
+        "pop",
+        "quick"
       ],
       "loop": true,
       "bpm": 150

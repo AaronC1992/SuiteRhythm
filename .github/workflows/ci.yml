@@ -20,6 +20,8 @@ jobs:
         run: npm test
       - name: Check catalog drift
         run: npm run catalog:check
+      - name: Check keyword enrichment drift
+        run: npm run keywords:check
       - name: Build
         run: npm run build
         env:
