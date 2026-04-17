@@ -5520,11 +5520,10 @@ class Effexiq {
         // Handle Sound Effects (skip in demo mode — story cue map handles SFX)
         if (this.sfxEnabled && !this.demoRunning && decisions.sfx && decisions.sfx.length > 0) {
             for (const sfx of decisions.sfx) {
-                // Skip sounds not found in catalog (hallucinated IDs)
-                if (sfx.id && !this.soundCatalog.find(s => s.id === sfx.id)) {
-                    console.warn(`[Effexiq] AI returned unknown sound ID: ${sfx.id} — skipping`);
-                    continue;
-                }
+                // NOTE: do NOT hard-reject unknown catalog IDs here —
+                // playSoundEffectById already matches by name and falls back
+                // to semanticSearchCatalog. The old pre-check was dropping
+                // every descriptive AI output (same bug that broke sing-mode music).
                 // Skip disabled sounds
                 if (sfx.id && this.disabledSounds.has(sfx.id)) {
                     debugLog('Skipping disabled sound:', sfx.id);
@@ -5599,11 +5598,20 @@ class Effexiq {
                 return;
             }
         
-        // Find sound in catalog (exact match, then filename-only fallback)
+        // Find sound in catalog (exact id → filename suffix → name → semantic fallback).
+        // The AI prompt instructs the model to return catalog `name` values
+        // (e.g. "sing ballad acoustic guitar"), but catalog entries store the
+        // file path in `id` — so match on `name` too before falling through
+        // to the fuzzy semantic search.
+        const wantedLc = String(musicData.id || '').toLowerCase().trim();
         let sound = this.soundCatalog.find(s => s.id === musicData.id);
         if (!sound) {
             // AI sometimes returns just the filename without the folder prefix
             sound = this.soundCatalog.find(s => s.id && s.id.endsWith('/' + musicData.id));
+        }
+        if (!sound && wantedLc) {
+            // Match on the human-readable `name` field (what the AI actually returns)
+            sound = this.soundCatalog.find(s => s.name && String(s.name).toLowerCase() === wantedLc);
         }
         if (!sound) {
             // Semantic fallback: search by ID as a descriptive query (same as SFX path)
