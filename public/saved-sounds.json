@@ -14005,6 +14005,729 @@
       ],
       "loop": true,
       "bpm": 130
+    },
+    {
+      "type": "sfx",
+      "name": "comic pow punch",
+      "file": "Saved sounds/comic-pow-punch.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "pow",
+        "punch",
+        "hit",
+        "impact",
+        "fight",
+        "whack",
+        "superhero",
+        "action",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic bam hit",
+      "file": "Saved sounds/comic-bam-hit.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "bam",
+        "hit",
+        "punch",
+        "impact",
+        "fight",
+        "superhero",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic wham slam",
+      "file": "Saved sounds/comic-wham-slam.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "wham",
+        "slam",
+        "impact",
+        "body-slam",
+        "heavy",
+        "fight",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic kapow explosion punch",
+      "file": "Saved sounds/comic-kapow-explosion-punch.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "kapow",
+        "pow",
+        "super-punch",
+        "explosion",
+        "impact",
+        "fight",
+        "finisher",
+        "superhero",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic biff light hit",
+      "file": "Saved sounds/comic-biff-light-hit.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "biff",
+        "jab",
+        "light-hit",
+        "tap",
+        "fight",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic boff soft hit",
+      "file": "Saved sounds/comic-boff-soft-hit.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "boff",
+        "soft-hit",
+        "goofy",
+        "muffled",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic thwack whip hit",
+      "file": "Saved sounds/comic-thwack-whip-hit.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "thwack",
+        "whip",
+        "slap",
+        "sharp",
+        "sting",
+        "hit",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic whack bat hit",
+      "file": "Saved sounds/comic-whack-bat-hit.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "whack",
+        "bat",
+        "hit",
+        "strike",
+        "fight",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic smack slap",
+      "file": "Saved sounds/comic-smack-slap.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "smack",
+        "slap",
+        "hit",
+        "face-slap",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic bonk head",
+      "file": "Saved sounds/comic-bonk-head.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "bonk",
+        "head",
+        "knock",
+        "hollow",
+        "goofy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic boom explosion",
+      "file": "Saved sounds/comic-boom-explosion.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "boom",
+        "explosion",
+        "blast",
+        "impact",
+        "action",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic kaboom big explosion",
+      "file": "Saved sounds/comic-kaboom-big-explosion.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "kaboom",
+        "boom",
+        "explosion",
+        "big-explosion",
+        "blast",
+        "finisher",
+        "action",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic blam gunshot",
+      "file": "Saved sounds/comic-blam-gunshot.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "blam",
+        "gunshot",
+        "bang",
+        "shot",
+        "western",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic bang door slam",
+      "file": "Saved sounds/comic-bang-door-slam.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "bang",
+        "slam",
+        "door",
+        "impact",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic whoosh swoosh",
+      "file": "Saved sounds/comic-whoosh-swoosh.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "whoosh",
+        "swoosh",
+        "swipe",
+        "air",
+        "movement",
+        "dodge",
+        "fly-by",
+        "transition",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic zoom fast pass",
+      "file": "Saved sounds/comic-zoom-fast-pass.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "zoom",
+        "whoosh",
+        "fast",
+        "speed",
+        "fly-by",
+        "pass-by",
+        "superhero",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic swish quick",
+      "file": "Saved sounds/comic-swish-quick.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "swish",
+        "swoosh",
+        "swipe",
+        "sword",
+        "dodge",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic zip warp",
+      "file": "Saved sounds/comic-zip-warp.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "zip",
+        "warp",
+        "teleport",
+        "fast",
+        "vanish",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic zap electric",
+      "file": "Saved sounds/comic-zap-electric.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "zap",
+        "electric",
+        "lightning",
+        "shock",
+        "energy",
+        "magic",
+        "superhero",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic zork ray gun",
+      "file": "Saved sounds/comic-zork-ray-gun.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "zork",
+        "zap",
+        "ray-gun",
+        "laser",
+        "sci-fi",
+        "retro",
+        "pew",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic pew laser",
+      "file": "Saved sounds/comic-pew-laser.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "pew",
+        "laser",
+        "ray-gun",
+        "sci-fi",
+        "zap",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic fwoosh fire",
+      "file": "Saved sounds/comic-fwoosh-fire.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "fwoosh",
+        "whoosh",
+        "fire",
+        "flame",
+        "burst",
+        "magic",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic sparkle magic",
+      "file": "Saved sounds/comic-sparkle-magic.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "sparkle",
+        "twinkle",
+        "shimmer",
+        "magic",
+        "fairy",
+        "power-up",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic poof disappear",
+      "file": "Saved sounds/comic-poof-disappear.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "poof",
+        "smoke",
+        "disappear",
+        "vanish",
+        "magic",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic ping power up",
+      "file": "Saved sounds/comic-ping-power-up.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "ping",
+        "ding",
+        "chime",
+        "power-up",
+        "shine",
+        "twinkle",
+        "idea",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic crash break",
+      "file": "Saved sounds/comic-crash-break.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "crash",
+        "break",
+        "shatter",
+        "glass",
+        "wood",
+        "impact",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic smash glass",
+      "file": "Saved sounds/comic-smash-glass.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "smash",
+        "glass",
+        "shatter",
+        "break",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic clang metal",
+      "file": "Saved sounds/comic-clang-metal.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "clang",
+        "metal",
+        "pan",
+        "ring",
+        "skillet",
+        "hit",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic clank metal drop",
+      "file": "Saved sounds/comic-clank-metal-drop.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "clank",
+        "metal",
+        "drop",
+        "fall",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic thud heavy fall",
+      "file": "Saved sounds/comic-thud-heavy-fall.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "thud",
+        "fall",
+        "drop",
+        "heavy",
+        "body-fall",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic splat wet",
+      "file": "Saved sounds/comic-splat-wet.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "splat",
+        "splatter",
+        "wet",
+        "pie",
+        "slap",
+        "goo",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic squish goo",
+      "file": "Saved sounds/comic-squish-goo.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "squish",
+        "squelch",
+        "goo",
+        "slime",
+        "wet",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic boing spring",
+      "file": "Saved sounds/comic-boing-spring.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "boing",
+        "spring",
+        "bounce",
+        "goofy",
+        "wobble",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic sproing stretch",
+      "file": "Saved sounds/comic-sproing-stretch.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "sproing",
+        "spring",
+        "stretch",
+        "rubber",
+        "goofy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic wobble jelly",
+      "file": "Saved sounds/comic-wobble-jelly.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "wobble",
+        "jelly",
+        "jiggle",
+        "goofy",
+        "bounce",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic slide whistle down",
+      "file": "Saved sounds/comic-slide-whistle-down.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "slide-whistle",
+        "fall",
+        "down",
+        "goofy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic slide whistle up",
+      "file": "Saved sounds/comic-slide-whistle-up.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "slide-whistle",
+        "rise",
+        "up",
+        "goofy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic pop bubble",
+      "file": "Saved sounds/comic-pop-bubble.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "pop",
+        "bubble",
+        "small",
+        "bright",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic ding bell",
+      "file": "Saved sounds/comic-ding-bell.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "ding",
+        "bell",
+        "idea",
+        "light-bulb",
+        "chime",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic honk horn",
+      "file": "Saved sounds/comic-honk-horn.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "honk",
+        "clown",
+        "horn",
+        "goofy",
+        "comedy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic gulp swallow",
+      "file": "Saved sounds/comic-gulp-swallow.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "gulp",
+        "swallow",
+        "nervous",
+        "goofy",
+        "reaction",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic yoink grab",
+      "file": "Saved sounds/comic-yoink-grab.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "yoink",
+        "grab",
+        "snatch",
+        "swipe",
+        "goofy",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic drumroll short",
+      "file": "Saved sounds/comic-drumroll-short.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "drumroll",
+        "reveal",
+        "comedy",
+        "snare",
+        "cymbal",
+        "onomatopoeia"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "comic sad trombone",
+      "file": "Saved sounds/comic-sad-trombone.mp3",
+      "keywords": [
+        "comic",
+        "comic-book",
+        "cartoon",
+        "sad-trombone",
+        "fail",
+        "wah-wah",
+        "comedy",
+        "defeat",
+        "onomatopoeia"
+      ]
     }
   ]
 }
