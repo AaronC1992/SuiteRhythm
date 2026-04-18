@@ -8119,40 +8119,7 @@ class SuiteRhythm {
     }
 
     updateApiStatusIndicators() {
-        const openaiStatus = document.getElementById('openaiStatus');
-        const pixabayStatus = document.getElementById('pixabayStatus');
-        
-        if (openaiStatus) {
-            // Show active when subscription token is present or backend confirms OpenAI is configured
-            const backendOpenAI = this.backendHealth?.openai === true;
-            const assumedBackend = this.backendAvailable && this.backendHealth == null;
-            if (this.accessToken) {
-                openaiStatus.className = 'api-status active';
-                openaiStatus.setAttribute('aria-label', 'AI active — subscription valid');
-            } else if (backendOpenAI || assumedBackend) {
-                openaiStatus.className = 'api-status active';
-                openaiStatus.setAttribute('aria-label', 'OpenAI available via backend');
-            } else {
-                openaiStatus.className = 'api-status inactive';
-                openaiStatus.setAttribute('aria-label', 'Subscribe to enable AI features');
-            }
-        }
-        
-        if (pixabayStatus) {
-            if (this.pixabayApiKey && this.pixabayApiKey.length > 10) {
-                pixabayStatus.className = 'api-status active';
-                pixabayStatus.setAttribute('aria-label', 'Pixabay API key is configured (local)');
-            } else {
-                const backendPixabay = this.backendHealth?.pixabay === true;
-                if (backendPixabay) {
-                    pixabayStatus.className = 'api-status active';
-                    pixabayStatus.setAttribute('aria-label', 'Pixabay available via backend');
-                } else {
-                    pixabayStatus.className = 'api-status inactive';
-                    pixabayStatus.setAttribute('aria-label', 'Pixabay (future support)');
-                }
-            }
-        }
+        // No-op: API keys are managed on the backend; status dots removed from UI.
     }
 
     // ===== ACTIVITY FEED =====
