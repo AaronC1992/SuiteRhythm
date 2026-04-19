@@ -43,6 +43,75 @@ export default function SettingsSection() {
           </div>
         </section>
 
+        {/* Theme Switcher */}
+        <section className="menu-section">
+          <button className="menu-toggle" id="themeMenuToggle">
+            Theme
+            <span className="toggle-indicator">&#9660;</span>
+          </button>
+          <div className="menu-content hidden" id="themeMenuContent">
+            <p className="info-text" style={{ marginBottom: 8, fontSize: '0.85rem' }}>
+              Choose a visual style for the interface.
+            </p>
+            <div className="theme-picker-grid" id="themePicker">
+              <button className="theme-card active" data-theme-value="" aria-label="Nightshade theme">
+                <div className="theme-card-name">Nightshade</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#8a2be2' }} />
+                  <span className="theme-swatch" style={{ background: '#bb86fc' }} />
+                  <span className="theme-swatch" style={{ background: '#03dac6' }} />
+                  <span className="theme-swatch" style={{ background: '#0a0a0a' }} />
+                </div>
+              </button>
+              <button className="theme-card" data-theme-value="ember-forge" aria-label="Ember Forge theme">
+                <div className="theme-card-name">Ember Forge</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#e65100' }} />
+                  <span className="theme-swatch" style={{ background: '#ff9800' }} />
+                  <span className="theme-swatch" style={{ background: '#ffab40' }} />
+                  <span className="theme-swatch" style={{ background: '#0d0907' }} />
+                </div>
+              </button>
+              <button className="theme-card" data-theme-value="arctic-depths" aria-label="Arctic Depths theme">
+                <div className="theme-card-name">Arctic Depths</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#0277bd' }} />
+                  <span className="theme-swatch" style={{ background: '#4fc3f7' }} />
+                  <span className="theme-swatch" style={{ background: '#00e5ff' }} />
+                  <span className="theme-swatch" style={{ background: '#060a10' }} />
+                </div>
+              </button>
+              <button className="theme-card" data-theme-value="verdant-grove" aria-label="Verdant Grove theme">
+                <div className="theme-card-name">Verdant Grove</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#2e7d32' }} />
+                  <span className="theme-swatch" style={{ background: '#66bb6a' }} />
+                  <span className="theme-swatch" style={{ background: '#00e676' }} />
+                  <span className="theme-swatch" style={{ background: '#070a07' }} />
+                </div>
+              </button>
+              <button className="theme-card" data-theme-value="crimson-night" aria-label="Crimson Night theme">
+                <div className="theme-card-name">Crimson Night</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#c62828' }} />
+                  <span className="theme-swatch" style={{ background: '#ef5350' }} />
+                  <span className="theme-swatch" style={{ background: '#ff80ab' }} />
+                  <span className="theme-swatch" style={{ background: '#0a0608' }} />
+                </div>
+              </button>
+              <button className="theme-card" data-theme-value="sunlit-studio" aria-label="Sunlit Studio theme">
+                <div className="theme-card-name">Sunlit Studio</div>
+                <div className="theme-card-swatches">
+                  <span className="theme-swatch" style={{ background: '#6200ea' }} />
+                  <span className="theme-swatch" style={{ background: '#7c4dff' }} />
+                  <span className="theme-swatch" style={{ background: '#00bfa5' }} />
+                  <span className="theme-swatch" style={{ background: '#f5f5f5' }} />
+                </div>
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Audio Source (Pixabay) */}
         <section className="menu-section">
           <button className="menu-toggle" id="audioSourceMenuToggle">

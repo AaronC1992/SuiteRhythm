@@ -37,6 +37,12 @@ export default function RootLayout({ children }) {
       <head>
         {/* Howler.js is loaded as an npm package (see engine/SuiteRhythm.js) */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* Restore saved theme instantly to prevent flash of default colours */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('SuiteRhythm_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         {/* Global zombie-audio killer — runs on every route, including landing. */}

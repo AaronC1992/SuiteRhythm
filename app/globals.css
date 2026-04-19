@@ -9,7 +9,7 @@
 #platformSidebar {
     width: 220px;
     flex-shrink: 0;
-    background: #0c0c14;
+    background: var(--sidebar-bg, #0c0c14);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -137,7 +137,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
-    background: #0c0c14;
+    background: var(--sidebar-bg, #0c0c14);
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
@@ -1380,6 +1380,8 @@
     --radius-lg: 16px;
     --shadow: 0 10px 40px rgba(0,0,0,0.35);
     --container: 980px;
+    --sidebar-bg: #0c0c14;
+    --body-grad-end: #1a1a2e;
     --space-1: 6px;
     --space-2: 10px;
     --space-3: 14px;
@@ -1397,7 +1399,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, var(--bg) 0%, #1a1a2e 100%);
+    background: linear-gradient(135deg, var(--bg) 0%, var(--body-grad-end, #1a1a2e) 100%);
     color: var(--text);
     min-height: 100vh;
     padding: 0;
@@ -4106,6 +4108,233 @@ body.cb-visualizer .visualizer-bar-alt {
 #perfPanel strong {
     color: #aec4ff;
     font-weight: 600;
+}
+
+/* ======================================================================
+   THEME SYSTEM — data-theme attribute on <html>
+   Default (no attribute) = Nightshade (current purple theme)
+   ====================================================================== */
+
+/* ── Theme Picker Grid ─────────────────────────────────────── */
+.theme-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+.theme-card {
+    position: relative;
+    border: 2px solid var(--border);
+    border-radius: var(--radius, 12px);
+    padding: 14px 12px 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    text-align: center;
+    background: var(--surface, #151522);
+}
+.theme-card:hover {
+    border-color: var(--primary);
+}
+.theme-card.active {
+    border-color: var(--primary-2);
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.25);
+}
+.theme-card-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+.theme-card-swatches {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+}
+.theme-swatch {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ── 1. Nightshade (Default — no data-theme needed) ──────── */
+/* Already defined in :root above */
+
+/* ── 2. Ember Forge — warm dark with orange/amber accents ── */
+[data-theme="ember-forge"] {
+    --bg: #0d0907;
+    --bg-alt: #120e0a;
+    --surface: #1a1410;
+    --surface-2: #241c16;
+    --surface-0: #0d0907;
+    --surface-1: #140f0b;
+    --surface-3: #2a2018;
+    --border: #3a2a1a;
+    --text: #e8ddd0;
+    --muted: #b8a898;
+    --muted-2: #8a7a6a;
+    --primary: #e65100;
+    --primary-2: #ff9800;
+    --teal: #ffab40;
+    --success: #66bb6a;
+    --danger: #ef5350;
+    --warning: #ffd54f;
+    --sidebar-bg: #0f0b08;
+    --body-grad-end: #1a120a;
+    --brand-grad-from: #e65100;
+    --brand-grad-to: #ffab40;
+    --brand-grad-mid: #ff9800;
+    --tint-primary: rgba(230, 81, 0, 0.14);
+    --tint-teal: rgba(255, 171, 64, 0.14);
+    --tint-danger: rgba(239, 83, 80, 0.16);
+    --tint-warning: rgba(255, 213, 79, 0.16);
+    --tint-success: rgba(102, 187, 106, 0.16);
+    --ring: 0 0 0 2px rgba(230, 81, 0, 0.35), 0 0 0 4px rgba(255, 171, 64, 0.25);
+}
+
+/* ── 3. Arctic Depths — cool blue/ice theme ───────────────── */
+[data-theme="arctic-depths"] {
+    --bg: #060a10;
+    --bg-alt: #080d14;
+    --surface: #0e1620;
+    --surface-2: #15202e;
+    --surface-0: #060a10;
+    --surface-1: #0a1018;
+    --surface-3: #1c2a3a;
+    --border: #1e3048;
+    --text: #d0e0f0;
+    --muted: #8aa8c8;
+    --muted-2: #5a7898;
+    --primary: #0277bd;
+    --primary-2: #4fc3f7;
+    --teal: #00e5ff;
+    --success: #00e676;
+    --danger: #ff5252;
+    --warning: #ffd740;
+    --sidebar-bg: #070c12;
+    --body-grad-end: #0c1824;
+    --brand-grad-from: #0277bd;
+    --brand-grad-to: #00e5ff;
+    --brand-grad-mid: #4fc3f7;
+    --tint-primary: rgba(2, 119, 189, 0.14);
+    --tint-teal: rgba(0, 229, 255, 0.14);
+    --tint-danger: rgba(255, 82, 82, 0.16);
+    --tint-warning: rgba(255, 215, 64, 0.16);
+    --tint-success: rgba(0, 230, 118, 0.16);
+    --ring: 0 0 0 2px rgba(2, 119, 189, 0.35), 0 0 0 4px rgba(0, 229, 255, 0.25);
+}
+
+/* ── 4. Verdant Grove — nature green/earth theme ──────────── */
+[data-theme="verdant-grove"] {
+    --bg: #070a07;
+    --bg-alt: #0a0e0a;
+    --surface: #101a10;
+    --surface-2: #18261a;
+    --surface-0: #070a07;
+    --surface-1: #0c140c;
+    --surface-3: #1e3220;
+    --border: #1e3a22;
+    --text: #d0e8d0;
+    --muted: #88b888;
+    --muted-2: #5a8a5a;
+    --primary: #2e7d32;
+    --primary-2: #66bb6a;
+    --teal: #00e676;
+    --success: #00c853;
+    --danger: #ef5350;
+    --warning: #ffca28;
+    --sidebar-bg: #080c08;
+    --body-grad-end: #0e1a10;
+    --brand-grad-from: #2e7d32;
+    --brand-grad-to: #00e676;
+    --brand-grad-mid: #66bb6a;
+    --tint-primary: rgba(46, 125, 50, 0.14);
+    --tint-teal: rgba(0, 230, 118, 0.14);
+    --tint-danger: rgba(239, 83, 80, 0.16);
+    --tint-warning: rgba(255, 202, 40, 0.16);
+    --tint-success: rgba(0, 200, 83, 0.16);
+    --ring: 0 0 0 2px rgba(46, 125, 50, 0.35), 0 0 0 4px rgba(0, 230, 118, 0.25);
+}
+
+/* ── 5. Crimson Night — red/rose dark theme ───────────────── */
+[data-theme="crimson-night"] {
+    --bg: #0a0608;
+    --bg-alt: #100a0c;
+    --surface: #1a1014;
+    --surface-2: #26161e;
+    --surface-0: #0a0608;
+    --surface-1: #120c10;
+    --surface-3: #301a24;
+    --border: #3a1a28;
+    --text: #f0d8e0;
+    --muted: #c898a8;
+    --muted-2: #986878;
+    --primary: #c62828;
+    --primary-2: #ef5350;
+    --teal: #ff80ab;
+    --success: #66bb6a;
+    --danger: #ff1744;
+    --warning: #ffab40;
+    --sidebar-bg: #0c080a;
+    --body-grad-end: #1a0c12;
+    --brand-grad-from: #c62828;
+    --brand-grad-to: #ff80ab;
+    --brand-grad-mid: #ef5350;
+    --tint-primary: rgba(198, 40, 40, 0.14);
+    --tint-teal: rgba(255, 128, 171, 0.14);
+    --tint-danger: rgba(255, 23, 68, 0.16);
+    --tint-warning: rgba(255, 171, 64, 0.16);
+    --tint-success: rgba(102, 187, 106, 0.16);
+    --ring: 0 0 0 2px rgba(198, 40, 40, 0.35), 0 0 0 4px rgba(255, 128, 171, 0.25);
+}
+
+/* ── 6. Sunlit Studio — light theme ──────────────────────── */
+[data-theme="sunlit-studio"] {
+    --bg: #f5f5f5;
+    --bg-alt: #ebebeb;
+    --surface: #ffffff;
+    --surface-2: #f0f0f0;
+    --surface-0: #fafafa;
+    --surface-1: #f5f5f5;
+    --surface-3: #e8e8e8;
+    --border: #d0d0d0;
+    --text: #1a1a1a;
+    --muted: #555555;
+    --muted-2: #888888;
+    --primary: #6200ea;
+    --primary-2: #7c4dff;
+    --teal: #00bfa5;
+    --success: #00c853;
+    --danger: #d50000;
+    --warning: #ff6d00;
+    --sidebar-bg: #e8e8f0;
+    --body-grad-end: #e0e0ee;
+    --brand-grad-from: #6200ea;
+    --brand-grad-to: #00bfa5;
+    --brand-grad-mid: #7c4dff;
+    --tint-primary: rgba(98, 0, 234, 0.08);
+    --tint-teal: rgba(0, 191, 165, 0.08);
+    --tint-danger: rgba(213, 0, 0, 0.08);
+    --tint-warning: rgba(255, 109, 0, 0.08);
+    --tint-success: rgba(0, 200, 83, 0.08);
+    --ring: 0 0 0 2px rgba(98, 0, 234, 0.25), 0 0 0 4px rgba(0, 191, 165, 0.18);
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+/* Light theme needs inverted scrollbar + text adjustments */
+[data-theme="sunlit-studio"] * {
+    scrollbar-color: #c0c0d0 transparent;
+}
+[data-theme="sunlit-studio"] *::-webkit-scrollbar-thumb {
+    background: #c0c0d0;
+}
+[data-theme="sunlit-studio"] *::-webkit-scrollbar-thumb:hover {
+    background: #a0a0b0;
+}
+[data-theme="sunlit-studio"] .sidebar-nav-item:hover {
+    background: rgba(0,0,0,0.05);
+}
+[data-theme="sunlit-studio"] .sidebar-nav-item.active {
+    background: rgba(98,0,234,0.08);
 }
 
 /* ============================================================ */

@@ -10621,6 +10621,49 @@ function initializeMenuToggles() {
             audioSourceContent.classList.toggle('hidden');
         });
     }
+
+    // Theme subsection toggle
+    const themeToggle = document.getElementById('themeMenuToggle');
+    const themeContent = document.getElementById('themeMenuContent');
+    if (themeToggle && themeContent) {
+        themeToggle.addEventListener('click', () => {
+            themeToggle.classList.toggle('active');
+            themeContent.classList.toggle('hidden');
+        });
+    }
+
+    // Theme picker cards
+    const themePicker = document.getElementById('themePicker');
+    if (themePicker) {
+        // Restore saved theme and mark the active card
+        const saved = localStorage.getItem('SuiteRhythm_theme') || '';
+        if (saved) document.documentElement.setAttribute('data-theme', saved);
+        themePicker.querySelectorAll('.theme-card').forEach(card => {
+            const val = card.getAttribute('data-theme-value');
+            if (val === saved) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+
+        themePicker.addEventListener('click', (e) => {
+            const card = e.target.closest('.theme-card');
+            if (!card) return;
+            const value = card.getAttribute('data-theme-value');
+            // Apply
+            if (value) {
+                document.documentElement.setAttribute('data-theme', value);
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+            // Persist
+            localStorage.setItem('SuiteRhythm_theme', value);
+            // Update active state
+            themePicker.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+        });
+    }
 }
 
 // ===== EXPORTS FOR NEXT.JS =====
