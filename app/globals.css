@@ -5368,6 +5368,246 @@ body.cb-visualizer .visualizer-bar-alt {
     .accordion-bar { padding: 14px 16px; font-size: 0.9rem; }
 }
 
+/* ======================================================================
+   NEW UI ELEMENTS — Top Tabs, Bottom Nav, Floating FAB (hidden by default)
+   ====================================================================== */
+
+/* ── Top Tab Bar ─────────────────────────────────────────────── */
+.top-tab-bar {
+    display: none;
+    align-items: center;
+    gap: 0;
+    background: var(--sidebar-bg, rgba(12,12,20,0.95));
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 160;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.top-tab-bar::-webkit-scrollbar { display: none; }
+.top-tab {
+    padding: 12px 18px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+}
+.top-tab:hover {
+    color: var(--text);
+}
+.top-tab.active {
+    color: var(--primary, #8a2be2);
+    border-bottom-color: var(--primary, #8a2be2);
+}
+
+/* ── Bottom Nav Bar ──────────────────────────────────────────── */
+.bottom-nav-bar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: var(--sidebar-bg, rgba(12,12,20,0.97));
+    border-top: 1px solid var(--border);
+    padding: 6px 0 env(safe-area-inset-bottom, 4px);
+    justify-content: space-around;
+    align-items: center;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.bottom-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.65rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    min-width: 48px;
+}
+.bottom-nav-btn svg { width: 20px; height: 20px; }
+.bottom-nav-btn:hover { color: var(--text); }
+.bottom-nav-btn.active {
+    color: var(--primary, #8a2be2);
+}
+.bottom-nav-btn.active svg {
+    filter: drop-shadow(0 0 4px var(--primary, #8a2be2));
+}
+
+/* ── Floating FAB + Menu ─────────────────────────────────────── */
+.floating-fab {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 210;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--primary, #8a2be2);
+    color: #fff;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.floating-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(138,43,226,0.35);
+}
+.floating-fab.open {
+    transform: rotate(45deg);
+}
+.floating-menu {
+    display: none;
+    position: fixed;
+    bottom: 84px;
+    right: 24px;
+    z-index: 205;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--surface, #151522);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    min-width: 160px;
+}
+.floating-menu.hidden { display: none !important; }
+.floating-menu-item {
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+.floating-menu-item:hover {
+    background: var(--tint-primary);
+}
+.floating-menu-item.active {
+    color: var(--primary, #8a2be2);
+    font-weight: 600;
+}
+
+/* ======================================================================
+   LAYOUT MODE 14: TOP TABS
+   Horizontal tab bar across the top, no sidebar. Standard web-app pattern.
+   ====================================================================== */
+[data-layout="top-tabs"] #platformSidebar { display: none; }
+[data-layout="top-tabs"] #platformShell { flex-direction: column; }
+[data-layout="top-tabs"] .top-tab-bar { display: flex; }
+[data-layout="top-tabs"] .now-playing-strip {
+    position: sticky;
+    top: 0;
+    z-index: 155;
+}
+[data-layout="top-tabs"] #platformMain {
+    padding: 0 32px 60px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+[data-layout="top-tabs"] .section-header {
+    padding: 28px 0 12px;
+}
+[data-layout="top-tabs"] .dashboard-hero {
+    padding: 40px 0 20px;
+    text-align: center;
+}
+[data-layout="top-tabs"] .dashboard-title { font-size: 2.5rem; }
+@media (max-width: 600px) {
+    [data-layout="top-tabs"] #platformMain { padding: 0 12px 60px; }
+    .top-tab { padding: 10px 12px; font-size: 0.78rem; }
+}
+
+/* ======================================================================
+   LAYOUT MODE 15: BOTTOM NAV
+   Mobile-app style bottom tab bar. Sidebar hidden.
+   Optimized for touch / mobile-first users.
+   ====================================================================== */
+[data-layout="bottom-nav"] #platformSidebar { display: none; }
+[data-layout="bottom-nav"] #platformShell { flex-direction: column; }
+[data-layout="bottom-nav"] .bottom-nav-bar { display: flex; }
+[data-layout="bottom-nav"] .now-playing-strip {
+    position: sticky;
+    top: 0;
+    z-index: 155;
+}
+[data-layout="bottom-nav"] #platformMain {
+    padding: 0 20px 80px; /* extra bottom padding for the nav bar */
+    max-width: 960px;
+    margin: 0 auto;
+}
+[data-layout="bottom-nav"] .section-header {
+    padding: 20px 0 10px;
+}
+[data-layout="bottom-nav"] .dashboard-hero {
+    padding: 32px 0 16px;
+    text-align: center;
+}
+[data-layout="bottom-nav"] .dashboard-title { font-size: 2.2rem; }
+@media (max-width: 600px) {
+    [data-layout="bottom-nav"] #platformMain { padding: 0 12px 90px; }
+}
+
+/* ======================================================================
+   LAYOUT MODE 16: FLOATING / ZEN
+   Zero persistent chrome. Full-screen content.
+   Small FAB in corner opens a nav menu on click.
+   ====================================================================== */
+[data-layout="floating"] #platformSidebar { display: none; }
+[data-layout="floating"] #platformShell { flex-direction: column; }
+[data-layout="floating"] .floating-fab { display: flex; }
+/* .floating-menu shown/hidden via JS toggling .hidden class */
+[data-layout="floating"] .floating-menu:not(.hidden) { display: flex; }
+[data-layout="floating"] .now-playing-strip { display: none; }
+[data-layout="floating"] .mobile-topbar { display: none !important; }
+[data-layout="floating"] #platformMain {
+    padding: 0 40px 60px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+[data-layout="floating"] .section-header {
+    padding: 36px 0 12px;
+}
+[data-layout="floating"] .dashboard-hero {
+    padding: 80px 20px 40px;
+    text-align: center;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+[data-layout="floating"] .dashboard-title { font-size: 3.5rem; }
+[data-layout="floating"] .section-intro {
+    max-width: 600px;
+    margin: 0 auto 24px;
+}
+@media (max-width: 600px) {
+    [data-layout="floating"] #platformMain { padding: 0 16px 60px; }
+    .floating-fab { bottom: 16px; right: 16px; width: 46px; height: 46px; }
+    .floating-menu { bottom: 72px; right: 16px; }
+}
+
 /* ============================================================ */
 /* UI ENHANCEMENTS (Batch 8) - appended block, overrides earlier  */
 /* rules via source order. Pure additive, no IDs removed.        */

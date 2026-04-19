@@ -276,6 +276,46 @@ export default function SettingsSection() {
                 <div className="layout-card-name">Accordion</div>
                 <div className="layout-card-desc">Collapsible rows, one section open at a time</div>
               </button>
+
+              {/* ── Top Tabs ── */}
+              <button className="layout-card" data-layout-value="top-tabs" aria-label="Top Tabs layout">
+                <div className="layout-card-preview" style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 4 }}>
+                  <div style={{ display: 'flex', gap: 3, marginBottom: 3 }}>
+                    <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'var(--primary, #8a2be2)', opacity: 0.7 }} />
+                    <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.08)' }} />
+                    <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.08)' }} />
+                    <div style={{ flex: 1, height: 4, borderRadius: 2, background: 'rgba(255,255,255,0.08)' }} />
+                  </div>
+                  <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 3 }} />
+                </div>
+                <div className="layout-card-name">Top Tabs</div>
+                <div className="layout-card-desc">Horizontal tab bar across the top</div>
+              </button>
+
+              {/* ── Bottom Nav ── */}
+              <button className="layout-card" data-layout-value="bottom-nav" aria-label="Bottom Nav layout">
+                <div className="layout-card-preview" style={{ display: 'flex', flexDirection: 'column', gap: 2, padding: 4 }}>
+                  <div style={{ flex: 1, background: 'rgba(255,255,255,0.06)', borderRadius: 3 }} />
+                  <div style={{ display: 'flex', gap: 4, justifyContent: 'center', paddingTop: 3 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--primary, #8a2be2)', opacity: 0.7 }} />
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
+                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(255,255,255,0.12)' }} />
+                  </div>
+                </div>
+                <div className="layout-card-name">Bottom Nav</div>
+                <div className="layout-card-desc">Mobile-app style bottom tab bar</div>
+              </button>
+
+              {/* ── Floating / Zen ── */}
+              <button className="layout-card" data-layout-value="floating" aria-label="Floating Zen layout">
+                <div className="layout-card-preview" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', padding: 4, position: 'relative' }}>
+                  <div style={{ position: 'absolute', inset: 4, background: 'rgba(255,255,255,0.04)', borderRadius: 3 }} />
+                  <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--primary, #8a2be2)', opacity: 0.8, zIndex: 1 }} />
+                </div>
+                <div className="layout-card-name">Floating</div>
+                <div className="layout-card-desc">Zero chrome, floating menu button</div>
+              </button>
             </div>
           </div>
         </section>

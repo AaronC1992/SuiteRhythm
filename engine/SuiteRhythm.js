@@ -10778,6 +10778,60 @@ function initializeMenuToggles() {
     if (splitLeftSel) splitLeftSel.addEventListener('change', _splitUpdate);
     if (splitRightSel) splitRightSel.addEventListener('change', _splitUpdate);
 
+    // ─── Top Tabs ────────────────────────────────────────────────
+    const topTabBar = document.getElementById('topTabBar');
+    if (topTabBar) {
+        topTabBar.addEventListener('click', (e) => {
+            const tab = e.target.closest('.top-tab');
+            if (!tab) return;
+            const sectionId = tab.getAttribute('data-section');
+            if (window.gameInstance?.navigateToSection) {
+                window.gameInstance.navigateToSection(sectionId);
+            }
+            topTabBar.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    }
+
+    // ─── Bottom Nav ──────────────────────────────────────────────
+    const bottomNavBar = document.getElementById('bottomNavBar');
+    if (bottomNavBar) {
+        bottomNavBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.bottom-nav-btn');
+            if (!btn) return;
+            const sectionId = btn.getAttribute('data-section');
+            if (window.gameInstance?.navigateToSection) {
+                window.gameInstance.navigateToSection(sectionId);
+            }
+            bottomNavBar.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    }
+
+    // ─── Floating / Zen ──────────────────────────────────────────
+    const floatingFab = document.getElementById('floatingFab');
+    const floatingMenu = document.getElementById('floatingMenu');
+    if (floatingFab && floatingMenu) {
+        floatingFab.addEventListener('click', () => {
+            const isOpen = !floatingMenu.classList.contains('hidden');
+            floatingMenu.classList.toggle('hidden', isOpen);
+            floatingFab.classList.toggle('open', !isOpen);
+        });
+        floatingMenu.addEventListener('click', (e) => {
+            const item = e.target.closest('.floating-menu-item');
+            if (!item) return;
+            const sectionId = item.getAttribute('data-section');
+            if (window.gameInstance?.navigateToSection) {
+                window.gameInstance.navigateToSection(sectionId);
+            }
+            floatingMenu.querySelectorAll('.floating-menu-item').forEach(m => m.classList.remove('active'));
+            item.classList.add('active');
+            // Close menu after selection
+            floatingMenu.classList.add('hidden');
+            floatingFab.classList.remove('open');
+        });
+    }
+
     // Activate layout on initial load
     const currentLayout = localStorage.getItem('SuiteRhythm_layout') || '';
     _activateLayout(currentLayout);
@@ -10889,6 +10943,12 @@ function _activateLayout(layout) {
     // Reset accordion bar active states
     document.querySelectorAll('.accordion-bar').forEach(b => b.classList.remove('active'));
 
+    // Close floating menu if open
+    const floatMenu = document.getElementById('floatingMenu');
+    const floatFab = document.getElementById('floatingFab');
+    if (floatMenu) floatMenu.classList.add('hidden');
+    if (floatFab) floatFab.classList.remove('open');
+
     // Command Center: since all sections are force-visible via CSS, clear hidden so engine
     // sidebar clicks don't fight the grid. For other layouts, re-navigate to the current section.
     if (layout === 'command-center' || layout === 'single-page') {
@@ -10914,6 +10974,7 @@ function _activateLayout(layout) {
         if (firstSection) firstSection.classList.add('accordion-open');
         if (firstBar) firstBar.classList.add('active');
     } else {
+        // top-tabs, bottom-nav, floating, classic, compact, cinematic, cozy, streamer, focus, spotlight
         // Re-trigger current section visibility so only 1 is shown
         const activeNav = document.querySelector('.sidebar-nav-item.active');
         const sectionId = activeNav?.getAttribute('data-section') || 'dashboardPanel';
