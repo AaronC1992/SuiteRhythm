@@ -3,7 +3,7 @@
 /** Dashboard / Home section — use-case cards and "How It Works" intro. */
 export default function DashboardSection() {
   return (
-    <div id="dashboardPanel" className="app-section">
+    <div id="dashboardPanel" className="app-section" data-persona="all">
       <div className="dashboard-hero">
         <h1 className="dashboard-title">SuiteRhythm</h1>
         <p className="dashboard-sub">

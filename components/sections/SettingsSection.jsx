@@ -3,7 +3,7 @@
 /** Settings section — volume, playback options, scene presets, custom triggers. */
 export default function SettingsSection() {
   return (
-    <div id="settingsSection" className="app-section hidden">
+    <div id="settingsSection" className="app-section hidden" data-persona="all">
       <div className="section-header">
         <h2>Settings</h2>
       </div>
@@ -172,6 +172,61 @@ export default function SettingsSection() {
                 </div>
                 <div className="layout-card-name">Streamer</div>
                 <div className="layout-card-desc">Dense info, minimal chrome, fast scanning</div>
+              </button>
+              <button className="layout-card" data-layout-value="persona-tabs" aria-label="Persona Tabs layout">
+                <div className="layout-card-preview layout-preview-persona">
+                  <div className="lp-topbar" style={{ display: 'flex', gap: 2, padding: '0 2px' }}>
+                    <span style={{ flex: 1, background: 'var(--primary, #8a2be2)', opacity: 0.5, borderRadius: 1 }} />
+                    <span style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 1 }} />
+                    <span style={{ flex: 1, background: 'rgba(255,255,255,0.1)', borderRadius: 1 }} />
+                  </div>
+                  <div className="lp-body">
+                    <div className="lp-content" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Persona Tabs</div>
+                <div className="layout-card-desc">Top tabs for Streamer / Tabletop / Storyteller</div>
+              </button>
+              <button className="layout-card" data-layout-value="command-center" aria-label="Command Center layout">
+                <div className="layout-card-preview layout-preview-command" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2, padding: 3 }}>
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 2 }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 2 }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 2 }} />
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 2 }} />
+                </div>
+                <div className="layout-card-name">Command Center</div>
+                <div className="layout-card-desc">All sections visible in a multi-panel grid</div>
+              </button>
+              <button className="layout-card" data-layout-value="focus" aria-label="Focus layout">
+                <div className="layout-card-preview layout-preview-focus" style={{ flexDirection: 'column' }}>
+                  <div className="lp-strip" style={{ margin: 3, marginBottom: 0 }} />
+                  <div className="lp-content lp-full" style={{ margin: 3, flex: 1 }} />
+                  <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', flexShrink: 0, display: 'flex', justifyContent: 'center', gap: 4, alignItems: 'center', padding: '0 8px' }}>
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--primary, #8a2be2)', opacity: 0.6 }} />
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+                  </div>
+                </div>
+                <div className="layout-card-name">Focus</div>
+                <div className="layout-card-desc">Full-screen sections, bottom dock, zero distractions</div>
+              </button>
+              <button className="layout-card" data-layout-value="spotlight" aria-label="Spotlight layout">
+                <div className="layout-card-preview layout-preview-spotlight" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3, padding: 4 }}>
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(transparent, var(--bg, #0a0a0a))' }} />
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(transparent, var(--bg, #0a0a0a))' }} />
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(transparent, var(--bg, #0a0a0a))' }} />
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 4, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%', background: 'linear-gradient(transparent, var(--bg, #0a0a0a))' }} />
+                  </div>
+                </div>
+                <div className="layout-card-name">Spotlight</div>
+                <div className="layout-card-desc">Card overview of all sections, click to expand</div>
               </button>
             </div>
           </div>

@@ -4693,6 +4693,346 @@ body.cb-visualizer .visualizer-bar-alt {
 [data-layout="streamer"] .slider-container label { font-size: 0.8rem; }
 [data-layout="streamer"] .toggle-row label { font-size: 0.82rem; }
 
+/* ======================================================================
+   NEW UI ELEMENTS — hidden by default, shown only in specific layouts
+   ====================================================================== */
+
+/* ── Persona Tab Bar ─────────────────────────────────────────── */
+.persona-tab-bar {
+    display: none;
+    gap: 0;
+    background: var(--sidebar-bg, rgba(12,12,20,0.95));
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 160;
+}
+.persona-tab {
+    padding: 12px 20px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--muted-2);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.persona-tab:hover { color: var(--text); }
+.persona-tab.active {
+    color: var(--primary-2);
+    border-bottom-color: var(--primary);
+}
+
+/* ── Spotlight Back Button ───────────────────────────────────── */
+.spotlight-back {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    margin: 16px 0 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--primary-2);
+    background: var(--tint-primary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius, 12px);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.spotlight-back:hover { background: rgba(138,43,226,0.15); }
+.spotlight-back svg { flex-shrink: 0; }
+
+/* ── Focus Dock ──────────────────────────────────────────────── */
+.focus-dock {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 16px;
+    background: var(--sidebar-bg, rgba(12,12,20,0.97));
+    border-top: 1px solid var(--border);
+    z-index: 300;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.focus-dock-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    background: none;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+.focus-dock-btn:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+.focus-dock-btn.active {
+    background: var(--tint-primary);
+    color: var(--primary-2);
+}
+
+/* ======================================================================
+   LAYOUT MODE 6: PERSONA TABS
+   Top persona bar (Streamer / Tabletop / Storyteller / All).
+   Sections filtered by data-persona attribute. Sidebar hidden.
+   ====================================================================== */
+[data-layout="persona-tabs"] #platformShell { flex-direction: column; }
+[data-layout="persona-tabs"] #platformSidebar { display: none; }
+[data-layout="persona-tabs"] .persona-tab-bar { display: flex; }
+[data-layout="persona-tabs"] .now-playing-strip {
+    position: sticky;
+    top: 0;
+    z-index: 155;
+}
+[data-layout="persona-tabs"] #platformMain {
+    padding: 0 40px 60px;
+}
+[data-layout="persona-tabs"] .app-section {
+    max-width: 980px;
+    margin: 0 auto;
+}
+/* Show all sections when filter is "all" (default) — handled by JS toggling .persona-hidden */
+[data-layout="persona-tabs"] .app-section.persona-hidden {
+    display: none !important;
+}
+/* Dashboard always visible in persona-tabs */
+[data-layout="persona-tabs"] #dashboardPanel {
+    display: block;
+}
+/* Mobile: make persona tabs scroll horizontally */
+@media (max-width: 600px) {
+    .persona-tab-bar {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    .persona-tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 10px 14px;
+        font-size: 0.82rem;
+    }
+}
+
+/* ======================================================================
+   LAYOUT MODE 7: COMMAND CENTER
+   All sections visible simultaneously in a multi-panel grid.
+   Icon rail sidebar. Each section becomes a scrollable card.
+   ====================================================================== */
+[data-layout="command-center"] #platformSidebar {
+    width: 56px;
+    align-items: center;
+    overflow: hidden;
+}
+[data-layout="command-center"] .sidebar-brand {
+    padding: 12px 6px;
+    text-align: center;
+}
+[data-layout="command-center"] .sidebar-logo-text { font-size: 0; }
+[data-layout="command-center"] .sidebar-logo-text::after {
+    content: 'SR';
+    font-size: 0.9rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-2), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-layout="command-center"] .sidebar-tagline { display: none; }
+[data-layout="command-center"] .sidebar-nav-group-label { display: none; }
+[data-layout="command-center"] .sidebar-nav {
+    align-items: center;
+    padding: 4px 0;
+    gap: 0;
+}
+[data-layout="command-center"] .sidebar-nav-item {
+    justify-content: center;
+    padding: 10px;
+    font-size: 0;
+    border-left: none;
+}
+[data-layout="command-center"] .sidebar-nav-item svg { width: 18px; height: 18px; }
+[data-layout="command-center"] .sidebar-footer { display: none; }
+
+/* Force ALL sections visible */
+[data-layout="command-center"] .app-section,
+[data-layout="command-center"] .app-section.hidden {
+    display: block !important;
+    opacity: 1 !important;
+}
+[data-layout="command-center"] #platformMain {
+    padding: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 12px;
+    align-content: start;
+    overflow-y: auto;
+}
+[data-layout="command-center"] .now-playing-strip {
+    grid-column: 1 / -1;
+    position: sticky;
+    top: 0;
+    z-index: 155;
+    border-radius: 10px;
+}
+[data-layout="command-center"] .app-section {
+    max-width: 100%;
+    margin: 0;
+    background: var(--surface, #151522);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+}
+[data-layout="command-center"] .app-section::-webkit-scrollbar { width: 4px; }
+[data-layout="command-center"] .dashboard-hero { padding: 16px 12px 12px; }
+[data-layout="command-center"] .dashboard-title { font-size: 1.6rem; }
+[data-layout="command-center"] .dashboard-sub { font-size: 0.85rem; }
+[data-layout="command-center"] .use-case-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+[data-layout="command-center"] .use-case-card { padding: 14px 12px; }
+[data-layout="command-center"] .section-header h2 { font-size: 1.1rem; }
+[data-layout="command-center"] .section-intro { font-size: 0.82rem; margin-bottom: 12px; }
+@media (max-width: 900px) {
+    [data-layout="command-center"] #platformMain {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ======================================================================
+   LAYOUT MODE 8: FOCUS
+   Ultra-minimal session mode. Single section fills the viewport.
+   Bottom dock navigation. No sidebar. No chrome.
+   ====================================================================== */
+[data-layout="focus"] #platformSidebar { display: none; }
+[data-layout="focus"] .focus-dock { display: flex; }
+[data-layout="focus"] .now-playing-strip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    border-radius: 0;
+    font-size: 0.82rem;
+    padding: 6px 20px;
+}
+[data-layout="focus"] #platformMain {
+    padding: 48px 32px 80px;
+    min-height: 100vh;
+}
+[data-layout="focus"] .app-section {
+    max-width: 100%;
+    min-height: calc(100vh - 140px);
+}
+[data-layout="focus"] .dashboard-hero {
+    padding: 40px 20px;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+[data-layout="focus"] .dashboard-title { font-size: 3.5rem; }
+[data-layout="focus"] .section-header h2 { font-size: 2rem; }
+[data-layout="focus"] .section-body { padding-top: 24px; }
+[data-layout="focus"] .use-case-grid {
+    max-width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+@media (max-width: 600px) {
+    [data-layout="focus"] .focus-dock { gap: 0; padding: 8px 8px; }
+    [data-layout="focus"] .focus-dock-btn { padding: 8px 10px; }
+    [data-layout="focus"] #platformMain { padding: 44px 16px 72px; }
+}
+
+/* ======================================================================
+   LAYOUT MODE 9: SPOTLIGHT
+   Card-based home screen. Each section is a large clickable tile.
+   Clicking opens it full-screen with a back button. No sidebar.
+   ====================================================================== */
+[data-layout="spotlight"] #platformSidebar { display: none; }
+[data-layout="spotlight"] #platformShell { flex-direction: column; }
+[data-layout="spotlight"] .now-playing-strip {
+    position: sticky;
+    top: 0;
+    z-index: 155;
+}
+[data-layout="spotlight"] #platformMain {
+    padding: 24px 40px 60px;
+}
+
+/* HOME STATE: All sections shown as summary cards in a grid */
+[data-layout="spotlight"]:not([data-spotlight-open]) .spotlight-back { display: none; }
+[data-layout="spotlight"]:not([data-spotlight-open]) .app-section,
+[data-layout="spotlight"]:not([data-spotlight-open]) .app-section.hidden {
+    display: block !important;
+    opacity: 1 !important;
+    max-width: 100%;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+}
+[data-layout="spotlight"]:not([data-spotlight-open]) #platformMain {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    align-content: start;
+}
+[data-layout="spotlight"]:not([data-spotlight-open]) .now-playing-strip {
+    grid-column: 1 / -1;
+}
+[data-layout="spotlight"]:not([data-spotlight-open]) .app-section {
+    background: var(--surface, #151522);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    max-height: 220px;
+    overflow: hidden;
+    padding: 24px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+[data-layout="spotlight"]:not([data-spotlight-open]) .app-section:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(138,43,226,0.15);
+}
+/* Fade overlay hinting "click to expand" */
+[data-layout="spotlight"]:not([data-spotlight-open]) .app-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, var(--surface, #151522));
+    pointer-events: none;
+    border-radius: 0 0 16px 16px;
+}
+/* Smaller typography in card preview */
+[data-layout="spotlight"]:not([data-spotlight-open]) .dashboard-title { font-size: 1.4rem; }
+[data-layout="spotlight"]:not([data-spotlight-open]) .section-header h2 { font-size: 1.1rem; }
+
+/* OPEN STATE: One section shown full, others hidden */
+[data-layout="spotlight"][data-spotlight-open] .spotlight-back { display: flex; }
+[data-layout="spotlight"][data-spotlight-open] .app-section {
+    display: none !important;
+}
+[data-layout="spotlight"][data-spotlight-open] .app-section.spotlight-active {
+    display: block !important;
+    opacity: 1 !important;
+    max-width: 980px;
+    margin: 0 auto;
+    cursor: default;
+}
+@media (max-width: 600px) {
+    [data-layout="spotlight"]:not([data-spotlight-open]) #platformMain {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ============================================================ */
 /* UI ENHANCEMENTS (Batch 8) - appended block, overrides earlier  */
 /* rules via source order. Pure additive, no IDs removed.        */

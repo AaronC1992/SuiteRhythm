@@ -10695,8 +10695,122 @@ function initializeMenuToggles() {
             // Update active state
             layoutPicker.querySelectorAll('.layout-card').forEach(c => c.classList.remove('active'));
             card.classList.add('active');
+
+            // Activate layout-specific behaviors when switching
+            _activateLayout(value);
         });
     }
+
+    // ─── Persona Tabs ────────────────────────────────────────────
+    const personaBar = document.getElementById('personaTabBar');
+    if (personaBar) {
+        personaBar.addEventListener('click', (e) => {
+            const tab = e.target.closest('.persona-tab');
+            if (!tab) return;
+            const filter = tab.getAttribute('data-persona-filter');
+            personaBar.querySelectorAll('.persona-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            _filterPersonaSections(filter);
+        });
+    }
+
+    // ─── Focus Dock ──────────────────────────────────────────────
+    const focusDock = document.getElementById('focusDock');
+    if (focusDock) {
+        focusDock.addEventListener('click', (e) => {
+            const btn = e.target.closest('.focus-dock-btn');
+            if (!btn) return;
+            const sectionId = btn.getAttribute('data-section');
+            // Use the engine's navigate if available, otherwise do it manually
+            if (window.gameInstance?.navigateToSection) {
+                window.gameInstance.navigateToSection(sectionId);
+            } else {
+                document.querySelectorAll('.app-section').forEach(s => {
+                    s.classList.add('hidden');
+                    s.classList.remove('section-visible');
+                });
+                const target = document.getElementById(sectionId);
+                if (target) {
+                    target.classList.remove('hidden');
+                    target.classList.add('section-visible');
+                }
+            }
+            // Update dock active state
+            focusDock.querySelectorAll('.focus-dock-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    }
+
+    // ─── Spotlight ───────────────────────────────────────────────
+    const spotlightBack = document.getElementById('spotlightBack');
+    if (spotlightBack) {
+        spotlightBack.addEventListener('click', () => {
+            document.documentElement.removeAttribute('data-spotlight-open');
+            document.querySelectorAll('.app-section').forEach(s => {
+                s.classList.remove('spotlight-active');
+            });
+        });
+    }
+    // Spotlight: click a section card to open it
+    document.getElementById('platformMain')?.addEventListener('click', (e) => {
+        if (document.documentElement.getAttribute('data-layout') !== 'spotlight') return;
+        if (document.documentElement.hasAttribute('data-spotlight-open')) return;
+        const section = e.target.closest('.app-section');
+        if (!section) return;
+        document.documentElement.setAttribute('data-spotlight-open', '1');
+        section.classList.add('spotlight-active');
+        // Scroll to top
+        const main = document.getElementById('platformMain');
+        if (main) main.scrollTop = 0;
+    });
+
+    // Activate layout on initial load
+    const currentLayout = localStorage.getItem('SuiteRhythm_layout') || '';
+    _activateLayout(currentLayout);
+}
+
+/** Apply layout-specific side effects when layout changes */
+function _activateLayout(layout) {
+    // Reset all layout-specific states
+    document.documentElement.removeAttribute('data-spotlight-open');
+    document.querySelectorAll('.app-section').forEach(s => {
+        s.classList.remove('spotlight-active', 'persona-hidden');
+    });
+
+    // Reset focus dock active markers
+    document.querySelectorAll('.focus-dock-btn').forEach(b => b.classList.remove('active'));
+
+    // Command Center: since all sections are force-visible via CSS, clear hidden so engine
+    // sidebar clicks don't fight the grid. For other layouts, re-navigate to the current section.
+    if (layout === 'command-center') {
+        // Nothing extra needed — CSS handles show-all
+    } else {
+        // Re-trigger current section visibility so only 1 is shown
+        const activeNav = document.querySelector('.sidebar-nav-item.active');
+        const sectionId = activeNav?.getAttribute('data-section') || 'dashboardPanel';
+        if (window.gameInstance?.navigateToSection) {
+            window.gameInstance.navigateToSection(sectionId);
+        }
+    }
+
+    // Persona tabs: apply initial filter
+    if (layout === 'persona-tabs') {
+        const activeTab = document.querySelector('.persona-tab.active');
+        const filter = activeTab?.getAttribute('data-persona-filter') || 'all';
+        _filterPersonaSections(filter);
+    }
+}
+
+/** Show/hide sections based on persona filter */
+function _filterPersonaSections(filter) {
+    document.querySelectorAll('.app-section').forEach(section => {
+        const personas = section.getAttribute('data-persona') || '';
+        if (filter === 'all' || personas.includes('all') || personas.includes(filter)) {
+            section.classList.remove('persona-hidden');
+        } else {
+            section.classList.add('persona-hidden');
+        }
+    });
 }
 
 // ===== EXPORTS FOR NEXT.JS =====

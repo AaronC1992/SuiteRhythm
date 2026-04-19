@@ -3,7 +3,7 @@
 /** Auto Detect section — microphone listening + live transcript + activity feed. */
 export default function AutoDetectSection() {
   return (
-    <div id="dndAutoDetect" className="app-section hidden">
+    <div id="dndAutoDetect" className="app-section hidden" data-persona="streamer storyteller tabletop">
       <div className="section-header">
         <h2>Auto Detect</h2>
       </div>

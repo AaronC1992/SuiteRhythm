@@ -4,7 +4,7 @@
 export default function SoundLibrarySection() {
   return (
     <>
-      <div id="soundLibrarySection" className="app-section hidden">
+      <div id="soundLibrarySection" className="app-section hidden" data-persona="streamer storyteller tabletop">
         <div className="section-header">
           <h2>Sound Library</h2>
         </div>
