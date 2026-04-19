@@ -43,15 +43,17 @@ export default function SettingsSection() {
           </div>
         </section>
 
-        {/* Theme Switcher */}
+        {/* Appearance — Theme + Layout */}
         <section className="menu-section">
           <button className="menu-toggle" id="themeMenuToggle">
-            Theme
+            Appearance
             <span className="toggle-indicator">&#9660;</span>
           </button>
           <div className="menu-content hidden" id="themeMenuContent">
+            {/* Color Theme */}
+            <h3>Color Theme</h3>
             <p className="info-text" style={{ marginBottom: 8, fontSize: '0.85rem' }}>
-              Choose a visual style for the interface.
+              Choose a color palette for the interface.
             </p>
             <div className="theme-picker-grid" id="themePicker">
               <button className="theme-card active" data-theme-value="" aria-label="Nightshade theme">
@@ -107,6 +109,69 @@ export default function SettingsSection() {
                   <span className="theme-swatch" style={{ background: '#00bfa5' }} />
                   <span className="theme-swatch" style={{ background: '#f5f5f5' }} />
                 </div>
+              </button>
+            </div>
+
+            {/* Layout Mode */}
+            <h3 style={{ marginTop: 24 }}>Layout</h3>
+            <p className="info-text" style={{ marginBottom: 8, fontSize: '0.85rem' }}>
+              Change how the interface is arranged.
+            </p>
+            <div className="layout-picker-grid" id="layoutPicker">
+              <button className="layout-card active" data-layout-value="" aria-label="Classic layout">
+                <div className="layout-card-preview layout-preview-classic">
+                  <div className="lp-sidebar" />
+                  <div className="lp-main">
+                    <div className="lp-strip" />
+                    <div className="lp-content" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Classic</div>
+                <div className="layout-card-desc">Sidebar + wide content area</div>
+              </button>
+              <button className="layout-card" data-layout-value="compact" aria-label="Compact layout">
+                <div className="layout-card-preview layout-preview-compact">
+                  <div className="lp-topbar" />
+                  <div className="lp-body">
+                    <div className="lp-strip" />
+                    <div className="lp-content lp-narrow" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Compact</div>
+                <div className="layout-card-desc">Top nav, narrow centered content</div>
+              </button>
+              <button className="layout-card" data-layout-value="cinematic" aria-label="Cinematic layout">
+                <div className="layout-card-preview layout-preview-cinematic">
+                  <div className="lp-sidebar lp-thin" />
+                  <div className="lp-main">
+                    <div className="lp-content lp-full" />
+                    <div className="lp-strip lp-bottom" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Cinematic</div>
+                <div className="layout-card-desc">Slim icon sidebar, full-width sections, bar at bottom</div>
+              </button>
+              <button className="layout-card" data-layout-value="cozy" aria-label="Cozy layout">
+                <div className="layout-card-preview layout-preview-cozy">
+                  <div className="lp-sidebar" />
+                  <div className="lp-main">
+                    <div className="lp-strip" />
+                    <div className="lp-content lp-rounded" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Cozy</div>
+                <div className="layout-card-desc">Larger text, rounded cards, extra spacing</div>
+              </button>
+              <button className="layout-card" data-layout-value="streamer" aria-label="Streamer layout">
+                <div className="layout-card-preview layout-preview-streamer">
+                  <div className="lp-sidebar lp-thin" />
+                  <div className="lp-main">
+                    <div className="lp-strip lp-accent" />
+                    <div className="lp-content lp-dense" />
+                  </div>
+                </div>
+                <div className="layout-card-name">Streamer</div>
+                <div className="layout-card-desc">Dense info, minimal chrome, fast scanning</div>
               </button>
             </div>
           </div>

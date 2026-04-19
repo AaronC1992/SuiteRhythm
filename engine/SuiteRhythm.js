@@ -10664,6 +10664,39 @@ function initializeMenuToggles() {
             card.classList.add('active');
         });
     }
+
+    // Layout picker cards
+    const layoutPicker = document.getElementById('layoutPicker');
+    if (layoutPicker) {
+        // Restore saved layout and mark the active card
+        const savedLayout = localStorage.getItem('SuiteRhythm_layout') || '';
+        if (savedLayout) document.documentElement.setAttribute('data-layout', savedLayout);
+        layoutPicker.querySelectorAll('.layout-card').forEach(card => {
+            const val = card.getAttribute('data-layout-value');
+            if (val === savedLayout) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
+        });
+
+        layoutPicker.addEventListener('click', (e) => {
+            const card = e.target.closest('.layout-card');
+            if (!card) return;
+            const value = card.getAttribute('data-layout-value');
+            // Apply
+            if (value) {
+                document.documentElement.setAttribute('data-layout', value);
+            } else {
+                document.documentElement.removeAttribute('data-layout');
+            }
+            // Persist
+            localStorage.setItem('SuiteRhythm_layout', value);
+            // Update active state
+            layoutPicker.querySelectorAll('.layout-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+        });
+    }
 }
 
 // ===== EXPORTS FOR NEXT.JS =====

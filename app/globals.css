@@ -4337,6 +4337,362 @@ body.cb-visualizer .visualizer-bar-alt {
     background: rgba(98,0,234,0.08);
 }
 
+/* ======================================================================
+   LAYOUT PICKER — preview thumbnails in Settings
+   ====================================================================== */
+.layout-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+.layout-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius, 12px);
+    padding: 10px 10px 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    text-align: center;
+    background: var(--surface, #151522);
+}
+.layout-card:hover { border-color: var(--primary); }
+.layout-card.active {
+    border-color: var(--primary-2);
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.25);
+}
+.layout-card-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 8px;
+}
+.layout-card-desc {
+    font-size: 0.7rem;
+    color: var(--muted-2);
+    margin-top: 2px;
+}
+/* Mini preview box */
+.layout-card-preview {
+    height: 60px;
+    border-radius: 6px;
+    background: var(--bg, #0a0a0a);
+    border: 1px solid var(--border);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+.lp-sidebar {
+    width: 22%;
+    background: rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+.lp-sidebar.lp-thin { width: 10%; }
+.lp-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    gap: 2px;
+}
+.lp-strip {
+    height: 6px;
+    border-radius: 2px;
+    background: var(--primary, #8a2be2);
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+.lp-strip.lp-bottom { margin-top: auto; }
+.lp-strip.lp-accent { opacity: 0.8; height: 4px; }
+.lp-content {
+    flex: 1;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+}
+.lp-content.lp-narrow { margin: 0 15%; }
+.lp-content.lp-full { margin: 0; }
+.lp-content.lp-rounded { border-radius: 6px; }
+.lp-content.lp-dense { background: repeating-linear-gradient(
+    0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 4px,
+    transparent 4px, transparent 7px); }
+.lp-topbar {
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+.lp-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    gap: 2px;
+}
+/* Compact preview is column layout */
+.layout-preview-compact { flex-direction: column; }
+
+/* ======================================================================
+   LAYOUT MODES — data-layout attribute on <html>
+   ====================================================================== */
+
+/* ── 1. Classic (default — no attribute) ─────────────────────── */
+/* Already the base styles */
+
+/* ── 2. Compact — top nav bar, narrow centered content ───────── */
+[data-layout="compact"] #platformSidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+}
+[data-layout="compact"] #platformShell {
+    flex-direction: column;
+}
+[data-layout="compact"] .sidebar-brand {
+    padding: 10px 16px;
+    border-bottom: none;
+    flex-shrink: 0;
+}
+[data-layout="compact"] .sidebar-tagline { display: none; }
+[data-layout="compact"] .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 8px;
+    gap: 0;
+    flex: 1;
+    align-items: center;
+}
+[data-layout="compact"] .sidebar-nav-group-label { display: none; }
+[data-layout="compact"] .sidebar-nav-item {
+    padding: 8px 14px;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    font-size: 0.82rem;
+    gap: 6px;
+}
+[data-layout="compact"] .sidebar-nav-item.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--primary);
+}
+[data-layout="compact"] .sidebar-footer {
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 16px;
+    border-top: none;
+    gap: 8px;
+}
+[data-layout="compact"] .sidebar-footer .version { display: none; }
+[data-layout="compact"] .sidebar-footer-actions { display: flex; gap: 6px; }
+[data-layout="compact"] #platformMain {
+    padding: 24px 40px 60px;
+}
+[data-layout="compact"] .app-section {
+    max-width: 720px;
+}
+[data-layout="compact"] .use-case-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 600px;
+}
+[data-layout="compact"] .dashboard-hero { padding: 24px 20px 20px; }
+[data-layout="compact"] .dashboard-title { font-size: 2rem; }
+
+/* ── 3. Cinematic — slim icon sidebar, full width, bottom bar ── */
+[data-layout="cinematic"] #platformSidebar {
+    width: 60px;
+    align-items: center;
+    overflow: hidden;
+}
+[data-layout="cinematic"] .sidebar-brand {
+    padding: 16px 8px 12px;
+    text-align: center;
+}
+[data-layout="cinematic"] .sidebar-logo-text {
+    font-size: 0;
+    /* Show just "SR" via first-letter pseudo doesn't work well —
+       hide full text, show abbreviation via ::after */
+}
+[data-layout="cinematic"] .sidebar-logo-text::after {
+    content: 'SR';
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-2), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-layout="cinematic"] .sidebar-tagline { display: none; }
+[data-layout="cinematic"] .sidebar-nav {
+    align-items: center;
+    padding: 8px 0;
+}
+[data-layout="cinematic"] .sidebar-nav-group-label { display: none; }
+[data-layout="cinematic"] .sidebar-nav-item {
+    justify-content: center;
+    padding: 10px;
+    font-size: 0;
+    border-left: none;
+    border-right: 3px solid transparent;
+    width: 100%;
+}
+[data-layout="cinematic"] .sidebar-nav-item.active {
+    border-left-color: transparent;
+    border-right-color: var(--primary);
+}
+[data-layout="cinematic"] .sidebar-nav-item svg {
+    width: 20px;
+    height: 20px;
+}
+[data-layout="cinematic"] .sidebar-footer {
+    padding: 10px 6px;
+    align-items: center;
+}
+[data-layout="cinematic"] .sidebar-footer .version,
+[data-layout="cinematic"] .sidebar-footer .sidebar-footer-actions,
+[data-layout="cinematic"] .sidebar-api-row { display: none; }
+[data-layout="cinematic"] #platformMain {
+    padding: 24px 48px 80px;
+}
+[data-layout="cinematic"] .app-section {
+    max-width: 100%;
+}
+[data-layout="cinematic"] .use-case-grid {
+    max-width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+[data-layout="cinematic"] .now-playing-strip {
+    position: fixed;
+    bottom: 0;
+    left: 60px;
+    right: 0;
+    top: auto;
+    z-index: 300;
+    border-top: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 0;
+}
+[data-layout="cinematic"] .dashboard-title { font-size: 3.2rem; }
+[data-layout="cinematic"] .section-header h2 { font-size: 1.6rem; }
+[data-layout="cinematic"] .use-case-card {
+    padding: 36px 28px 32px;
+}
+
+/* ── 4. Cozy — bigger text, rounder cards, more breathing room ─ */
+[data-layout="cozy"] #platformSidebar { width: 240px; }
+[data-layout="cozy"] .sidebar-logo-text { font-size: 1.65rem; }
+[data-layout="cozy"] .sidebar-nav-item {
+    padding: 12px 22px;
+    font-size: 0.95rem;
+    gap: 12px;
+}
+[data-layout="cozy"] #platformMain {
+    padding: 40px 50px 70px;
+}
+[data-layout="cozy"] .app-section {
+    max-width: 860px;
+}
+[data-layout="cozy"] .section-header {
+    padding: 20px 0;
+    margin-bottom: 14px;
+}
+[data-layout="cozy"] .section-header h2 { font-size: 1.6rem; }
+[data-layout="cozy"] .section-body { padding-top: 20px; }
+[data-layout="cozy"] .section-intro { font-size: 1.05rem; margin-bottom: 28px; }
+[data-layout="cozy"] .use-case-grid {
+    gap: 24px;
+}
+[data-layout="cozy"] .use-case-card {
+    padding: 36px 28px 32px;
+    border-radius: 20px;
+    gap: 14px;
+}
+[data-layout="cozy"] .use-case-title { font-size: 1.2rem; }
+[data-layout="cozy"] .use-case-desc { font-size: 0.92rem; line-height: 1.65; }
+[data-layout="cozy"] .dashboard-title { font-size: 3rem; }
+[data-layout="cozy"] .dashboard-sub { font-size: 1.1rem; }
+[data-layout="cozy"] .now-playing-strip { padding: 10px 24px; font-size: 0.9rem; }
+[data-layout="cozy"] .menu-section { margin-bottom: 8px; }
+[data-layout="cozy"] .menu-toggle { padding: 14px 18px; font-size: 0.95rem; }
+[data-layout="cozy"] .menu-content { padding: 18px; }
+[data-layout="cozy"] .slider-container { margin-bottom: 16px; }
+[data-layout="cozy"] .toggle-row { padding: 10px 0; }
+
+/* ── 5. Streamer — dense, minimal, fast scanning ─────────────── */
+[data-layout="streamer"] #platformSidebar { width: 56px; }
+[data-layout="streamer"] .sidebar-brand {
+    padding: 10px 6px;
+    text-align: center;
+}
+[data-layout="streamer"] .sidebar-logo-text { font-size: 0; }
+[data-layout="streamer"] .sidebar-logo-text::after {
+    content: 'SR';
+    font-size: 0.9rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-2), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-layout="streamer"] .sidebar-tagline { display: none; }
+[data-layout="streamer"] .sidebar-nav-group-label { display: none; }
+[data-layout="streamer"] .sidebar-nav {
+    align-items: center;
+    padding: 4px 0;
+    gap: 0;
+}
+[data-layout="streamer"] .sidebar-nav-item {
+    justify-content: center;
+    padding: 8px;
+    font-size: 0;
+    border-left: none;
+    gap: 0;
+}
+[data-layout="streamer"] .sidebar-nav-item svg { width: 18px; height: 18px; }
+[data-layout="streamer"] .sidebar-nav-item.active {
+    border-left-color: transparent;
+    background: var(--tint-primary);
+    border-radius: 8px;
+    margin: 0 6px;
+}
+[data-layout="streamer"] .sidebar-footer { display: none; }
+[data-layout="streamer"] #platformMain {
+    padding: 16px 24px 48px;
+}
+[data-layout="streamer"] .now-playing-strip {
+    padding: 4px 16px;
+    font-size: 0.78rem;
+    gap: 8px;
+    min-height: 0;
+}
+[data-layout="streamer"] .np-divider { height: 12px; }
+[data-layout="streamer"] .app-section { max-width: 100%; }
+[data-layout="streamer"] .section-header {
+    padding: 8px 0;
+    margin-bottom: 4px;
+}
+[data-layout="streamer"] .section-header h2 { font-size: 1.1rem; }
+[data-layout="streamer"] .section-body { padding-top: 8px; }
+[data-layout="streamer"] .section-intro { font-size: 0.85rem; margin-bottom: 12px; }
+[data-layout="streamer"] .dashboard-hero { padding: 16px 10px 12px; }
+[data-layout="streamer"] .dashboard-title { font-size: 1.8rem; }
+[data-layout="streamer"] .dashboard-sub { font-size: 0.85rem; margin-bottom: 16px; }
+[data-layout="streamer"] .use-case-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    max-width: 100%;
+}
+[data-layout="streamer"] .use-case-card {
+    padding: 16px 14px 14px;
+    border-radius: 8px;
+    gap: 6px;
+}
+[data-layout="streamer"] .use-case-title { font-size: 0.95rem; }
+[data-layout="streamer"] .use-case-desc { font-size: 0.78rem; }
+[data-layout="streamer"] .menu-toggle { padding: 10px 14px; font-size: 0.82rem; }
+[data-layout="streamer"] .menu-content { padding: 10px 14px; }
+[data-layout="streamer"] .slider-container label { font-size: 0.8rem; }
+[data-layout="streamer"] .toggle-row label { font-size: 0.82rem; }
+
 /* ============================================================ */
 /* UI ENHANCEMENTS (Batch 8) - appended block, overrides earlier  */
 /* rules via source order. Pure additive, no IDs removed.        */
