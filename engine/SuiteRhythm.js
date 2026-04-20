@@ -6393,27 +6393,23 @@ class SuiteRhythm {
     
     // ===== PIXABAY INTEGRATION =====
     async searchPixabay(query, type) {
-        if (!this.pixabayApiKey) return null;
-        
         try {
             const searchQuery = encodeURIComponent(query);
             const category = type === 'music' ? 'music' : '';
             const minDuration = type === 'music' ? 30 : 0;
             const maxDuration = type === 'music' ? 300 : 15;
             const params = new URLSearchParams({
-                key: this.pixabayApiKey,
                 q: searchQuery,
                 ...(category && { category }),
                 min_duration: minDuration,
                 max_duration: maxDuration,
-                per_page: 5,
-                safesearch: 'true'
+                per_page: 5
             });
             
-            const response = await fetch(`https://pixabay.com/api/audio/?${params}`);
+            const response = await fetch(`/api/pixabay?${params}`);
             if (!response.ok) {
-                if (response.status === 401) {
-                    debugLog('Invalid Pixabay API key');
+                if (response.status === 503) {
+                    debugLog('Pixabay not available (server key missing)');
                     return null;
                 }
                 throw new Error(`Pixabay API error: ${response.status}`);
