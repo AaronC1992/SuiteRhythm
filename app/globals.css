@@ -1522,9 +1522,10 @@ body {
 }
 
 .info-text {
-    font-size: 12px;
+    font-size: 0.82rem;
     color: #888;
     margin-top: 15px;
+    line-height: 1.45;
 }
 
 /* ===== MAIN APP ===== */
@@ -4534,3 +4535,267 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .theme-card-preview.dark-preview { background: #0a0a0a; }
 .theme-card-preview.light-preview { background: #f5f5f8; }
 .theme-card-label { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+/* ========================================
+   LIGHT THEME — full component coverage
+   ======================================== */
+
+/* — Now Playing Strip — */
+[data-theme="light"] .now-playing-strip {
+    background: linear-gradient(180deg, rgba(245,245,248,0.95) 0%, rgba(238,238,242,0.85) 100%);
+    border-bottom-color: var(--border);
+}
+[data-theme="light"] .now-playing-strip.is-listening {
+    background: linear-gradient(180deg, rgba(0,137,123,0.06) 0%, rgba(245,245,248,0.9) 100%);
+    border-bottom-color: rgba(0,137,123,0.25);
+}
+[data-theme="light"] .np-divider { background: var(--border); }
+
+/* — Toast — */
+[data-theme="light"] .toast {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+
+/* — Activity Log — */
+[data-theme="light"] .activity-log {
+    background: rgba(0,0,0,0.03);
+    border-color: var(--border);
+}
+
+/* — Session Stats — */
+[data-theme="light"] .session-stats {
+    background: var(--tint-primary);
+    border-color: rgba(123,31,162,0.15);
+}
+[data-theme="light"] .stat-item {
+    color: var(--text);
+}
+
+/* — Control Board — */
+[data-theme="light"] .cb-canvas {
+    background: rgba(0,0,0,0.02);
+    border-color: var(--border);
+}
+[data-theme="light"] .cb-button {
+    background: var(--surface);
+    border-color: var(--border);
+}
+[data-theme="light"] .cb-button.cb-active {
+    background: var(--tint-teal);
+    border-color: var(--teal);
+}
+
+/* — Sound Library — */
+[data-theme="light"] .sound-item {
+    background: var(--tint-teal);
+    border-color: var(--teal);
+}
+[data-theme="light"] .sound-item.inactive {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--muted);
+}
+[data-theme="light"] .sound-item .sound-type { color: var(--teal); }
+[data-theme="light"] .sound-item .sound-volume { color: var(--primary); }
+
+/* — Story Overlay — */
+[data-theme="light"] .story-overlay {
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* — No-Key Banner — */
+[data-theme="light"] .no-key-banner {
+    background: var(--tint-warning);
+    border-color: rgba(230,81,0,0.25);
+}
+
+/* — Transcript — */
+[data-theme="light"] .transcript-section h3 { color: var(--primary); }
+[data-theme="light"] .transcript-box {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+}
+[data-theme="light"] .transcript-box::-webkit-scrollbar-track { background: var(--surface-2); }
+[data-theme="light"] .transcript-box::-webkit-scrollbar-thumb { background: var(--primary); }
+[data-theme="light"] .transcript-box::-webkit-scrollbar-thumb:hover { background: var(--primary-2); }
+
+/* — Scene Preset Buttons — */
+[data-theme="light"] .scene-preset-btn {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text-dim);
+}
+[data-theme="light"] .scene-preset-btn:hover {
+    background: var(--tint-primary);
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+/* — Audio Controls Panel — */
+[data-theme="light"] .audio-controls-panel {
+    background: var(--surface);
+    border-color: var(--border);
+}
+[data-theme="light"] .audio-controls-title { color: var(--text); }
+
+/* — Session Recording Panel — */
+[data-theme="light"] .session-recording-panel {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+/* — Sing Stats — */
+[data-theme="light"] .sing-mode-panel .stat-item {
+    background: var(--surface-2);
+}
+[data-theme="light"] .sing-mode-panel .stat-value { color: var(--teal); }
+[data-theme="light"] .sing-mode-panel .stat-label { color: var(--muted); }
+
+/* — Section Header & Intro — */
+[data-theme="light"] .section-header { border-bottom-color: var(--border); }
+[data-theme="light"] .section-header h2 { color: var(--primary); }
+[data-theme="light"] .section-intro { color: var(--muted); }
+[data-theme="light"] .activity-feed-section h3 { color: var(--primary); }
+
+/* — Context Input Area — */
+[data-theme="light"] .context-input-area label { color: var(--primary); }
+
+/* — Mobile Topbar — */
+[data-theme="light"] .mobile-topbar {
+    background: #ffffff;
+    border-bottom-color: var(--border);
+}
+
+/* — Modal — */
+[data-theme="light"] .modal {
+    background: rgba(0,0,0,0.4);
+}
+[data-theme="light"] .modal-content {
+    background: var(--surface);
+    border-color: var(--primary);
+    box-shadow: 0 10px 50px rgba(123,31,162,0.15);
+    color: var(--text);
+}
+[data-theme="light"] .modal-content h2 { color: var(--primary); }
+[data-theme="light"] .modal-content input {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* — Toggle Switches (light override for both patterns) — */
+[data-theme="light"] .slider {
+    background-color: var(--surface-3);
+    border-color: var(--border);
+}
+[data-theme="light"] .slider:before { background-color: var(--muted); }
+[data-theme="light"] input:checked + .slider {
+    background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    border-color: var(--primary);
+}
+[data-theme="light"] input:checked + .slider:before { background-color: #fff; }
+[data-theme="light"] .toggle-slider {
+    background: var(--surface-3);
+    border-color: var(--border);
+}
+[data-theme="light"] .toggle-slider::before { background: var(--muted); }
+[data-theme="light"] .toggle-switch input:checked + .toggle-slider {
+    background: rgba(123,31,162,0.2);
+    border-color: var(--primary);
+}
+[data-theme="light"] .toggle-switch input:checked + .toggle-slider::before { background: var(--primary); }
+
+/* — Main scrollbar — */
+[data-theme="light"] #platformMain::-webkit-scrollbar { width: 8px; }
+[data-theme="light"] #platformMain::-webkit-scrollbar-track { background: var(--bg); }
+[data-theme="light"] #platformMain::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+[data-theme="light"] #platformMain::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+[data-theme="light"] .activity-log::-webkit-scrollbar-track { background: var(--surface-2); }
+[data-theme="light"] .activity-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+/* — Buttons in controls areas — */
+[data-theme="light"] .section-undo-music {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* — Menu sections in settings — */
+[data-theme="light"] .menu-toggle {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+}
+[data-theme="light"] .menu-content {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+/* — Loading skeleton animation — */
+@keyframes skeleton-pulse {
+    0%   { opacity: 0.6; }
+    50%  { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
+.skeleton {
+    background: var(--surface-2, #2a2a3a);
+    border-radius: var(--radius);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+.skeleton-line {
+    height: 14px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+.skeleton-line.short { width: 60%; }
+.skeleton-line.medium { width: 80%; }
+.skeleton-block {
+    height: 60px;
+    margin-bottom: 12px;
+}
+.empty-state {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+.empty-state p { margin: 8px 0; }
+
+/* — NowPlayingStrip mobile: hide low-priority items — */
+@media (max-width: 480px) {
+    .np-music { display: none; }
+    .np-kw    { display: none; }
+    .np-ago   { display: none; }
+}
+
+/* — Mobile active section indicator — */
+.mobile-section-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--primary-2);
+    margin-left: auto;
+    margin-right: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+/* — Focus trap visual hint (outline on trapped modal) — */
+.modal:focus-within .modal-content {
+    outline: 2px solid transparent;
+}
+
+/* — Settings sticky accordion headers on mobile — */
+@media (max-width: 768px) {
+    #settingsSection .menu-toggle {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+}

@@ -161,6 +161,7 @@ export default function AppShell() {
               </svg>
             </button>
             <span className="mobile-brand">SuiteRhythm</span>
+            <span id="mobileSectionName" className="mobile-section-name" aria-live="polite"></span>
             <span id="noKeyBannerMobile" className="mobile-no-key hidden">No subscription</span>
           </header>
 

@@ -39,7 +39,7 @@ export default function SingSection() {
             <option value="lofi">Lo-Fi</option>
             <option value="gospel">Gospel</option>
           </select>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 4 }}>
+          <p className="info-text" style={{ marginTop: 4 }}>
             Tells SuiteRhythm what style of backing music to play while you sing.
           </p>
         </section>
@@ -78,22 +78,22 @@ export default function SingSection() {
         <div style={{ marginTop: 16 }}>
           <div className="toggle-row" style={{ marginTop: 8 }}>
             <label htmlFor="singSectionApplauseToggle">Applause on song end</label>
-            <label className="switch">
+            <label className="toggle-switch">
               <input type="checkbox" id="singSectionApplauseToggle" className="sing-applause-mirror" defaultChecked />
-              <span className="slider" />
+              <span className="toggle-slider" />
             </label>
           </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0 }}>
+          <p className="info-text" style={{ marginTop: 0 }}>
             Plays a crowd applause cue after ~6s of silence following a sustained song.
           </p>
           <div className="toggle-row" style={{ marginTop: 8 }}>
             <label htmlFor="singSectionStageFeelToggle">Live stage feel</label>
-            <label className="switch">
+            <label className="toggle-switch">
               <input type="checkbox" id="singSectionStageFeelToggle" className="sing-stage-mirror" />
-              <span className="slider" />
+              <span className="toggle-slider" />
             </label>
           </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0 }}>
+          <p className="info-text" style={{ marginTop: 0 }}>
             Occasional quiet crowd cheers/whistles mid-song, like a live gig. Off = silent audience.
           </p>
         </div>

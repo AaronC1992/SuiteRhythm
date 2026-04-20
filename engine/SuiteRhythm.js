@@ -3143,6 +3143,7 @@ class SuiteRhythm {
         
         // Legacy mode buttons (if still present)
         document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.setAttribute('aria-pressed', 'false');
             btn.addEventListener('click', (e) => this.selectMode(e.target.dataset.mode));
         });
 
@@ -4159,7 +4160,9 @@ class SuiteRhythm {
         const prevMode = this.currentMode;
         this.currentMode = mode;
         document.querySelectorAll('.mode-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.mode === mode);
+            const isActive = btn.dataset.mode === mode;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-pressed', String(isActive));
         });
 
         // ===== SING MODE: auto-configure for singer workflow =====
@@ -8447,6 +8450,11 @@ class SuiteRhythm {
         document.querySelectorAll('.sidebar-nav-item').forEach(item => {
             item.classList.toggle('active', item.dataset.section === sectionId);
         });
+
+        // Update mobile section indicator
+        const activeNav = document.querySelector(`.sidebar-nav-item[data-section="${sectionId}"]`);
+        const sectionLabel = document.getElementById('mobileSectionName');
+        if (sectionLabel) sectionLabel.textContent = activeNav ? activeNav.textContent.trim() : '';
 
         // Close mobile sidebar if open
         const sidebar = document.getElementById('platformSidebar');

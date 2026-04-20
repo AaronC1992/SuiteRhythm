@@ -54,22 +54,22 @@ export default function CreatorSection() {
         <section className="creator-options" style={{ marginTop: 16 }}>
           <div className="toggle-row">
             <label htmlFor="creatorVoiceDuck">Voice Ducking</label>
-            <label className="switch">
+            <label className="toggle-switch">
               <input type="checkbox" id="creatorVoiceDuck" className="voice-duck-mirror" />
-              <span className="slider" />
+              <span className="toggle-slider" />
             </label>
           </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0, marginBottom: 12 }}>
+          <p className="info-text" style={{ marginTop: 0, marginBottom: 12 }}>
             Automatically lower music &amp; ambience when your voice is detected, then restore during pauses.
           </p>
           <div className="toggle-row">
             <label htmlFor="creatorStreamerMode">Live Streamer Mode</label>
-            <label className="switch">
+            <label className="toggle-switch">
               <input type="checkbox" id="creatorStreamerMode" className="streamer-mode-mirror" />
-              <span className="slider" />
+              <span className="toggle-slider" />
             </label>
           </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0, marginBottom: 12 }}>
+          <p className="info-text" style={{ marginTop: 0, marginBottom: 12 }}>
             Shorter cooldowns and snappier SFX triggering for live streams. Leave off for calmer content.
           </p>
         </section>

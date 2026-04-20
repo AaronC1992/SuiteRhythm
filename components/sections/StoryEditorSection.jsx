@@ -60,7 +60,7 @@ export default function StoryEditorSection() {
               <button id="scSoundscapeBtn" className="btn-secondary" style={{ marginTop: 8 }}>
                 Generate Soundscape
               </button>
-              <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 4 }}>
+              <p className="info-text" style={{ marginTop: 4 }}>
                 Build a full sound timeline from the script — no mic needed. Play or export the result.
               </p>
             </div>

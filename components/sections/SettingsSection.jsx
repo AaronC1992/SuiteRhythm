@@ -71,7 +71,7 @@ export default function SettingsSection() {
             <span className="toggle-indicator">&#9660;</span>
           </button>
           <div className="menu-content hidden" id="audioSourceMenuContent">
-            <p className="info-text" style={{ marginBottom: 8, fontSize: '0.85rem' }}>
+            <p className="info-text" style={{ marginBottom: 8 }}>
               Add a <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener noreferrer">Pixabay API key</a> for additional high-quality sounds beyond the built-in library.
             </p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -135,45 +135,45 @@ export default function SettingsSection() {
             <h3>Playback Options</h3>
             <div className="toggle-row">
               <label htmlFor="toggleMusic">Music</label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="toggleMusic" defaultChecked />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
             <div className="toggle-row">
               <label htmlFor="toggleSfx">Sound Effects</label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="toggleSfx" defaultChecked />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
             <div className="toggle-row">
               <label htmlFor="togglePrediction">Auto Scene Detection</label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="togglePrediction" defaultChecked />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
 
             <h3 style={{ marginTop: 20 }}>Creator Tools</h3>
             <div className="toggle-row">
               <label htmlFor="voiceDuckToggle">Voice Ducking</label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="voiceDuckToggle" />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
-            <p className="info-text" style={{ fontSize: '0.78rem', marginTop: -4, marginBottom: 12 }}>
+            <p className="info-text" style={{ marginTop: -4, marginBottom: 12 }}>
               Automatically lower music &amp; ambience when your voice is detected, then restore during pauses.
             </p>
             <div className="toggle-row">
               <label htmlFor="creatorModeToggle">Live Streamer Mode</label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="creatorModeToggle" />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
-            <p className="info-text" style={{ fontSize: '0.78rem', marginTop: -4, marginBottom: 12 }}>
+            <p className="info-text" style={{ marginTop: -4, marginBottom: 12 }}>
               Shorter cooldowns and snappier SFX triggering for live streams. Leave off for story narration.
             </p>
 
@@ -199,9 +199,9 @@ export default function SettingsSection() {
                   Preloads more sounds in parallel for faster reactions. Best on strong networks.
                 </span>
               </label>
-              <label className="switch">
+              <label className="toggle-switch">
                 <input type="checkbox" id="lowLatencyMode" />
-                <span className="slider" />
+                <span className="toggle-slider" />
               </label>
             </div>
           </div>
