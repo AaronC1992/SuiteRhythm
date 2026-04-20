@@ -3158,6 +3158,48 @@ class SuiteRhythm {
         document.querySelectorAll('.section-stop-audio').forEach(btn => {
             btn.addEventListener('click', () => document.getElementById('stopAudioBtn')?.click());
         });
+
+        // Wire section undo-music mirrors
+        document.querySelectorAll('.section-undo-music').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('undoMusicBtn')?.click());
+        });
+
+        // Wire section audio toggle mirrors (SFX / Music / Ambience)
+        const sfxToggle = document.getElementById('sfxToggle');
+        const musicToggle = document.getElementById('musicToggle');
+        const ambienceToggle = document.getElementById('ambienceToggle');
+
+        document.querySelectorAll('.sfx-toggle-mirror').forEach(cb => {
+            if (sfxToggle) cb.checked = sfxToggle.checked;
+            cb.addEventListener('change', () => { if (sfxToggle) { sfxToggle.checked = cb.checked; sfxToggle.dispatchEvent(new Event('change')); } });
+        });
+        if (sfxToggle) sfxToggle.addEventListener('change', () => {
+            document.querySelectorAll('.sfx-toggle-mirror').forEach(m => { m.checked = sfxToggle.checked; });
+        });
+
+        document.querySelectorAll('.music-toggle-mirror').forEach(cb => {
+            if (musicToggle) cb.checked = musicToggle.checked;
+            cb.addEventListener('change', () => { if (musicToggle) { musicToggle.checked = cb.checked; musicToggle.dispatchEvent(new Event('change')); } });
+        });
+        if (musicToggle) musicToggle.addEventListener('change', () => {
+            document.querySelectorAll('.music-toggle-mirror').forEach(m => { m.checked = musicToggle.checked; });
+        });
+
+        document.querySelectorAll('.ambience-toggle-mirror').forEach(cb => {
+            if (ambienceToggle) cb.checked = ambienceToggle.checked;
+            cb.addEventListener('change', () => { if (ambienceToggle) { ambienceToggle.checked = cb.checked; ambienceToggle.dispatchEvent(new Event('change')); } });
+        });
+        if (ambienceToggle) ambienceToggle.addEventListener('change', () => {
+            document.querySelectorAll('.ambience-toggle-mirror').forEach(m => { m.checked = ambienceToggle.checked; });
+        });
+
+        // Wire section session recording mirrors
+        document.querySelectorAll('.section-rec-start').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('recStartBtn')?.click());
+        });
+        document.querySelectorAll('.section-rec-stop').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('recStopBtn')?.click());
+        });
         
         // Volume Controls
         const minVolumeEl = document.getElementById('minVolume');
@@ -9228,11 +9270,45 @@ class SuiteRhythm {
     // ===== SCENE PRESETS =====
     _defaultScenePresets() {
         return [
-            { id: 'p1', name: 'Tavern',   moodBias: 0.2, context: 'A lively tavern with music, chatter, and ale flowing freely' },
-            { id: 'p2', name: 'Dungeon',  moodBias: 0.7, context: 'Dark dungeon corridors, torchlight flickering, distant dripping water' },
-            { id: 'p3', name: 'Forest',   moodBias: 0.3, context: 'Ancient forest with ambient nature sounds, birdsong, and rustling leaves' },
-            { id: 'p4', name: 'Combat',   moodBias: 0.9, context: 'Intense battle with swords clashing, war cries, and chaos' },
-            { id: 'p5', name: 'Mystical', moodBias: 0.5, context: 'Mysterious magical realm with arcane energy and ethereal sounds' },
+            { id: 'p1', name: 'Calm',     moodBias: 0.2, context: 'Calm and peaceful ambient atmosphere, gentle and relaxing' },
+            { id: 'p2', name: 'Upbeat',   moodBias: 0.4, context: 'Upbeat and lively energy, positive and warm mood' },
+            { id: 'p3', name: 'Dramatic',  moodBias: 0.7, context: 'Dramatic and intense scene with building tension' },
+            { id: 'p4', name: 'Action',    moodBias: 0.9, context: 'High-energy action with fast pace and excitement' },
+            { id: 'p5', name: 'Mysterious', moodBias: 0.5, context: 'Mysterious and enigmatic atmosphere with suspense' },
+        ];
+    }
+
+    _defaultTableTopPresets() {
+        return [
+            { id: 'tt1', name: 'Tavern',    moodBias: 0.2, context: 'A lively tavern with music, chatter, and ale flowing freely' },
+            { id: 'tt2', name: 'Dungeon',   moodBias: 0.7, context: 'Dark dungeon corridors, torchlight flickering, distant dripping water' },
+            { id: 'tt3', name: 'Forest',    moodBias: 0.3, context: 'Ancient forest with ambient nature sounds, birdsong, and rustling leaves' },
+            { id: 'tt4', name: 'Combat',    moodBias: 0.9, context: 'Intense battle with swords clashing, war cries, and chaos' },
+            { id: 'tt5', name: 'Mystical',  moodBias: 0.5, context: 'Mysterious magical realm with arcane energy and ethereal sounds' },
+            { id: 'tt6', name: 'Castle',    moodBias: 0.4, context: 'Grand medieval castle with echoing halls, torches, and distant horns' },
+            { id: 'tt7', name: 'Ocean',     moodBias: 0.3, context: 'Open ocean voyage with waves crashing, seagulls, and creaking wood' },
+            { id: 'tt8', name: 'Cave',      moodBias: 0.6, context: 'Deep underground cave with dripping water, echoes, and eerie silence' },
+        ];
+    }
+
+    _defaultStoryTellerPresets() {
+        return [
+            { id: 'st1', name: 'Haunted House',  moodBias: 0.8, context: 'A creepy haunted house with creaking floors, whispers, and ghostly sounds' },
+            { id: 'st2', name: 'Cozy Night',     moodBias: 0.1, context: 'A warm cozy evening by the fire with gentle rain and soft ambient sounds' },
+            { id: 'st3', name: 'Enchanted',      moodBias: 0.3, context: 'A magical enchanted land with sparkling sounds, fairies, and wonder' },
+            { id: 'st4', name: 'Dark Woods',     moodBias: 0.7, context: 'Ominous dark woods at night with owls hooting, branches snapping, and wind' },
+            { id: 'st5', name: 'Winter Magic',   moodBias: 0.2, context: 'A snowy winter wonderland with sleigh bells, crackling fire, and gentle snowfall' },
+            { id: 'st6', name: 'Adventure',      moodBias: 0.6, context: 'An exciting adventure quest with dramatic reveals and building suspense' },
+        ];
+    }
+
+    _defaultCreatorPresets() {
+        return [
+            { id: 'cr1', name: 'Lo-Fi Chill',    moodBias: 0.2, context: 'Relaxed lo-fi background for podcast or chill stream, low-key and mellow' },
+            { id: 'cr2', name: 'Gaming Hype',     moodBias: 0.8, context: 'High-energy gaming stream with exciting action and intense moments' },
+            { id: 'cr3', name: 'Focus Work',      moodBias: 0.1, context: 'Deep focus ambient for coding or creative work, minimal distractions' },
+            { id: 'cr4', name: 'Talk Show',       moodBias: 0.3, context: 'Light background ambience for interview or talk show format content' },
+            { id: 'cr5', name: 'Nature Vibes',    moodBias: 0.2, context: 'Calming nature background with birds, water, and gentle breeze for ASMR or relaxation content' },
         ];
     }
 
@@ -9247,8 +9323,14 @@ class SuiteRhythm {
         const moodValue = document.getElementById('moodBiasValue');
         if (moodSlider) moodSlider.value = Math.round(preset.moodBias * 100);
         if (moodValue) moodValue.textContent = Math.round(preset.moodBias * 100);
-        const ctx = document.getElementById('dndContextInput');
-        if (ctx) ctx.value = preset.context;
+        // Write context to the visible section's context input
+        const ctxIds = ['dndContextInput', 'tableTopContextInput', 'storyTellerContextInput', 'creatorContextInput'];
+        let wrote = false;
+        for (const id of ctxIds) {
+            const el = document.getElementById(id);
+            if (el && el.offsetParent !== null) { el.value = preset.context; wrote = true; break; }
+        }
+        if (!wrote) { const fallback = document.getElementById('dndContextInput'); if (fallback) fallback.value = preset.context; }
         this.updateStatus(`Scene set: ${preset.name}`);
     }
 
@@ -9258,6 +9340,27 @@ class SuiteRhythm {
         if (!this.scenePresets) this.scenePresets = this._defaultScenePresets();
         bar.innerHTML = '';
         for (const p of this.scenePresets) {
+            const btn = document.createElement('button');
+            btn.className = 'scene-preset-btn';
+            btn.textContent = p.name;
+            btn.setAttribute('aria-label', `Apply scene preset: ${p.name}`);
+            btn.addEventListener('click', () => this.applyScenePreset(p));
+            bar.appendChild(btn);
+        }
+        // Per-section preset bars
+        this._renderSectionPresetBar('tableTopPresetsBar', this._defaultTableTopPresets(), 'SuiteRhythm_tabletop_presets');
+        this._renderSectionPresetBar('storyTellerPresetsBar', this._defaultStoryTellerPresets(), 'SuiteRhythm_storyteller_presets');
+        this._renderSectionPresetBar('creatorPresetsBar', this._defaultCreatorPresets(), 'SuiteRhythm_creator_presets');
+    }
+
+    _renderSectionPresetBar(barId, defaults, storageKey) {
+        const bar = document.getElementById(barId);
+        if (!bar) return;
+        let presets;
+        try { presets = JSON.parse(localStorage.getItem(storageKey)); } catch (_) { /* ignore */ }
+        if (!presets || !Array.isArray(presets) || presets.length === 0) presets = defaults;
+        bar.innerHTML = '';
+        for (const p of presets) {
             const btn = document.createElement('button');
             btn.className = 'scene-preset-btn';
             btn.textContent = p.name;

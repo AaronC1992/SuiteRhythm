@@ -47,6 +47,7 @@ export default function TableTopSection() {
           <button className="btn-start section-start-btn">Start Listening</button>
           <button className="btn-stop hidden section-stop-btn">Stop Listening</button>
           <button className="btn-stop-audio section-stop-audio">Stop Audio</button>
+          <button className="btn-secondary section-undo-music" title="Revert the most recent music change">Undo Music</button>
         </section>
 
         {/* Session Stats */}
@@ -65,6 +66,44 @@ export default function TableTopSection() {
           </div>
         </section>
 
+        {/* Audio Controls */}
+        <section className="audio-controls-panel">
+          <h3 className="audio-controls-title">Audio Controls</h3>
+          <div className="audio-controls-grid">
+            <div className="audio-control-row">
+              <label className="audio-control-label">Sound Effects</label>
+              <label className="toggle-switch">
+                <input type="checkbox" className="sfx-toggle-mirror" defaultChecked />
+                <span className="toggle-slider" />
+              </label>
+            </div>
+            <div className="audio-control-row">
+              <label className="audio-control-label">Music</label>
+              <label className="toggle-switch">
+                <input type="checkbox" className="music-toggle-mirror" defaultChecked />
+                <span className="toggle-slider" />
+              </label>
+            </div>
+            <div className="audio-control-row">
+              <label className="audio-control-label">Ambience</label>
+              <label className="toggle-switch">
+                <input type="checkbox" className="ambience-toggle-mirror" defaultChecked />
+                <span className="toggle-slider" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        {/* Session Recording */}
+        <section className="session-recording-panel">
+          <h3>Session Recording</h3>
+          <p className="info-text">Record your full session audio for playback or sharing.</p>
+          <div className="session-rec-controls">
+            <button className="btn-primary section-rec-start">Record Session</button>
+            <button className="btn-stop hidden section-rec-stop">Stop Recording</button>
+          </div>
+        </section>
+
         {/* Currently Playing */}
         <section className="sounds-section">
           <h3>Currently Playing</h3>
@@ -77,6 +116,12 @@ export default function TableTopSection() {
         <section className="transcript-section">
           <h3>What I&apos;m Hearing</h3>
           <div className="transcript-box section-transcript">Waiting for audio input...</div>
+        </section>
+
+        {/* Activity Feed */}
+        <section className="activity-feed-section">
+          <h3>Engine Activity <span className="toggle-indicator">&#9660;</span></h3>
+          <div className="activity-log section-activity-log" />
         </section>
       </div>
     </div>
