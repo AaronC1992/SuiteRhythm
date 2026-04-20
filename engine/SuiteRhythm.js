@@ -456,6 +456,7 @@ class SuiteRhythm {
         // ===== SING MODE STATE =====
         // Singer-focused: backing music only, no SFX, BPM detection, applause on song end.
         this.singState = 'idle';              // 'idle' | 'singing' | 'between_songs'
+        this.singGenre = localStorage.getItem('SuiteRhythm_sing_genre') || 'pop';  // genre hint for backing-music selection
         this.singApplauseEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_sing_applause') ?? 'true');
         // Live stage feel: occasional low-volume crowd cheers/whistles during sustained singing.
         // Off by default so quiet rehearsal is the baseline; users opt in when they want hype.
@@ -3403,6 +3404,17 @@ class SuiteRhythm {
                 if (singStageFeelToggle) singStageFeelToggle.checked = e.target.checked;
             });
         }
+
+        // Sing genre selector (dedicated Sing screen)
+        const singGenreSelect = document.getElementById('singGenreSelect');
+        if (singGenreSelect) {
+            singGenreSelect.value = this.singGenre || 'pop';
+            singGenreSelect.addEventListener('change', (e) => {
+                this.singGenre = e.target.value;
+                localStorage.setItem('SuiteRhythm_sing_genre', this.singGenre);
+                this.updateStatus(`Sing genre set to ${this.singGenre}`);
+            });
+        }
         
         // Trigger keyword cooldown slider
         const cooldownSlider = document.getElementById('keywordCooldown');
@@ -5364,6 +5376,7 @@ class SuiteRhythm {
             newSpeech: newSpeech || null,
             // Sing mode extras — only meaningful when mode === 'sing'
             singState: this.currentMode === 'sing' ? this.singState : null,
+            singGenre: this.currentMode === 'sing' ? (this.singGenre || 'pop') : null,
             detectedBPM: this.currentMode === 'sing' ? (this.detectedBPM || null) : null,
             vocalEnergy: this.currentMode === 'sing' ? +(this._singEnergyAvg || 0).toFixed(4) : null
         };
@@ -10786,7 +10799,7 @@ function initializeMenuToggles() {
     // Theme picker
     const themePicker = document.getElementById('themePicker');
     if (themePicker) {
-        const saved = localStorage.getItem('SuiteRhythm_theme') || 'dark';
+        const saved = localStorage.getItem('SuiteRhythm_theme') || 'light';
         document.documentElement.setAttribute('data-theme', saved);
         themePicker.querySelectorAll('.theme-card').forEach(card => {
             card.classList.toggle('active', card.dataset.themeValue === saved);
