@@ -3144,6 +3144,20 @@ class SuiteRhythm {
         document.querySelectorAll('.mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.selectMode(e.target.dataset.mode));
         });
+
+        // Wire section-specific control buttons (Creator, Table Top, Story Teller, Sing)
+        document.querySelectorAll('.section-start-btn').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('startBtn')?.click());
+        });
+        document.querySelectorAll('.section-stop-btn').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('stopBtn')?.click());
+        });
+        document.querySelectorAll('.section-test-mic').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('testMicBtn')?.click());
+        });
+        document.querySelectorAll('.section-stop-audio').forEach(btn => {
+            btn.addEventListener('click', () => document.getElementById('stopAudioBtn')?.click());
+        });
         
         // Volume Controls
         const minVolumeEl = document.getElementById('minVolume');
@@ -3323,6 +3337,28 @@ class SuiteRhythm {
                 // Reset cue timer so toggling on doesn't immediately fire.
                 this._singLastStageCueTs = Date.now();
                 this.updateStatus(`Live stage feel ${this.singStageFeelEnabled ? 'enabled' : 'disabled'}`);
+            });
+        }
+
+        // SingSection mirror toggles (dedicated Sing screen)
+        const singSecApplause = document.getElementById('singSectionApplauseToggle');
+        if (singSecApplause) {
+            singSecApplause.checked = !!this.singApplauseEnabled;
+            singSecApplause.addEventListener('change', (e) => {
+                this.singApplauseEnabled = e.target.checked;
+                localStorage.setItem('SuiteRhythm_sing_applause', JSON.stringify(this.singApplauseEnabled));
+                if (singApplauseToggle) singApplauseToggle.checked = e.target.checked;
+            });
+        }
+        const singSecStageFeel = document.getElementById('singSectionStageFeelToggle');
+        if (singSecStageFeel) {
+            singSecStageFeel.checked = !!this.singStageFeelEnabled;
+            singSecStageFeel.addEventListener('change', (e) => {
+                this.singStageFeelEnabled = e.target.checked;
+                localStorage.setItem('SuiteRhythm_sing_stage_feel', JSON.stringify(this.singStageFeelEnabled));
+                this._singLastStageCueTs = Date.now();
+                this.updateStatus(`Live stage feel ${this.singStageFeelEnabled ? 'enabled' : 'disabled'}`);
+                if (singStageFeelToggle) singStageFeelToggle.checked = e.target.checked;
             });
         }
         
@@ -4526,6 +4562,8 @@ class SuiteRhythm {
         if (prevState !== this.singState) {
             const el = document.getElementById('singStateReadout');
             if (el) el.textContent = this.singState;
+            const el2 = document.getElementById('singSectionStateReadout');
+            if (el2) el2.textContent = this.singState;
         }
     }
 
@@ -4546,6 +4584,8 @@ class SuiteRhythm {
         // Update UI readout if present
         const el = document.getElementById('singBpmReadout');
         if (el) el.textContent = `${this.detectedBPM} BPM`;
+        const el2 = document.getElementById('singSectionBpmReadout');
+        if (el2) el2.textContent = `${this.detectedBPM} BPM`;
     }
 
     _onSingSongEnd() {
@@ -4635,6 +4675,8 @@ class SuiteRhythm {
         this._singLastStageCueTs = 0;
         const el = document.getElementById('singBpmReadout');
         if (el) el.textContent = '— BPM';
+        const el3 = document.getElementById('singSectionBpmReadout');
+        if (el3) el3.textContent = '— BPM';
     }
 
     // ===== SPEECH RECOGNITION =====
@@ -8342,6 +8384,12 @@ class SuiteRhythm {
                     target.classList.add('section-visible');
                 });
             });
+
+            // Auto-select mode if the section has a hidden auto-select mode button
+            const autoBtn = target.querySelector('.mode-btn[data-auto-select]');
+            if (autoBtn && autoBtn.dataset.mode) {
+                this.selectMode(autoBtn.dataset.mode);
+            }
         }
 
         // Update sidebar active state
@@ -10621,417 +10669,6 @@ function initializeMenuToggles() {
             audioSourceContent.classList.toggle('hidden');
         });
     }
-
-    // Theme subsection toggle
-    const themeToggle = document.getElementById('themeMenuToggle');
-    const themeContent = document.getElementById('themeMenuContent');
-    if (themeToggle && themeContent) {
-        themeToggle.addEventListener('click', () => {
-            themeToggle.classList.toggle('active');
-            themeContent.classList.toggle('hidden');
-        });
-    }
-
-    // Theme picker cards
-    const themePicker = document.getElementById('themePicker');
-    if (themePicker) {
-        // Restore saved theme and mark the active card
-        const saved = localStorage.getItem('SuiteRhythm_theme') || '';
-        if (saved) document.documentElement.setAttribute('data-theme', saved);
-        themePicker.querySelectorAll('.theme-card').forEach(card => {
-            const val = card.getAttribute('data-theme-value');
-            if (val === saved) {
-                card.classList.add('active');
-            } else {
-                card.classList.remove('active');
-            }
-        });
-
-        themePicker.addEventListener('click', (e) => {
-            const card = e.target.closest('.theme-card');
-            if (!card) return;
-            const value = card.getAttribute('data-theme-value');
-            // Apply
-            if (value) {
-                document.documentElement.setAttribute('data-theme', value);
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-            }
-            // Persist
-            localStorage.setItem('SuiteRhythm_theme', value);
-            // Update active state
-            themePicker.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-        });
-    }
-
-    // Layout picker cards
-    const layoutPicker = document.getElementById('layoutPicker');
-    if (layoutPicker) {
-        // Restore saved layout and mark the active card
-        const savedLayout = localStorage.getItem('SuiteRhythm_layout') || '';
-        if (savedLayout) document.documentElement.setAttribute('data-layout', savedLayout);
-        layoutPicker.querySelectorAll('.layout-card').forEach(card => {
-            const val = card.getAttribute('data-layout-value');
-            if (val === savedLayout) {
-                card.classList.add('active');
-            } else {
-                card.classList.remove('active');
-            }
-        });
-
-        layoutPicker.addEventListener('click', (e) => {
-            const card = e.target.closest('.layout-card');
-            if (!card) return;
-            const value = card.getAttribute('data-layout-value');
-            // Apply
-            if (value) {
-                document.documentElement.setAttribute('data-layout', value);
-            } else {
-                document.documentElement.removeAttribute('data-layout');
-            }
-            // Persist
-            localStorage.setItem('SuiteRhythm_layout', value);
-            // Update active state
-            layoutPicker.querySelectorAll('.layout-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-
-            // Activate layout-specific behaviors when switching
-            _activateLayout(value);
-        });
-    }
-
-    // ─── Generic customization picker helper ─────────────────────
-    function _wireCustomPicker(pickerId, cardClass, dataValueAttr, dataAttr, storageKey) {
-        const picker = document.getElementById(pickerId);
-        if (!picker) return;
-        const saved = localStorage.getItem(storageKey) || '';
-        if (saved) document.documentElement.setAttribute('data-' + dataAttr, saved);
-        picker.querySelectorAll('.' + cardClass).forEach(card => {
-            const val = card.getAttribute(dataValueAttr);
-            if (val === saved) { card.classList.add('active'); } else { card.classList.remove('active'); }
-        });
-        picker.addEventListener('click', (e) => {
-            const card = e.target.closest('.' + cardClass);
-            if (!card) return;
-            const value = card.getAttribute(dataValueAttr);
-            if (value) { document.documentElement.setAttribute('data-' + dataAttr, value); }
-            else { document.documentElement.removeAttribute('data-' + dataAttr); }
-            localStorage.setItem(storageKey, value);
-            picker.querySelectorAll('.' + cardClass).forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-        });
-    }
-
-    // Logo picker
-    _wireCustomPicker('logoPicker', 'logo-card', 'data-logo-value', 'logo', 'SuiteRhythm_logo');
-    // Font picker
-    _wireCustomPicker('fontPicker', 'font-card', 'data-font-value', 'font', 'SuiteRhythm_font');
-    // Corner picker
-    _wireCustomPicker('cornerPicker', 'corner-card', 'data-corners-value', 'corners', 'SuiteRhythm_corners');
-    // Animation picker
-    _wireCustomPicker('animPicker', 'anim-card', 'data-anim-value', 'animation', 'SuiteRhythm_animation');
-
-    // ─── Persona Tabs ────────────────────────────────────────────
-    const personaBar = document.getElementById('personaTabBar');
-    if (personaBar) {
-        personaBar.addEventListener('click', (e) => {
-            const tab = e.target.closest('.persona-tab');
-            if (!tab) return;
-            const filter = tab.getAttribute('data-persona-filter');
-            personaBar.querySelectorAll('.persona-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            _filterPersonaSections(filter);
-        });
-    }
-
-    // ─── Focus Dock ──────────────────────────────────────────────
-    const focusDock = document.getElementById('focusDock');
-    if (focusDock) {
-        focusDock.addEventListener('click', (e) => {
-            const btn = e.target.closest('.focus-dock-btn');
-            if (!btn) return;
-            const sectionId = btn.getAttribute('data-section');
-            // Use the engine's navigate if available, otherwise do it manually
-            if (window.gameInstance?.navigateToSection) {
-                window.gameInstance.navigateToSection(sectionId);
-            } else {
-                document.querySelectorAll('.app-section').forEach(s => {
-                    s.classList.add('hidden');
-                    s.classList.remove('section-visible');
-                });
-                const target = document.getElementById(sectionId);
-                if (target) {
-                    target.classList.remove('hidden');
-                    target.classList.add('section-visible');
-                }
-            }
-            // Update dock active state
-            focusDock.querySelectorAll('.focus-dock-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    }
-
-    // ─── Spotlight ───────────────────────────────────────────────
-    const spotlightBack = document.getElementById('spotlightBack');
-    if (spotlightBack) {
-        spotlightBack.addEventListener('click', () => {
-            document.documentElement.removeAttribute('data-spotlight-open');
-            document.querySelectorAll('.app-section').forEach(s => {
-                s.classList.remove('spotlight-active');
-            });
-        });
-    }
-    // Spotlight: click a section card to open it
-    document.getElementById('platformMain')?.addEventListener('click', (e) => {
-        if (document.documentElement.getAttribute('data-layout') !== 'spotlight') return;
-        if (document.documentElement.hasAttribute('data-spotlight-open')) return;
-        const section = e.target.closest('.app-section');
-        if (!section) return;
-        document.documentElement.setAttribute('data-spotlight-open', '1');
-        section.classList.add('spotlight-active');
-        // Scroll to top
-        const main = document.getElementById('platformMain');
-        if (main) main.scrollTop = 0;
-    });
-
-    // ─── Carousel ────────────────────────────────────────────────
-    const carouselPrev = document.getElementById('carouselPrev');
-    const carouselNext = document.getElementById('carouselNext');
-
-    if (carouselPrev) carouselPrev.addEventListener('click', () => _carouselGo(_carouselIndex - 1));
-    if (carouselNext) carouselNext.addEventListener('click', () => _carouselGo(_carouselIndex + 1));
-
-    // ─── Split Screen ────────────────────────────────────────────
-    const splitLeftSel = document.getElementById('splitLeftSelect');
-    const splitRightSel = document.getElementById('splitRightSelect');
-
-    if (splitLeftSel) splitLeftSel.addEventListener('change', _splitUpdate);
-    if (splitRightSel) splitRightSel.addEventListener('change', _splitUpdate);
-
-    // ─── Top Tabs ────────────────────────────────────────────────
-    const topTabBar = document.getElementById('topTabBar');
-    if (topTabBar) {
-        topTabBar.addEventListener('click', (e) => {
-            const tab = e.target.closest('.top-tab');
-            if (!tab) return;
-            const sectionId = tab.getAttribute('data-section');
-            if (window.gameInstance?.navigateToSection) {
-                window.gameInstance.navigateToSection(sectionId);
-            }
-            topTabBar.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-        });
-    }
-
-    // ─── Bottom Nav ──────────────────────────────────────────────
-    const bottomNavBar = document.getElementById('bottomNavBar');
-    if (bottomNavBar) {
-        bottomNavBar.addEventListener('click', (e) => {
-            const btn = e.target.closest('.bottom-nav-btn');
-            if (!btn) return;
-            const sectionId = btn.getAttribute('data-section');
-            if (window.gameInstance?.navigateToSection) {
-                window.gameInstance.navigateToSection(sectionId);
-            }
-            bottomNavBar.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    }
-
-    // ─── Floating / Zen ──────────────────────────────────────────
-    const floatingFab = document.getElementById('floatingFab');
-    const floatingMenu = document.getElementById('floatingMenu');
-    if (floatingFab && floatingMenu) {
-        floatingFab.addEventListener('click', () => {
-            const isOpen = !floatingMenu.classList.contains('hidden');
-            floatingMenu.classList.toggle('hidden', isOpen);
-            floatingFab.classList.toggle('open', !isOpen);
-        });
-        floatingMenu.addEventListener('click', (e) => {
-            const item = e.target.closest('.floating-menu-item');
-            if (!item) return;
-            const sectionId = item.getAttribute('data-section');
-            if (window.gameInstance?.navigateToSection) {
-                window.gameInstance.navigateToSection(sectionId);
-            }
-            floatingMenu.querySelectorAll('.floating-menu-item').forEach(m => m.classList.remove('active'));
-            item.classList.add('active');
-            // Close menu after selection
-            floatingMenu.classList.add('hidden');
-            floatingFab.classList.remove('open');
-        });
-    }
-
-    // Activate layout on initial load
-    const currentLayout = localStorage.getItem('SuiteRhythm_layout') || '';
-    _activateLayout(currentLayout);
-}
-
-/* ─── Module-scope helpers for Carousel / Split / Accordion ─── */
-let _carouselIndex = 0;
-let _accordionBarsInjected = false;
-
-function _carouselSections() {
-    return Array.from(document.querySelectorAll('.app-section'));
-}
-
-function _carouselGo(idx) {
-    const sections = _carouselSections();
-    if (!sections.length) return;
-    _carouselIndex = ((idx % sections.length) + sections.length) % sections.length;
-    sections.forEach((s, i) => {
-        if (i === _carouselIndex) {
-            s.classList.remove('hidden');
-            s.classList.add('section-visible');
-        } else {
-            s.classList.add('hidden');
-            s.classList.remove('section-visible');
-        }
-    });
-    const dotsWrap = document.getElementById('carouselDots');
-    if (dotsWrap) {
-        dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === _carouselIndex);
-        });
-    }
-}
-
-function _carouselBuildDots() {
-    const dotsWrap = document.getElementById('carouselDots');
-    if (!dotsWrap) return;
-    dotsWrap.innerHTML = '';
-    const sectionNames = ['Home', 'Auto Detect', 'Story Editor', 'Control Board', 'Sound Library', 'Settings'];
-    _carouselSections().forEach((_, i) => {
-        const dot = document.createElement('button');
-        dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', sectionNames[i] || 'Section ' + (i + 1));
-        dot.title = sectionNames[i] || 'Section ' + (i + 1);
-        dot.addEventListener('click', () => _carouselGo(i));
-        dotsWrap.appendChild(dot);
-    });
-}
-
-function _splitUpdate() {
-    const splitLeftSel = document.getElementById('splitLeftSelect');
-    const splitRightSel = document.getElementById('splitRightSelect');
-    if (!splitLeftSel || !splitRightSel) return;
-    const leftId = splitLeftSel.value;
-    const rightId = splitRightSel.value;
-    document.querySelectorAll('.app-section').forEach(s => {
-        s.classList.remove('split-visible', 'hidden');
-        s.classList.add('hidden');
-    });
-    const left = document.getElementById(leftId);
-    const right = document.getElementById(rightId);
-    if (left) { left.classList.remove('hidden'); left.classList.add('split-visible'); }
-    if (right && rightId !== leftId) { right.classList.remove('hidden'); right.classList.add('split-visible'); }
-}
-
-function _accordionInjectBars() {
-    if (_accordionBarsInjected) return;
-    _accordionBarsInjected = true;
-    const names = {
-        dashboardPanel: 'Home',
-        dndAutoDetect: 'Auto Detect',
-        dndCreateCampaign: 'Story Editor',
-        dndControlBoard: 'Control Board',
-        soundLibrarySection: 'Sound Library',
-        settingsSection: 'Settings'
-    };
-    document.querySelectorAll('.app-section').forEach(section => {
-        const bar = document.createElement('button');
-        bar.className = 'accordion-bar';
-        bar.setAttribute('data-accordion-target', section.id);
-        const label = names[section.id] || section.id;
-        bar.innerHTML = label + ' <svg class="accordion-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>';
-        section.parentNode.insertBefore(bar, section);
-
-        bar.addEventListener('click', () => {
-            const isOpen = section.classList.contains('accordion-open');
-            document.querySelectorAll('.app-section').forEach(s => s.classList.remove('accordion-open'));
-            document.querySelectorAll('.accordion-bar').forEach(b => b.classList.remove('active'));
-            if (!isOpen) {
-                section.classList.add('accordion-open');
-                bar.classList.add('active');
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
-}
-
-/** Apply layout-specific side effects when layout changes */
-function _activateLayout(layout) {
-    // Reset all layout-specific states
-    document.documentElement.removeAttribute('data-spotlight-open');
-    document.querySelectorAll('.app-section').forEach(s => {
-        s.classList.remove('spotlight-active', 'persona-hidden', 'split-visible', 'accordion-open');
-    });
-
-    // Reset focus dock active markers
-    document.querySelectorAll('.focus-dock-btn').forEach(b => b.classList.remove('active'));
-
-    // Reset accordion bar active states
-    document.querySelectorAll('.accordion-bar').forEach(b => b.classList.remove('active'));
-
-    // Close floating menu if open
-    const floatMenu = document.getElementById('floatingMenu');
-    const floatFab = document.getElementById('floatingFab');
-    if (floatMenu) floatMenu.classList.add('hidden');
-    if (floatFab) floatFab.classList.remove('open');
-
-    // Command Center: since all sections are force-visible via CSS, clear hidden so engine
-    // sidebar clicks don't fight the grid. For other layouts, re-navigate to the current section.
-    if (layout === 'command-center' || layout === 'single-page') {
-        // CSS handles show-all — just make sure no sections are hidden
-        document.querySelectorAll('.app-section').forEach(s => s.classList.remove('hidden'));
-    } else if (layout === 'carousel') {
-        // Build dots and show first slide
-        _carouselBuildDots();
-        _carouselIndex = 0;
-        _carouselGo(0);
-    } else if (layout === 'split-screen') {
-        // Show the two default panels
-        const splitL = document.getElementById('splitLeftSelect');
-        const splitR = document.getElementById('splitRightSelect');
-        if (splitL) splitL.value = 'dashboardPanel';
-        if (splitR) splitR.value = 'dndAutoDetect';
-        _splitUpdate();
-    } else if (layout === 'accordion') {
-        // Inject bars if not done yet, then open the first section
-        _accordionInjectBars();
-        const firstSection = document.querySelector('.app-section');
-        const firstBar = document.querySelector('.accordion-bar');
-        if (firstSection) firstSection.classList.add('accordion-open');
-        if (firstBar) firstBar.classList.add('active');
-    } else {
-        // top-tabs, bottom-nav, floating, classic, compact, cinematic, cozy, streamer, focus, spotlight
-        // Re-trigger current section visibility so only 1 is shown
-        const activeNav = document.querySelector('.sidebar-nav-item.active');
-        const sectionId = activeNav?.getAttribute('data-section') || 'dashboardPanel';
-        if (window.gameInstance?.navigateToSection) {
-            window.gameInstance.navigateToSection(sectionId);
-        }
-    }
-
-    // Persona tabs: apply initial filter
-    if (layout === 'persona-tabs') {
-        const activeTab = document.querySelector('.persona-tab.active');
-        const filter = activeTab?.getAttribute('data-persona-filter') || 'all';
-        _filterPersonaSections(filter);
-    }
-}
-
-/** Show/hide sections based on persona filter */
-function _filterPersonaSections(filter) {
-    document.querySelectorAll('.app-section').forEach(section => {
-        const personas = section.getAttribute('data-persona') || '';
-        if (filter === 'all' || personas.includes('all') || personas.includes(filter)) {
-            section.classList.remove('persona-hidden');
-        } else {
-            section.classList.add('persona-hidden');
-        }
-    });
 }
 
 // ===== EXPORTS FOR NEXT.JS =====

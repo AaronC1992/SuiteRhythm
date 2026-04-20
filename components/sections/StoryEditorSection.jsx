@@ -3,7 +3,7 @@
 /** Story Editor section — write, save, and play stories with real-time sound cues. */
 export default function StoryEditorSection() {
   return (
-    <div id="dndCreateCampaign" className="app-section hidden" data-persona="tabletop storyteller">
+    <div id="dndCreateCampaign" className="app-section hidden">
       <div className="section-header">
         <h2 id="createSectionTitle">Story Editor</h2>
       </div>

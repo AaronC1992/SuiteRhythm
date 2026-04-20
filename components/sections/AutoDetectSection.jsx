@@ -3,7 +3,7 @@
 /** Auto Detect section — microphone listening + live transcript + activity feed. */
 export default function AutoDetectSection() {
   return (
-    <div id="dndAutoDetect" className="app-section hidden" data-persona="streamer storyteller tabletop">
+    <div id="dndAutoDetect" className="app-section hidden">
       <div className="section-header">
         <h2>Auto Detect</h2>
       </div>
@@ -12,72 +12,15 @@ export default function AutoDetectSection() {
           SuiteRhythm will listen and automatically play contextual sounds and music.
         </p>
 
-        {/* Mode Selector */}
+        {/* Mode — Auto only (other modes have dedicated sections) */}
         <div className="mode-selector">
-          <h3>Mode</h3>
           <div className="mode-buttons">
-            {[
-              { mode: 'auto', label: 'Auto' },
-              { mode: 'dnd', label: 'D&D' },
-              { mode: 'horror', label: 'Horror' },
-              { mode: 'bedtime', label: 'Bedtime' },
-              { mode: 'fairytale', label: 'Fairytale' },
-              { mode: 'christmas', label: 'Christmas' },
-              { mode: 'halloween', label: 'Halloween' },
-              { mode: 'creator', label: 'Creator' },
-              { mode: 'sing', label: 'Sing' },
-            ].map(({ mode, label }) => (
-              <button
-                key={mode}
-                className={`mode-btn${mode === 'auto' ? ' active' : ''}`}
-                data-mode={mode}
-              >
-                {label}
-              </button>
-            ))}
+            <button className="mode-btn active" data-mode="auto" data-auto-select="true">Auto</button>
           </div>
         </div>
 
         {/* Scene Presets Bar — populated by SuiteRhythm engine */}
         <div className="scene-presets-bar" id="scenePresetsBar" />
-
-        {/* Sing Mode Panel — shown by the engine when mode === 'sing' via .visualizer-section.mode-sing CSS hook */}
-        <section id="singModePanel" className="sing-mode-panel" style={{ display: 'none' }}>
-          <h3 style={{ margin: 0, marginBottom: 6 }}>Sing Mode</h3>
-          <p className="info-text" style={{ marginTop: 0 }}>
-            Start singing. SuiteRhythm will pick backing music that matches your tempo and energy, and keep it going between verses. Headphones recommended so your mic doesn&apos;t catch the music.
-          </p>
-          <div className="sing-stats">
-            <div className="stat-item">
-              <span className="stat-value" id="singBpmReadout">— BPM</span>
-              <span className="stat-label">Detected Tempo</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value" id="singStateReadout">idle</span>
-              <span className="stat-label">State</span>
-            </div>
-          </div>
-          <div className="toggle-row" style={{ marginTop: 8 }}>
-            <label htmlFor="singApplauseToggle">Applause on song end</label>
-            <label className="switch">
-              <input type="checkbox" id="singApplauseToggle" defaultChecked />
-              <span className="slider" />
-            </label>
-          </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0 }}>
-            Plays a crowd applause cue after ~6s of silence following a sustained song.
-          </p>
-          <div className="toggle-row" style={{ marginTop: 8 }}>
-            <label htmlFor="singStageFeelToggle">Live stage feel</label>
-            <label className="switch">
-              <input type="checkbox" id="singStageFeelToggle" />
-              <span className="slider" />
-            </label>
-          </div>
-          <p className="info-text" style={{ fontSize: '0.78rem', marginTop: 0 }}>
-            Occasional quiet crowd cheers/whistles mid-song, like a live gig. Off = silent audience.
-          </p>
-        </section>
 
         <div className="context-input-area">
           <label htmlFor="dndContextInput">Story Context (Optional)</label>

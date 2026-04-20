@@ -31,6 +31,10 @@ import StoryEditorSection from './sections/StoryEditorSection';
 import ControlBoardSection from './sections/ControlBoardSection';
 import SoundLibrarySection from './sections/SoundLibrarySection';
 import SettingsSection from './sections/SettingsSection';
+import CreatorSection from './sections/CreatorSection';
+import TableTopSection from './sections/TableTopSection';
+import StoryTellerSection from './sections/StoryTellerSection';
+import SingSection from './sections/SingSection';
 import {
   SubscribeModal,
   TutorialModal,
@@ -168,64 +172,6 @@ export default function AppShell() {
             {/* Live engine status bar — reactive via useEngine() */}
             <NowPlayingStrip />
 
-            {/* Persona tab bar — only visible in persona-tabs layout */}
-            <div id="personaTabBar" className="persona-tab-bar">
-              <button className="persona-tab active" data-persona-filter="all">All</button>
-              <button className="persona-tab" data-persona-filter="streamer">Content Creator</button>
-              <button className="persona-tab" data-persona-filter="tabletop">Tabletop RPG</button>
-              <button className="persona-tab" data-persona-filter="storyteller">Storyteller</button>
-            </div>
-
-            {/* Spotlight back button — only visible in spotlight layout when a section is open */}
-            <button id="spotlightBack" className="spotlight-back" aria-label="Back to overview">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              Back
-            </button>
-
-            {/* Carousel nav — only visible in carousel layout */}
-            <div id="carouselNav" className="carousel-nav">
-              <button id="carouselPrev" className="carousel-arrow carousel-prev" aria-label="Previous section">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <div id="carouselDots" className="carousel-dots" />
-              <button id="carouselNext" className="carousel-arrow carousel-next" aria-label="Next section">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="9 18 15 12 9 6"/></svg>
-              </button>
-            </div>
-
-            {/* Top tab bar — only visible in top-tabs layout */}
-            <nav id="topTabBar" className="top-tab-bar" aria-label="Section tabs">
-              <button className="top-tab active" data-section="dashboardPanel">Home</button>
-              <button className="top-tab" data-section="dndAutoDetect">Auto Detect</button>
-              <button className="top-tab" data-section="dndCreateCampaign">Story Editor</button>
-              <button className="top-tab" data-section="dndControlBoard">Control Board</button>
-              <button className="top-tab" data-section="soundLibrarySection">Sound Library</button>
-              <button className="top-tab" data-section="settingsSection">Settings</button>
-            </nav>
-
-            {/* Split screen panel selectors — only visible in split-screen layout */}
-            <div id="splitControls" className="split-controls">
-              <select id="splitLeftSelect" className="split-select" aria-label="Left panel section">
-                <option value="dashboardPanel">Home</option>
-                <option value="dndAutoDetect">Auto Detect</option>
-                <option value="dndCreateCampaign">Story Editor</option>
-                <option value="dndControlBoard">Control Board</option>
-                <option value="soundLibrarySection">Sound Library</option>
-                <option value="settingsSection">Settings</option>
-              </select>
-              <span className="split-divider-label">|</span>
-              <select id="splitRightSelect" className="split-select" aria-label="Right panel section">
-                <option value="dndAutoDetect">Auto Detect</option>
-                <option value="dashboardPanel">Home</option>
-                <option value="dndCreateCampaign">Story Editor</option>
-                <option value="dndControlBoard">Control Board</option>
-                <option value="soundLibrarySection">Sound Library</option>
-                <option value="settingsSection">Settings</option>
-              </select>
-            </div>
-
             {/* Firefox compatibility warning — shown only in Firefox by the engine */}
             <div
               id="firefoxWarning"
@@ -254,70 +200,11 @@ export default function AppShell() {
             <SoundLibrarySection />
             <SettingsSection />
             <AutoDetectSection />
+            <CreatorSection />
+            <TableTopSection />
+            <StoryTellerSection />
+            <SingSection />
             <ControlBoardSection />
-
-            {/* Bottom nav bar — only visible in bottom-nav layout */}
-            <nav id="bottomNavBar" className="bottom-nav-bar" aria-label="Bottom navigation">
-              <button className="bottom-nav-btn active" data-section="dashboardPanel" aria-label="Home">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                <span>Home</span>
-              </button>
-              <button className="bottom-nav-btn" data-section="dndAutoDetect" aria-label="Auto Detect">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-                <span>Detect</span>
-              </button>
-              <button className="bottom-nav-btn" data-section="dndCreateCampaign" aria-label="Story Editor">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                <span>Story</span>
-              </button>
-              <button className="bottom-nav-btn" data-section="dndControlBoard" aria-label="Control Board">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                <span>Control</span>
-              </button>
-              <button className="bottom-nav-btn" data-section="soundLibrarySection" aria-label="Sound Library">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-                <span>Library</span>
-              </button>
-              <button className="bottom-nav-btn" data-section="settingsSection" aria-label="Settings">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>Settings</span>
-              </button>
-            </nav>
-
-            {/* Floating action button — only visible in floating layout */}
-            <button id="floatingFab" className="floating-fab" aria-label="Open navigation">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-            <nav id="floatingMenu" className="floating-menu hidden" aria-label="Navigation menu">
-              <button className="floating-menu-item active" data-section="dashboardPanel">Home</button>
-              <button className="floating-menu-item" data-section="dndAutoDetect">Auto Detect</button>
-              <button className="floating-menu-item" data-section="dndCreateCampaign">Story Editor</button>
-              <button className="floating-menu-item" data-section="dndControlBoard">Control Board</button>
-              <button className="floating-menu-item" data-section="soundLibrarySection">Sound Library</button>
-              <button className="floating-menu-item" data-section="settingsSection">Settings</button>
-            </nav>
-
-            {/* Focus-mode bottom dock — only visible in focus layout */}
-            <nav id="focusDock" className="focus-dock" aria-label="Section dock">
-              <button className="focus-dock-btn" data-section="dashboardPanel" aria-label="Home">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-              </button>
-              <button className="focus-dock-btn" data-section="dndAutoDetect" aria-label="Auto Detect">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-              </button>
-              <button className="focus-dock-btn" data-section="dndCreateCampaign" aria-label="Story Editor">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              </button>
-              <button className="focus-dock-btn" data-section="dndControlBoard" aria-label="Control Board">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-              </button>
-              <button className="focus-dock-btn" data-section="soundLibrarySection" aria-label="Sound Library">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-              </button>
-              <button className="focus-dock-btn" data-section="settingsSection" aria-label="Settings">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              </button>
-            </nav>
           </main>
         </div>
       </div>

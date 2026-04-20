@@ -13,35 +13,7 @@ export default function Sidebar() {
     <aside id="platformSidebar" aria-label="Platform navigation">
       <div className="sidebar-brand">
         <div className="sidebar-brand-row">
-          {/* Logo variant: Wordmark (default) */}
-          <span className="sidebar-logo-text logo-variant logo-wordmark">SuiteRhythm</span>
-
-          {/* Logo variant: Icon + Text */}
-          <span className="logo-variant logo-icon-text">
-            <svg className="logo-icon-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-            <span className="logo-icon-label">SuiteRhythm</span>
-          </span>
-
-          {/* Logo variant: Minimal Icon */}
-          <span className="logo-variant logo-minimal">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-2, #bb86fc)" strokeWidth="2">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-          </span>
-
-          {/* Logo variant: Stacked */}
-          <span className="logo-variant logo-stacked">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-2, #bb86fc)" strokeWidth="2">
-              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-            </svg>
-            <span className="logo-stacked-name">Suite<br/>Rhythm</span>
-          </span>
-
-          {/* Logo variant: Monogram */}
-          <span className="logo-variant logo-monogram">SR</span>
-
+          <span className="sidebar-logo-text">SuiteRhythm</span>
           <EngineStatusDot />
         </div>
         <span className="sidebar-tagline">Reactive Sound Design</span>
@@ -66,6 +38,41 @@ export default function Sidebar() {
             <line x1="8" y1="23" x2="16" y2="23" />
           </svg>
           Auto Detect
+        </button>
+
+        <button className="sidebar-nav-item" data-section="tableTopSection" aria-label="Table Top Games">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+            <line x1="12" y1="22.08" x2="12" y2="12" />
+          </svg>
+          Table Top
+        </button>
+
+        <button className="sidebar-nav-item" data-section="storyTellerSection" aria-label="Story Teller">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
+          Story Teller
+        </button>
+
+        <button className="sidebar-nav-item" data-section="creatorSection" aria-label="Creator">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+          Creator
+        </button>
+
+        <button className="sidebar-nav-item" data-section="singSection" aria-label="Sing">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+          Sing
         </button>
 
         <button className="sidebar-nav-item" data-section="dndCreateCampaign" aria-label="Story Editor">

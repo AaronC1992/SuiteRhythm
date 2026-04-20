@@ -3,7 +3,7 @@
 /** Control Board section — drag-and-drop soundboard with scene tabs. */
 export default function ControlBoardSection() {
   return (
-    <div id="dndControlBoard" className="app-section hidden" data-persona="streamer tabletop">
+    <div id="dndControlBoard" className="app-section hidden">
       <div className="section-header">
         <h2>Control Board</h2>
         <div className="cb-header-actions">
