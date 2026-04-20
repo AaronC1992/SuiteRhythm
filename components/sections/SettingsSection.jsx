@@ -10,6 +10,27 @@ export default function SettingsSection() {
       <div className="section-body">
         <p className="section-intro">Adjust volume, playback options, and performance settings.</p>
 
+        {/* Appearance / Theme */}
+        <section className="menu-section">
+          <button className="menu-toggle" id="appearanceMenuToggle">
+            Appearance
+            <span className="toggle-indicator">&#9660;</span>
+          </button>
+          <div className="menu-content hidden" id="appearanceMenuContent">
+            <h3>Theme</h3>
+            <div className="theme-picker" id="themePicker">
+              <button className="theme-card active" data-theme-value="dark" type="button">
+                <div className="theme-card-preview dark-preview" />
+                <div className="theme-card-label">Dark</div>
+              </button>
+              <button className="theme-card" data-theme-value="light" type="button">
+                <div className="theme-card-preview light-preview" />
+                <div className="theme-card-label">Light</div>
+              </button>
+            </div>
+          </div>
+        </section>
+
         {/* Subscription Management */}
         <section className="menu-section">
           <button className="menu-toggle" id="subscriptionMenuToggle">

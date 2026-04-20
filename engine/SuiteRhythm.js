@@ -10669,6 +10669,34 @@ function initializeMenuToggles() {
             audioSourceContent.classList.toggle('hidden');
         });
     }
+
+    // Appearance subsection toggle
+    const appearanceToggle = document.getElementById('appearanceMenuToggle');
+    const appearanceContent = document.getElementById('appearanceMenuContent');
+    if (appearanceToggle && appearanceContent) {
+        appearanceToggle.addEventListener('click', () => {
+            appearanceToggle.classList.toggle('active');
+            appearanceContent.classList.toggle('hidden');
+        });
+    }
+
+    // Theme picker
+    const themePicker = document.getElementById('themePicker');
+    if (themePicker) {
+        const saved = localStorage.getItem('SuiteRhythm_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        themePicker.querySelectorAll('.theme-card').forEach(card => {
+            card.classList.toggle('active', card.dataset.themeValue === saved);
+            card.addEventListener('click', () => {
+                const val = card.dataset.themeValue;
+                document.documentElement.setAttribute('data-theme', val);
+                localStorage.setItem('SuiteRhythm_theme', val);
+                themePicker.querySelectorAll('.theme-card').forEach(c => {
+                    c.classList.toggle('active', c.dataset.themeValue === val);
+                });
+            });
+        });
+    }
 }
 
 // ===== EXPORTS FOR NEXT.JS =====
