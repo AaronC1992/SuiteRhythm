@@ -10803,7 +10803,7 @@ function initializeMenuToggles() {
     // Theme picker
     const themePicker = document.getElementById('themePicker');
     if (themePicker) {
-        const saved = localStorage.getItem('SuiteRhythm_theme') || 'light';
+        const saved = localStorage.getItem('SuiteRhythm_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', saved);
         themePicker.querySelectorAll('.theme-card').forEach(card => {
             card.classList.toggle('active', card.dataset.themeValue === saved);
