@@ -33,14 +33,14 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Howler.js is loaded as an npm package (see engine/SuiteRhythm.js) */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         {/* Apply saved theme before first paint to prevent flash */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('SuiteRhythm_theme')||'light';document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','light')}}())`,
+            __html: `(function(){try{var d=document.documentElement;var t=localStorage.getItem('SuiteRhythm_theme')||'dark';var p=localStorage.getItem('SuiteRhythm_palette');var l=localStorage.getItem('SuiteRhythm_look')||'classic';d.setAttribute('data-theme',t);if(p)d.setAttribute('data-color-palette',p);d.setAttribute('data-look',l)}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.setAttribute('data-look','classic')}}())`,
           }}
         />
         {/* Plausible Analytics — privacy-friendly, no cookies, no banner needed */}

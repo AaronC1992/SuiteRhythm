@@ -31,14 +31,15 @@ export default function TermsPage() {
 
       <h2>4. Subscriptions &amp; Payments</h2>
       <p>
-        Some features require a paid subscription processed through Stripe. Subscriptions renew
-        automatically unless cancelled. Refund requests are handled on a case-by-case basis.
+        SuiteRhythm is currently offered as a beta preview. Paid subscriptions may be introduced
+        later with clear pricing, checkout, renewal, and cancellation terms before any charge is made.
       </p>
 
       <h2>5. Intellectual Property</h2>
       <p>
         All sounds, code, and branding are owned by SuiteRhythm or licensed from third parties.
-        You may not redistribute the sound library or recordings derived from it.
+        You may use recordings of your own sessions, streams, and shows, but you may not redistribute
+        the raw sound library or package the sounds as a competing library.
       </p>
 
       <h2>6. Limitation of Liability</h2>

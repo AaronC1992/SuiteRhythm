@@ -20,20 +20,20 @@ export function SubscribeModal() {
         <h2 id="subscribeModalTitle">Welcome to SuiteRhythm</h2>
         <p><strong>Reactive Sound Design for Storytellers</strong></p>
         <p className="info-text">
-          Unlimited live scene listening for storytelling, D&amp;D, and content creation &mdash;
-          $10/month.
+          Live scene listening is currently available in beta. Paid plans are coming later,
+          but checkout is not active yet.
         </p>
 
         <div className="provider-info" style={{ textAlign: 'center' }}>
           <p style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--primary-2)', margin: '16px 0' }}>
-            $10 / month
+            Beta Access
           </p>
           <button
             id="subscribeBtn"
             className="btn-primary"
             style={{ width: '100%', padding: 14, fontSize: '1.05rem' }}
           >
-            Subscribe &mdash; $10/month
+            Continue to App
           </button>
           <button
             id="enterTokenBtn"

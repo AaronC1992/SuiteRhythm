@@ -33,7 +33,6 @@ const nextConfig = {
         source: '/(.*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           {
             key: 'Content-Security-Policy',
@@ -42,11 +41,11 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
-              "media-src 'self' blob: https://pub-b8fe695f5b4b490ebe0dc151042193e2.r2.dev",
-              "connect-src 'self' https://plausible.io https://*.supabase.co wss://*.supabase.co https://api.openai.com https://pixabay.com https://irc-ws.chat.twitch.tv",
+              "media-src 'self' blob: https: data:",
+              "connect-src 'self' https://plausible.io https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.elevenlabs.io https://pixabay.com https://pixabay.com/api/ https://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv:443",
               "font-src 'self'",
               "worker-src 'self' blob:",
-              "frame-src 'none'",
+              "frame-src 'self'",
             ].join('; '),
           },
         ],

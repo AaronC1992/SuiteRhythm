@@ -13,12 +13,25 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '../../../lib/api-auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 const PIXABAY_KEY = process.env.PIXABAY_API_KEY;
 
 export async function GET(request) {
   const denied = requireAuth(request);
   if (denied) return denied;
+
+  const rate = checkRateLimit(request, {
+    namespace: 'pixabay',
+    limit: 30,
+    windowMs: 60_000,
+  });
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Try again shortly.' },
+      { status: 429, headers: rateLimitHeaders(rate) }
+    );
+  }
 
   if (!PIXABAY_KEY) {
     return NextResponse.json(
@@ -32,6 +45,9 @@ export async function GET(request) {
   if (!q || q.trim().length === 0) {
     return NextResponse.json({ error: 'Missing search query' }, { status: 400 });
   }
+  if (q.length > 80) {
+    return NextResponse.json({ error: 'Search query is too long' }, { status: 400 });
+  }
 
   // Build safe param set — only forward allowed keys
   const allowed = ['q', 'category', 'min_duration', 'max_duration', 'per_page'];
@@ -40,6 +56,8 @@ export async function GET(request) {
     const val = searchParams.get(key);
     if (val !== null && val !== '') params.set(key, val);
   }
+  const perPage = Math.max(1, Math.min(10, parseInt(params.get('per_page') || '5', 10) || 5));
+  params.set('per_page', String(perPage));
 
   try {
     const res = await fetch(`https://pixabay.com/api/audio/?${params}`, {

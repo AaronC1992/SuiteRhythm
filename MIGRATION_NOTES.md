@@ -50,11 +50,11 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 ## What Still Needs Backend Work
 
 ### 1. Auth (TODO)
-- The Subscribe modal and token input exist in the UI but there is no Next.js auth layer.
+- The beta access modal and token input exist in the UI, but there is no user account auth layer.
 - **Next step**: Add NextAuth.js or Clerk. Check session in `app/dashboard/page.jsx` and redirect unauthenticated users to a landing page.
 
 ### 2. Stripe subscription (TODO)
-- The "Subscribe $10/month" button exists but has no Stripe integration server-side.
+- Paid checkout is intentionally disabled during beta.
 - **Next step**: Create `app/api/stripe/checkout/route.js` (create checkout session) and `app/api/stripe/webhook/route.js` (handle subscription events). Store subscription status in the database.
 
 ### 3. Database (TODO)
@@ -63,8 +63,8 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 - **Next step**: Connect Supabase (or PlanetScale). Migrate story/board data to user-scoped database rows. Replace `saved-sounds.json` read with a DB query.
 
 ### 4. OpenAI / AI analysis (TODO)
-- Currently `POST /api/analyze` proxies to the external Render backend.
-- **Next step**: Move the OpenAI call into the Next.js route handler directly. The API key stays server-side only and is never sent to the browser. Remove the Render dependency.
+- `POST /api/analyze` runs server-side in Next.js using the OpenAI key from environment variables.
+- **Next step**: Add production account/subscription gating when paid plans are enabled.
 
 ### 5. Service Worker (DONE)
 - Registration handled via `useEffect` in `AppShell.jsx`.
@@ -81,8 +81,7 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 | ~~No favicon.svg in `/public`~~ | ~~Low~~ | **RESOLVED** — `favicon.svg` added |
 | ~~Service worker not registered~~ | ~~Medium~~ | **RESOLVED** — registered via `useEffect` in `AppShell.jsx` |
 | ~~`/terms` and `/privacy` links 404~~ | ~~Low~~ | **RESOLVED** — pages created |
-| Manage Billing URL hardcoded | Low | `https://billing.stripe.com/p/login/` — should be env var |
-| External Render backend still required | Medium | `/api/analyze` proxies to Render. Render must be running for AI features |
+| Paid subscription enforcement not enabled | Medium | Deferred until checkout/subscriptions are added |
 | `window.Howl` CDN reference removed | Fixed | Howler now imported as npm package — no action needed |
 
 ---
@@ -94,9 +93,9 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 3. **Add `.env.local`**: Copy `.env.example` → `.env.local` and set `NEXT_PUBLIC_BACKEND_URL`.
 4. ~~**Service worker**~~ — Done
 5. **Auth layer**: Add NextAuth.js or Clerk. Gate the dashboard behind session check.
-6. **Stripe**: Build the subscription checkout flow.
+6. **Stripe**: Build the subscription checkout flow when paid plans are ready.
 7. **Database**: Connect Supabase. Migrate localStorage data (stories, boards, custom sounds) to the DB.
-8. **Move AI calls server-side**: Delete the Render backend. The OpenAI key lives only in Next.js env.
+8. **Production auth**: Enforce account/subscription access around paid API routes.
 9. **Deploy to Vercel**: `git push` → Vercel auto-deploys. Set env vars in Vercel dashboard.
 
 ---

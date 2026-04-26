@@ -3,7 +3,7 @@
 // Version: 3.0.0 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
 
 // ===== IMPORT MODULES =====
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import { CONFIG } from '../lib/config.js';
 import { LRUCache, MemoryMonitor, CacheManager } from '../lib/modules/memory-manager.js';
 import PerformanceMonitor from '../lib/modules/performance-monitor.js';
@@ -34,7 +34,7 @@ import { applyHorrorRestraint } from '../lib/modules/scene-toggles.js';
 import { installErrorReporter } from '../lib/modules/error-reporter.js';
 
 // Expose CONFIG globally for modules that read window.CONFIG (e.g., api.js debugLog)
-try { window.CONFIG = CONFIG; } catch (_) {}
+try { window.CONFIG = CONFIG; window.Howler = Howler; } catch (_) {}
 
 // Debug logger - only logs when DEBUG_MODE is true
 const debugLog = (...args) => {
@@ -101,22 +101,10 @@ function setAccessToken(token) {
 
 // ===== HELPER FUNCTIONS =====
 function getOpenAIKey() {
-    return null; // OpenAI key now managed on the backend — users subscribe instead
+    return null; // OpenAI key is managed on the backend.
 }
 
 function setOpenAIKey(key) {} // no-op
-
-function getPixabayKey() {
-    return storage.get('pixabay_api_key') || null;
-}
-
-function setPixabayKey(key) {
-    if (key) {
-        storage.set('pixabay_api_key', key);
-    } else {
-        storage.remove('pixabay_api_key');
-    }
-}
 
 // Speech recognition feature detection
 function isSpeechRecognitionAvailable() {
@@ -155,11 +143,10 @@ class SuiteRhythm {
         this.lastMusicChange = 0; // Timestamp of last music change
         this.musicChangeThreshold = 30000; // Minimum 30s between music changes
         
-        // Access token for AI backend (subscription-based)
+        // Access token for AI backend.
         this.accessToken = getAccessToken();
-        this.pixabayApiKey = getPixabayKey();
         
-        // Refresh token on visibility change (in case user subscribed in another tab)
+        // Refresh token on visibility change.
         this._visibilityHandler = () => {
             if (!document.hidden) {
                 this.accessToken = getAccessToken();
@@ -621,7 +608,7 @@ class SuiteRhythm {
 
     async loadSavedSounds() {
         try {
-            const resp = await fetch('saved-sounds.json', { cache: 'no-cache' });
+            const resp = await fetch('/saved-sounds.json', { cache: 'no-cache' });
             if (!resp.ok) return;
             const data = await resp.json();
             if (Array.isArray(data?.files)) {
@@ -648,7 +635,8 @@ class SuiteRhythm {
     // ===== STORIES =====
     async loadStories() {
         try {
-            const resp = await fetch('stories.json', { cache: 'no-cache' });
+            let resp = await fetch('/api/stories', { cache: 'no-cache' });
+            if (!resp.ok) resp = await fetch('/stories.json', { cache: 'no-cache' });
             if (!resp.ok) return;
             const data = await resp.json();
             this.stories = {};
@@ -945,8 +933,8 @@ class SuiteRhythm {
                 if (demoStatus) demoStatus.textContent = 'Generating AI narration — this may take 30+ seconds, please wait...';
                 const ttsUrl = `${backendUrl}/api/tts`;
 
-                // ElevenLabs TTS has ~5000 char limit — split if needed
-                const chunks = this._splitTextForTTS(textFromHere, 5000);
+                // The TTS route caps request size, so split long stories into safe chunks.
+                const chunks = this._splitTextForTTS(textFromHere, 3000);
                 const audioBlobs = [];
 
                 this._ttsAbortCtrl = new AbortController();
@@ -2893,30 +2881,14 @@ class SuiteRhythm {
                 el.textContent = 'Active subscription';
             }
         } else {
-            el.textContent = 'No active subscription. Subscribe to unlock AI features.';
+            el.textContent = 'Beta access active. Paid subscription enforcement is not enabled yet.';
         }
     }
 
     async startCheckout() {
-        const backendUrl = this.getBackendUrl();
-        try {
-            this.updateStatus('Redirecting to checkout...');
-            const origin = location.origin;
-            const base = location.pathname.replace(/\/[^/]*$/, '/');
-            const resp = await fetch(`${backendUrl}/create-checkout-session`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    successUrl: `${origin}${base}?session_id={CHECKOUT_SESSION_ID}`,
-                    cancelUrl: `${origin}${base}`,
-                }),
-            });
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const { url } = await resp.json();
-            window.location.href = url;
-        } catch (err) {
-            this.updateStatus(`Checkout error: ${err.message}`);
-        }
+        this.backendAvailable = true;
+        this.closeSubscribeModal?.();
+        this.updateStatus('Beta access enabled. Paid checkout is not active yet.');
     }
 
     async saveToken() {
@@ -2940,7 +2912,7 @@ class SuiteRhythm {
     async refreshToken() {
         const backendUrl = this.getBackendUrl();
         if (!this.accessToken) {
-            this.updateStatus('No token to refresh — please subscribe first.');
+            this.updateStatus('No access token to refresh yet.');
             return;
         }
         try {
@@ -3083,7 +3055,7 @@ class SuiteRhythm {
             this.stopListening();
             this.stopAllAudio();
             
-            this.updateStatus('ðŸ”„ Refreshing app and clearing cache...');
+            this.updateStatus('Refreshing app and clearing cache...');
             
             // Unregister service workers
             if ('serviceWorker' in navigator) {
@@ -3110,18 +3082,34 @@ class SuiteRhythm {
         }
     }
     
-    saveAudioKeys() {
-        const pixabayInput = document.getElementById('pixabayKeyInput');
-        const pixabayKey = pixabayInput?.value.trim() ?? '';
-        
-        if (pixabayKey.length > 10) {
-            this.pixabayApiKey = pixabayKey;
-            setPixabayKey(pixabayKey);
-            this.updateApiStatusIndicators();
-            this.updateStatus('Audio source enabled: Pixabay');
-            alert('Pixabay API Key Saved!\n\nYou will now hear high-quality sounds when SuiteRhythm analyzes your speech.');
-        } else {
-            alert('Please enter a valid Pixabay API key (10+ characters).');
+    async saveAudioKeys() {
+        const status = document.getElementById('pixabayKeyStatus');
+        const btn = document.getElementById('saveAudioKeys');
+        if (btn) btn.disabled = true;
+        if (status) status.textContent = 'Checking Pixabay proxy...';
+
+        try {
+            const headers = {};
+            const tok = typeof window.getSuiteRhythmAuthToken === 'function'
+                ? await window.getSuiteRhythmAuthToken()
+                : getAccessToken();
+            if (tok) headers.Authorization = `Bearer ${tok}`;
+
+            const resp = await fetch('/api/pixabay?q=rain&per_page=1', { headers, cache: 'no-cache' });
+            if (resp.ok) {
+                if (status) status.textContent = 'Pixabay proxy is configured and responding.';
+                this.updateStatus('Audio source available: Pixabay proxy');
+            } else if (resp.status === 503) {
+                if (status) status.textContent = 'Pixabay proxy is not configured on the server. Built-in library will be used.';
+                this.updateStatus('Using built-in sound library');
+            } else {
+                if (status) status.textContent = `Pixabay proxy check failed (${resp.status}). Built-in library will be used.`;
+            }
+        } catch (err) {
+            if (status) status.textContent = 'Pixabay proxy check failed. Built-in library will be used.';
+            debugLog('Pixabay proxy check failed:', err?.message || err);
+        } finally {
+            if (btn) btn.disabled = false;
         }
     }
     
@@ -3479,14 +3467,15 @@ class SuiteRhythm {
         // Control Buttons
         const testMicBtnEl = document.getElementById('testMicBtn');
         if (testMicBtnEl) testMicBtnEl.addEventListener('click', () => this.testMicrophone());
-        document.getElementById('startBtn').addEventListener('click', () => {
+        const startBtnRoot = document.getElementById('startBtn');
+        if (startBtnRoot) startBtnRoot.addEventListener('click', () => {
             const btn = document.getElementById('startBtn');
             if (btn.disabled) return;
             btn.disabled = true;
             setTimeout(() => { btn.disabled = false; }, 1000);
             this.startListening();
         });
-        document.getElementById('stopBtn').addEventListener('click', () => this.stopListening());
+        document.getElementById('stopBtn')?.addEventListener('click', () => this.stopListening());
         const stopAudioBtn = document.getElementById('stopAudioBtn');
         if (stopAudioBtn) {
             stopAudioBtn.addEventListener('click', () => {
@@ -4323,6 +4312,15 @@ class SuiteRhythm {
         this.recordingDest = this.audioContext.createMediaStreamDestination();
         // Tap the limiter so recordings match what the user actually heard.
         this.masterLimiter.connect(this.recordingDest);
+        this.howlerRecordingDest = null;
+        try {
+            if (Howler?.ctx && Howler?.masterGain?.connect) {
+                this.howlerRecordingDest = Howler.ctx.createMediaStreamDestination();
+                Howler.masterGain.connect(this.howlerRecordingDest);
+            }
+        } catch (e) {
+            debugLog('Howler recording tap unavailable:', e?.message || e);
+        }
         this._sessionRecorder = null;
         this._sessionChunks = [];
 
@@ -4407,6 +4405,21 @@ class SuiteRhythm {
         } catch (e) {
             console.warn('[reverb] IR build failed:', e);
             return null;
+        }
+    }
+
+    _tapHowlHtml5ForRecording(howl) {
+        if (!this.audioContext || !howl?._sounds?.length) return;
+        for (const sound of howl._sounds) {
+            const node = sound?._node;
+            if (!node || node._suiteRhythmMediaSource) continue;
+            try {
+                const source = this.audioContext.createMediaElementSource(node);
+                source.connect(this.masterLimiter || this.audioContext.destination);
+                node._suiteRhythmMediaSource = source;
+            } catch (err) {
+                debugLog('HTML5 audio recording tap unavailable:', err?.message || err);
+            }
         }
     }
 
@@ -6397,19 +6410,26 @@ class SuiteRhythm {
     // ===== PIXABAY INTEGRATION =====
     async searchPixabay(query, type) {
         try {
-            const searchQuery = encodeURIComponent(query);
             const category = type === 'music' ? 'music' : '';
             const minDuration = type === 'music' ? 30 : 0;
             const maxDuration = type === 'music' ? 300 : 15;
             const params = new URLSearchParams({
-                q: searchQuery,
+                q: query,
                 ...(category && { category }),
                 min_duration: minDuration,
                 max_duration: maxDuration,
                 per_page: 5
             });
-            
-            const response = await fetch(`/api/pixabay?${params}`);
+
+            const headers = {};
+            try {
+                const tok = typeof window.getSuiteRhythmAuthToken === 'function'
+                    ? await window.getSuiteRhythmAuthToken()
+                    : getAccessToken();
+                if (tok) headers.Authorization = `Bearer ${tok}`;
+            } catch (_) {}
+
+            const response = await fetch(`/api/pixabay?${params}`, { headers });
             if (!response.ok) {
                 if (response.status === 503) {
                     debugLog('Pixabay not available (server key missing)');
@@ -6460,19 +6480,16 @@ class SuiteRhythm {
                 return local;
             }
         }
-        // Try Pixabay if key is set
-        let url = null;
-        
-        if (this.pixabayApiKey) {
-            url = await this.searchPixabay(query, type);
-            if (url) {
-                return url;
-            }
+        // Try the server-side Pixabay proxy if configured. The browser never
+        // needs to store a user-provided Pixabay key.
+        const url = await this.searchPixabay(query, type);
+        if (url) {
+            return url;
         }
-        
-        if (!this.pixabayApiKey && !this._noApiKeysWarned) {
+
+        if (!this._noApiKeysWarned) {
             this._noApiKeysWarned = true;
-            debugLog('No Pixabay API key — using local sound library only.');
+            debugLog('Pixabay unavailable - using local sound library only.');
         }
         
         return url;
@@ -6781,6 +6798,7 @@ class SuiteRhythm {
             // bus while the old one fades out on the active bus. Old Howl is
             // stopped/unloaded ~100ms after the fade completes.
             this.musicCrossfader.crossfadeToHowl(newHowl, targetVol, crossfadeMs);
+            setTimeout(() => this._tapHowlHtml5ForRecording(newHowl), 0);
             if (oldHowl && oldHowl._howl && oldHowl._howl !== newHowl) {
                 setTimeout(() => { try { oldHowl._howl.unload(); } catch (_) {} }, crossfadeMs + 150);
             }
@@ -6793,6 +6811,7 @@ class SuiteRhythm {
                 setTimeout(() => { try { old.stop(); old.unload(); } catch (_) {} }, crossfadeMs + 100);
             }
             newHowl.play();
+            setTimeout(() => this._tapHowlHtml5ForRecording(newHowl), 0);
             try { newHowl.fade(0, targetVol, crossfadeMs); } catch (_) {}
         }
 
@@ -6874,6 +6893,7 @@ class SuiteRhythm {
         });
         
         howl.play();
+        setTimeout(() => this._tapHowlHtml5ForRecording(howl), 0);
         howl.fade(0, this.ambientBedGain * this.musicLevel, crossfadeMs);
         
         this.ambientBed = { _howl: howl, name: catalogEntry.id };
@@ -9019,7 +9039,7 @@ class SuiteRhythm {
         try {
             const backendUrl = typeof getBackendUrl === 'function' ? getBackendUrl() : '';
             const ttsUrl = `${backendUrl}/api/tts`;
-            const chunks = this._splitTextForTTS(text, 5000);
+            const chunks = this._splitTextForTTS(text, 3000);
             const audioBlobs = [];
 
             for (const chunk of chunks) {
@@ -9050,7 +9070,7 @@ class SuiteRhythm {
             this._readAloudAudio.play();
         } catch (e) {
             console.error('[ReadAloud]', e);
-            this.showToast('Read Aloud failed — check your subscription', 'error');
+            this.showToast('Read Aloud failed - check your AI/TTS configuration', 'error');
             if (btn) { btn.textContent = 'Read Aloud (AI Voice)'; btn.disabled = false; }
         }
     }
@@ -9607,7 +9627,7 @@ class SuiteRhythm {
             if (this.cbTabs.length > 1) {
                 const closeBtn = document.createElement('button');
                 closeBtn.className = 'cb-tab-close';
-                closeBtn.textContent = 'Ã—';
+                closeBtn.textContent = 'x';
                 closeBtn.title = 'Delete this scene tab';
                 closeBtn.setAttribute('aria-label', `Delete tab: ${tab.name}`);
                 closeBtn.addEventListener('click', (e) => { e.stopPropagation(); this._cbDeleteTab(i); });
@@ -10086,6 +10106,12 @@ class SuiteRhythm {
     }
 
     // ===== SESSION RECORDING (AUDIO EXPORT) =====
+    getSessionRecordingStream() {
+        if (this.howlerRecordingDest?.stream) return this.howlerRecordingDest.stream;
+        if (this.recordingDest?.stream) return this.recordingDest.stream;
+        return null;
+    }
+
     setupSessionRecording() {
         const startBtn = document.getElementById('recStartBtn');
         const stopBtn = document.getElementById('recStopBtn');
@@ -10110,17 +10136,19 @@ class SuiteRhythm {
         let sfxBlob = null;
 
         startBtn.addEventListener('click', () => {
-            if (!this.recordingDest) {
+            const recordingStream = this.getSessionRecordingStream();
+            if (!recordingStream) {
                 this.updateStatus('Recording not available — audio context not initialized');
                 return;
             }
+            const usingHowlerStream = recordingStream === this.howlerRecordingDest?.stream;
             this._sessionChunks = [];
             try {
-                this._sessionRecorder = new MediaRecorder(this.recordingDest.stream, {
+                this._sessionRecorder = new MediaRecorder(recordingStream, {
                     mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm'
                 });
             } catch (_) {
-                this._sessionRecorder = new MediaRecorder(this.recordingDest.stream);
+                this._sessionRecorder = new MediaRecorder(recordingStream);
             }
             this._sessionRecorder.ondataavailable = (e) => { if (e.data.size > 0) this._sessionChunks.push(e.data); };
             this._sessionRecorder.onstop = () => {
@@ -10136,13 +10164,19 @@ class SuiteRhythm {
             musicChunks = []; sfxChunks = [];
             musicBlob = null; sfxBlob = null;
             const mimeOpts = { mimeType: MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/webm' };
+            if (stemsBtn) {
+                stemsBtn.disabled = usingHowlerStream;
+                stemsBtn.title = usingHowlerStream ? 'Stem export is unavailable for the browser mixed audio stream.' : '';
+            }
             try {
+                if (usingHowlerStream) throw new Error('stem recording unavailable for Howler stream');
                 musicRecorder = new MediaRecorder(this.musicRecordDest.stream, mimeOpts);
                 musicRecorder.ondataavailable = (e) => { if (e.data.size > 0) musicChunks.push(e.data); };
                 musicRecorder.onstop = () => { musicBlob = new Blob(musicChunks, { type: 'audio/webm' }); };
                 musicRecorder.start(1000);
             } catch (_) { musicRecorder = null; }
             try {
+                if (usingHowlerStream) throw new Error('stem recording unavailable for Howler stream');
                 sfxRecorder = new MediaRecorder(this.sfxRecordDest.stream, mimeOpts);
                 sfxRecorder.ondataavailable = (e) => { if (e.data.size > 0) sfxChunks.push(e.data); };
                 sfxRecorder.onstop = () => { sfxBlob = new Blob(sfxChunks, { type: 'audio/webm' }); };
@@ -10864,6 +10898,66 @@ function initializeMenuToggles() {
                     s.classList.toggle('active', (s.dataset.paletteValue ?? '') === val);
                 });
             });
+        });
+    }
+
+    // Full look presets: layout treatment plus suggested theme/palette.
+    const lookPicker = document.getElementById('lookPicker');
+    const lookNameEl = document.getElementById('lookName');
+    const lookNames = {
+        'classic': 'Classic Console',
+        'studio-console': 'Studio Console',
+        'broadcast-neon': 'Broadcast Neon',
+        'story-paper': 'Story Paper',
+        'control-deck': 'Control Deck',
+        'cinema-wide': 'Cinema Wide',
+    };
+    const syncThemeCards = (value) => {
+        if (!themePicker) return;
+        themePicker.querySelectorAll('.theme-card').forEach(card => {
+            card.classList.toggle('active', card.dataset.themeValue === value);
+        });
+    };
+    const syncPaletteCards = (value) => {
+        if (!palettePicker) return;
+        palettePicker.querySelectorAll('.palette-swatch').forEach(btn => {
+            btn.classList.toggle('active', (btn.dataset.paletteValue ?? '') === value);
+        });
+        if (paletteNameEl) paletteNameEl.textContent = paletteNames[value] ?? 'Deep Violet';
+    };
+    const applyLook = (value, card = null) => {
+        const look = value || 'classic';
+        document.documentElement.setAttribute('data-look', look);
+        localStorage.setItem('SuiteRhythm_look', look);
+        if (lookNameEl) lookNameEl.textContent = lookNames[look] ?? 'Classic Console';
+        if (lookPicker) {
+            lookPicker.querySelectorAll('.look-card').forEach(btn => {
+                btn.classList.toggle('active', (btn.dataset.lookValue || 'classic') === look);
+            });
+        }
+        const source = card || lookPicker?.querySelector(`[data-look-value="${look}"]`);
+        const theme = source?.dataset.lookTheme;
+        const palette = source?.dataset.lookPalette;
+        if (theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('SuiteRhythm_theme', theme);
+            syncThemeCards(theme);
+        }
+        if (palette !== undefined) {
+            if (palette) document.documentElement.setAttribute('data-color-palette', palette);
+            else document.documentElement.removeAttribute('data-color-palette');
+            localStorage.setItem('SuiteRhythm_palette', palette);
+            syncPaletteCards(palette);
+        }
+    };
+    if (lookPicker) {
+        const activeLook = localStorage.getItem('SuiteRhythm_look') || 'classic';
+        document.documentElement.setAttribute('data-look', activeLook);
+        if (lookNameEl) lookNameEl.textContent = lookNames[activeLook] ?? 'Classic Console';
+        lookPicker.querySelectorAll('.look-card').forEach(card => {
+            const cardValue = card.dataset.lookValue || 'classic';
+            card.classList.toggle('active', cardValue === activeLook);
+            card.addEventListener('click', () => applyLook(cardValue, card));
         });
     }
 }

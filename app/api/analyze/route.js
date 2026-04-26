@@ -8,63 +8,15 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
 import { MODE_CONTEXTS, MODE_RULES } from '../../../lib/modules/ai-director.js';
 import { requireAuth } from '../../../lib/api-auth.js';
 import { classifyLocal } from '../../../lib/modules/local-classifier.js';
+import { buildCatalogSummary } from '../../../lib/server-catalog.js';
+import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 let _openai;
 function getOpenAI() {
   return (_openai ??= new OpenAI({ apiKey: process.env.OPENAI_API_KEY }));
-}
-
-// --- Load sound catalog once at startup for the AI prompt ---
-let _catalogSummary = null;
-function getCatalogSummary() {
-  if (_catalogSummary) return _catalogSummary;
-  try {
-    const filePath = path.join(process.cwd(), 'public', 'saved-sounds.json');
-    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const files = data?.files || [];
-
-    const music = files
-      .filter(f => f.type === 'music')
-      .map(f => `${f.name} [${(f.keywords || []).slice(0, 4).join(', ')}]`);
-    const sfx = files
-      .filter(f => f.type !== 'music')
-      .map(f => f.name);
-
-    _catalogSummary = `\nAVAILABLE MUSIC (${music.length} tracks — pick by exact name):\n${music.join(' | ')}\n\nAVAILABLE SFX (${sfx.length} sounds — pick by exact name):\n${sfx.join(' | ')}`;
-  } catch (e) {
-    console.warn('[analyze] Could not load catalog summary:', e.message);
-    _catalogSummary = '';
-  }
-  return _catalogSummary;
-}
-
-// --- In-memory rate limiting (per IP, resets on deploy) ---
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 15;           // max requests per window per IP
-const rateLimitMap = new Map();      // ip -> { count, resetAt }
-
-function checkRateLimit(ip) {
-  const now = Date.now();
-  let entry = rateLimitMap.get(ip);
-  if (!entry || now >= entry.resetAt) {
-    entry = { count: 0, resetAt: now + RATE_LIMIT_WINDOW_MS };
-    rateLimitMap.set(ip, entry);
-  }
-  entry.count++;
-  rateLimitMap.set(ip, entry);
-  const remaining = Math.max(0, RATE_LIMIT_MAX - entry.count);
-  // Inline cleanup: cap map size and prune stale entries
-  if (rateLimitMap.size > 10000) {
-    for (const [k, v] of rateLimitMap) {
-      if (now >= v.resetAt) rateLimitMap.delete(k);
-    }
-  }
-  return { allowed: entry.count <= RATE_LIMIT_MAX, remaining, resetAt: entry.resetAt };
 }
 
 // --- Response cache (hash-based dedup for identical transcripts) ---
@@ -152,8 +104,8 @@ OTHER RULES:
 - When "sceneStabilityMs" is low (< 10000), be cautious: set sfx confidence 0.5+ only if you are sure, else drop the sfx.
 - When "creatorMode" is true (live streamer context), you may be slightly more responsive with SFX, but still never duplicate active or consumed sounds.`;
 
-function buildSystemPrompt() {
-  return SYSTEM_PROMPT + getCatalogSummary();
+function buildSystemPrompt(transcript, mode, context) {
+  return SYSTEM_PROMPT + buildCatalogSummary({ transcript, mode, context });
 }
 
 function buildUserMessage(transcript, mode, context) {
@@ -205,20 +157,17 @@ export async function POST(request) {
     return NextResponse.json({ error: 'OpenAI not configured' }, { status: 503 });
   }
 
-  // Rate limiting by IP
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-    || request.headers.get('x-real-ip')
-    || 'unknown';
-  const { allowed, remaining, resetAt } = checkRateLimit(ip);
-  if (!allowed) {
+  const rate = checkRateLimit(request, {
+    namespace: 'analyze',
+    limit: 15,
+    windowMs: 60_000,
+  });
+  if (!rate.allowed) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Try again shortly.' },
       {
         status: 429,
-        headers: {
-          'Retry-After': String(Math.ceil((resetAt - Date.now()) / 1000)),
-          'X-RateLimit-Remaining': '0',
-        },
+        headers: rateLimitHeaders(rate),
       }
     );
   }
@@ -243,7 +192,7 @@ export async function POST(request) {
   const cached = getCache(cacheKey);
   if (cached) {
     const res = NextResponse.json(cached);
-    res.headers.set('X-RateLimit-Remaining', String(remaining));
+    res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Cache', 'HIT');
     return res;
   }
@@ -257,7 +206,7 @@ export async function POST(request) {
       temperature: 0.4,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: buildSystemPrompt() },
+        { role: 'system', content: buildSystemPrompt(transcript, mode, context) },
         { role: 'user', content: userMessage },
       ],
     });
@@ -270,7 +219,7 @@ export async function POST(request) {
     setCache(cacheKey, data);
 
     const res = NextResponse.json(data);
-    res.headers.set('X-RateLimit-Remaining', String(remaining));
+    res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Cache', 'MISS');
     return res;
   } catch (err) {
@@ -292,7 +241,7 @@ export async function POST(request) {
     };
     const status = err?.status === 429 ? 429 : 200; // 200 lets client merge with ruleBased
     const res = NextResponse.json(fallback, { status });
-    res.headers.set('X-RateLimit-Remaining', String(remaining));
+    res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Fallback', fallback._reason);
     return res;
   }

@@ -16,9 +16,9 @@ export default function DashboardSection() {
 
       <div id="noKeyBanner" className="no-key-banner hidden">
         <span>
-          Running in keyword-only mode — instant triggers active. Subscribe to unlock full scene listening.
+          Running in keyword-only mode. Full scene listening is available during the beta when the AI API is configured.
         </span>
-        <button id="showSubscribeModal">Subscribe</button>
+        <button id="showSubscribeModal">Beta Access</button>
       </div>
 
       {/* Use Case Cards */}

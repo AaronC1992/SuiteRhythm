@@ -20,8 +20,8 @@ export default function PrivacyPage() {
           language model. Not stored permanently &mdash; used only for the duration of the request.
         </li>
         <li>
-          <strong>Account data:</strong> Email address and subscription status if you create an
-          account.
+          <strong>Account data:</strong> Email address and access status if you create an account
+          or join a future paid plan.
         </li>
         <li>
           <strong>Local storage:</strong> Preferences, scene presets, and custom sounds are stored
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
       <h2>3. Third-Party Services</h2>
       <ul>
         <li><strong>OpenAI:</strong> Processes transcripts. Subject to <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener noreferrer" style={{ color: '#bb86fc' }}>OpenAI&rsquo;s Privacy Policy</a>.</li>
-        <li><strong>Stripe:</strong> Handles payments. Subject to <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#bb86fc' }}>Stripe&rsquo;s Privacy Policy</a>.</li>
+        <li><strong>Payments:</strong> No live payment processor is active in the beta. If paid plans are introduced, the payment provider will be disclosed before checkout.</li>
         <li><strong>Supabase:</strong> Stores account and story data.</li>
         <li><strong>Cloudflare R2:</strong> Hosts sound files.</li>
       </ul>

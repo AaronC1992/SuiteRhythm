@@ -6,6 +6,7 @@
  */
 
 import { requireAuth } from '../../../lib/api-auth.js';
+import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 const DEFAULT_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'PPzYpIqttlTYA83688JI';
@@ -14,6 +15,18 @@ export async function POST(request) {
     // Auth check
     const denied = requireAuth(request);
     if (denied) return denied;
+
+    const rate = checkRateLimit(request, {
+        namespace: 'tts',
+        limit: 8,
+        windowMs: 60_000,
+    });
+    if (!rate.allowed) {
+        return new Response(
+            JSON.stringify({ error: 'Rate limit exceeded. Try again shortly.' }),
+            { status: 429, headers: { 'Content-Type': 'application/json', ...rateLimitHeaders(rate) } }
+        );
+    }
 
     if (!ELEVENLABS_API_KEY) {
         return new Response(
@@ -41,10 +54,10 @@ export async function POST(request) {
         );
     }
 
-    // Cap input length to prevent abuse (ElevenLabs limit is ~5000 chars)
-    if (text.length > 5000) {
+    // Keep each request below the upstream cap and inside a sane cost envelope.
+    if (text.length > 3000) {
         return new Response(
-            JSON.stringify({ error: 'Text exceeds 5000 character limit' }),
+            JSON.stringify({ error: 'Text exceeds 3000 character limit' }),
             { status: 400, headers: { 'Content-Type': 'application/json' } }
         );
     }

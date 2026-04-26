@@ -117,7 +117,7 @@ export default function Sidebar() {
 
       <div className="sidebar-footer">
         <div className="sidebar-api-row">
-          <button id="manageSubscriptionBtn" className="sidebar-reset-key">Manage</button>
+          <button id="manageSubscriptionBtn" className="sidebar-reset-key">Access</button>
         </div>
         <div className="sidebar-footer-actions">
           <button id="tutorialBtn" className="sidebar-action-btn">How to Use</button>

@@ -9,6 +9,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '../../../lib/supabase.js';
 import { requireAuth } from '../../../lib/api-auth.js';
+import { getStaticStoriesForApi } from '../../../lib/server-catalog.js';
+import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 export async function GET() {
   try {
@@ -25,8 +27,13 @@ export async function GET() {
 
     return NextResponse.json({ stories });
   } catch (err) {
-    console.error('[/api/stories GET]', err);
-    return NextResponse.json({ error: 'Failed to load stories' }, { status: 500 });
+    console.warn('[/api/stories GET] Supabase unavailable, using static stories:', err?.message || err);
+    try {
+      return NextResponse.json({ stories: getStaticStoriesForApi(), source: 'static' });
+    } catch (fallbackErr) {
+      console.error('[/api/stories GET] Static fallback failed:', fallbackErr);
+      return NextResponse.json({ error: 'Failed to load stories' }, { status: 500 });
+    }
   }
 }
 
@@ -35,12 +42,27 @@ export async function POST(request) {
   const denied = requireAuth(request);
   if (denied) return denied;
 
+  const rate = checkRateLimit(request, {
+    namespace: 'stories-post',
+    limit: 10,
+    windowMs: 60_000,
+  });
+  if (!rate.allowed) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Try again shortly.' },
+      { status: 429, headers: rateLimitHeaders(rate) }
+    );
+  }
+
   try {
     const body = await request.json();
     const { title, theme, description, text } = body;
 
     if (!title || !text) {
       return NextResponse.json({ error: 'title and text are required' }, { status: 400 });
+    }
+    if (title.length > 120 || text.length > 50000) {
+      return NextResponse.json({ error: 'story is too large' }, { status: 400 });
     }
 
     const { data, error } = await supabaseAdmin

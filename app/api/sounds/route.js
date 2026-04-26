@@ -6,6 +6,7 @@
 
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '../../../lib/supabase.js';
+import { getStaticSoundsForApi } from '../../../lib/server-catalog.js';
 
 export async function GET() {
   try {
@@ -18,7 +19,12 @@ export async function GET() {
 
     return NextResponse.json({ sounds: data ?? [] });
   } catch (err) {
-    console.error('[/api/sounds]', err);
-    return NextResponse.json({ error: 'Failed to load sound catalog' }, { status: 500 });
+    console.warn('[/api/sounds] Supabase unavailable, using static catalog:', err?.message || err);
+    try {
+      return NextResponse.json({ sounds: getStaticSoundsForApi(), source: 'static' });
+    } catch (fallbackErr) {
+      console.error('[/api/sounds] Static fallback failed:', fallbackErr);
+      return NextResponse.json({ error: 'Failed to load sound catalog' }, { status: 500 });
+    }
   }
 }

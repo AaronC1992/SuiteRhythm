@@ -1,7 +1,112 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
+
+const LOOK_PRESETS = [
+  {
+    value: 'classic',
+    name: 'Classic Console',
+    description: 'Current SuiteRhythm layout with a sharper red/orange pulse.',
+    previewClass: 'look-preview-classic',
+    theme: 'dark',
+    palette: 'crimson-circuit',
+  },
+  {
+    value: 'studio-console',
+    name: 'Studio Console',
+    description: 'Dense production desk, compact panels, cool meters.',
+    previewClass: 'look-preview-studio',
+    theme: 'dark',
+    palette: 'arctic-minimal',
+  },
+  {
+    value: 'broadcast-neon',
+    name: 'Broadcast Neon',
+    description: 'Horizontal show-control layout built for stream setups.',
+    previewClass: 'look-preview-broadcast',
+    theme: 'dark',
+    palette: 'neon-pink',
+  },
+  {
+    value: 'story-paper',
+    name: 'Story Paper',
+    description: 'Readable writers desk with soft surfaces and editorial spacing.',
+    previewClass: 'look-preview-paper',
+    theme: 'light',
+    palette: 'rose-gold',
+  },
+  {
+    value: 'control-deck',
+    name: 'Control Deck',
+    description: 'Compact left rail and tighter tool panels for fast triggering.',
+    previewClass: 'look-preview-deck',
+    theme: 'dark',
+    palette: 'amber-dusk',
+  },
+  {
+    value: 'cinema-wide',
+    name: 'Cinema Wide',
+    description: 'Roomy cinematic composition for demos and live sessions.',
+    previewClass: 'look-preview-cinema',
+    theme: 'dark',
+    palette: 'sunset-funk',
+  },
+];
+
+const PALETTE_NAMES = {
+  '': 'Deep Violet',
+  'midnight-ocean': 'Midnight Ocean',
+  'crimson-circuit': 'Crimson Circuit',
+  'forest-synth': 'Forest Synth',
+  'rose-gold': 'Rose Gold',
+  'arctic-minimal': 'Arctic Minimal',
+  'sunset-funk': 'Sunset Funk',
+  'pastel-vaporwave': 'Pastel Vaporwave',
+  'monochrome-pro': 'Monochrome Pro',
+  'toxic-goblin': 'Toxic Goblin',
+  'neon-pink': 'Neon Pink',
+  'deep-space': 'Deep Space',
+  'matrix': 'Matrix',
+  'cobalt-storm': 'Cobalt Storm',
+  'amber-dusk': 'Amber Dusk',
+  'neon-arcade': 'Neon Arcade',
+};
+
 /** Settings section — volume, playback options, scene presets, custom triggers. */
 export default function SettingsSection() {
+  const [activeLook, setActiveLook] = useState('classic');
+  const activeLookName = useMemo(
+    () => LOOK_PRESETS.find((preset) => preset.value === activeLook)?.name ?? 'Classic Console',
+    [activeLook]
+  );
+
+  useEffect(() => {
+    setActiveLook(localStorage.getItem('SuiteRhythm_look') || 'classic');
+  }, []);
+
+  function applyLookPreset(preset) {
+    const root = document.documentElement;
+    root.setAttribute('data-look', preset.value);
+    root.setAttribute('data-theme', preset.theme);
+    if (preset.palette) root.setAttribute('data-color-palette', preset.palette);
+    else root.removeAttribute('data-color-palette');
+
+    localStorage.setItem('SuiteRhythm_look', preset.value);
+    localStorage.setItem('SuiteRhythm_theme', preset.theme);
+    localStorage.setItem('SuiteRhythm_palette', preset.palette);
+
+    document.querySelectorAll('.theme-card').forEach((card) => {
+      card.classList.toggle('active', card.dataset.themeValue === preset.theme);
+    });
+    document.querySelectorAll('.palette-swatch').forEach((swatch) => {
+      swatch.classList.toggle('active', (swatch.dataset.paletteValue ?? '') === preset.palette);
+    });
+    const paletteName = document.getElementById('paletteName');
+    if (paletteName) paletteName.textContent = PALETTE_NAMES[preset.palette] ?? 'Deep Violet';
+
+    setActiveLook(preset.value);
+  }
+
   return (
     <div id="settingsSection" className="app-section hidden">
       <div className="section-header">
@@ -12,11 +117,33 @@ export default function SettingsSection() {
 
         {/* Appearance / Theme */}
         <section className="menu-section">
-          <button className="menu-toggle" id="appearanceMenuToggle">
+          <button className="menu-toggle active" id="appearanceMenuToggle">
             Appearance
             <span className="toggle-indicator">&#9660;</span>
           </button>
-          <div className="menu-content hidden" id="appearanceMenuContent">
+          <div className="menu-content" id="appearanceMenuContent">
+            <h3>Look Presets</h3>
+            <div className="look-picker" id="lookPicker">
+              {LOOK_PRESETS.map((preset) => (
+                <button
+                  className={`look-card${activeLook === preset.value ? ' active' : ''}`}
+                  data-look-value={preset.value}
+                  data-look-theme={preset.theme}
+                  data-look-palette={preset.palette}
+                  key={preset.value}
+                  onClick={() => applyLookPreset(preset)}
+                  type="button"
+                >
+                  <div className={`look-preview ${preset.previewClass}`}><span /><span /><span /></div>
+                  <div className="look-card-copy">
+                    <strong>{preset.name}</strong>
+                    <span>{preset.description}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="look-label" id="lookName">{activeLookName}</div>
+
             <h3>Theme</h3>
             <div className="theme-picker" id="themePicker">
               <button className="theme-card active" data-theme-value="dark" type="button">
@@ -52,30 +179,21 @@ export default function SettingsSection() {
           </div>
         </section>
 
-        {/* Subscription Management */}
+        {/* Beta Access */}
         <section className="menu-section">
           <button className="menu-toggle" id="subscriptionMenuToggle">
-            Subscription
+            Beta Access
             <span className="toggle-indicator">&#9660;</span>
           </button>
           <div className="menu-content hidden" id="subscriptionMenuContent">
             <div id="subscriptionStatus" className="info-text" style={{ marginBottom: 10 }}>
-              Checking subscription status...
+              Checking beta access...
             </div>
             <button id="refreshTokenBtn" className="btn-secondary" style={{ width: '100%', marginTop: 4 }}>
               Refresh Access Token
             </button>
-            {/* TODO: Replace href with env-variable so billing URL is configurable */}
-            <button
-              id="manageSubscriptionBtn2"
-              className="btn-secondary"
-              style={{ width: '100%', marginTop: 8 }}
-              onClick={() => window.open(process.env.NEXT_PUBLIC_STRIPE_BILLING_URL || 'https://billing.stripe.com/p/login/', '_blank', 'noopener,noreferrer')}
-            >
-              Manage Billing
-            </button>
             <button id="subscribeBtn2" className="btn-primary" style={{ width: '100%', marginTop: 8 }}>
-              Subscribe &mdash; $10/month
+              Continue with Beta Access
             </button>
             <p className="info-text" style={{ marginTop: 12, fontSize: '0.8rem' }}>
               <a href="/terms" target="_blank">Terms of Service</a>
@@ -93,20 +211,15 @@ export default function SettingsSection() {
           </button>
           <div className="menu-content hidden" id="audioSourceMenuContent">
             <p className="info-text" style={{ marginBottom: 8 }}>
-              Add a <a href="https://pixabay.com/api/docs/" target="_blank" rel="noopener noreferrer">Pixabay API key</a> for additional high-quality sounds beyond the built-in library.
+              SuiteRhythm uses the built-in library first. If a server-side Pixabay key is configured,
+              the app can also search Pixabay without exposing the key in your browser.
             </p>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <input
-                id="pixabayKeyInput"
-                type="password"
-                placeholder="Pixabay API key"
-                className="input-field"
-                style={{ flex: 1 }}
-                autoComplete="off"
-              />
-              <button id="saveAudioKeys" className="btn-secondary">Save</button>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button id="saveAudioKeys" className="btn-secondary">Check Pixabay Proxy</button>
             </div>
-            <div id="pixabayKeyStatus" className="info-text" style={{ marginTop: 6, fontSize: '0.8rem' }} />
+            <div id="pixabayKeyStatus" className="info-text" style={{ marginTop: 6, fontSize: '0.8rem' }}>
+              Built-in library available. Pixabay proxy not checked yet.
+            </div>
           </div>
         </section>
 

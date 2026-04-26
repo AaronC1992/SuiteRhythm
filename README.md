@@ -32,7 +32,7 @@ The GM stays in the story. The players stay immersed. The audio just works.
 
 ## How It Works
 
-SuiteRhythm uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4o-mini), and maps the output to a curated library of **450+ sound effects and ambient tracks** — all in real time.
+SuiteRhythm uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4o-mini), and maps the output to a curated library of **700+ sound effects, ambience beds, and music tracks** — all in real time.
 
 ```
 Voice Input → Speech Recognition → AI Context Analysis → Sound Matching → Playback
@@ -44,7 +44,8 @@ Voice Input → Speech Recognition → AI Context Analysis → Sound Matching �
 |---|---|
 | **Auto-Detect Mode** | Listens to live speech and triggers sounds automatically via AI |
 | **Story Mode** | Pre-written narrative scenes with timed audio cues |
-| **Sound Library** | 450+ categorized sounds — ambient, combat, weather, creatures, music |
+| **Sound Library** | 700+ categorized sounds — ambient, combat, weather, creatures, music |
+| **Session Recording** | Browser mixed-session export for review, editing, and show notes |
 | **Control Board** | Manual triggers for GMs who want direct control alongside auto-detect |
 | **Smart Layering** | Multiple sounds play simultaneously with intelligent volume balancing |
 | **Instant Response** | Sub-second latency from spoken word to audio playback |
@@ -73,7 +74,7 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 | **AI Analysis** | OpenAI GPT-4o-mini (server-side) |
 | **Speech Recognition** | Web Speech API (native browser) |
 | **Database** | Supabase (PostgreSQL) |
-| **Media Storage** | Cloudflare R2 (450+ audio files via CDN proxy) |
+| **Media Storage** | Cloudflare R2 (700+ audio files via CDN proxy) |
 | **Hosting** | Vercel (serverless, edge-optimized) |
 
 ## Architecture
@@ -100,7 +101,7 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 ## Traction & Status
 
 - **Fully functional product** — live and playable today
-- **450+ curated sound assets** hosted on CDN
+- **700+ curated sound assets** hosted on CDN
 - **AI pipeline operational** — real-time analysis with sub-second response
 - **Zero-config user experience** — open the app and press play
 
@@ -108,9 +109,9 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 
 | Tier | Price | Features |
 |---|---|---|
-| **Free** | $0 | Core auto-detect, limited sound library |
-| **Pro** | $10/mo | Full library, story mode, custom sounds, priority AI |
-| **Table License** | $20/mo | Multi-device sync, shared sessions, commercial use |
+| **Beta** | $0 | Core auto-detect, full current library, scene presets |
+| **Pro** | $15/mo planned | Story mode, custom sounds, priority AI, OBS overlay |
+| **Table License** | Contact | Multi-device sync, shared sessions, commercial use |
 
 ## Roadmap
 

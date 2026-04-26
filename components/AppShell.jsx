@@ -162,7 +162,7 @@ export default function AppShell() {
             </button>
             <span className="mobile-brand">SuiteRhythm</span>
             <span id="mobileSectionName" className="mobile-section-name" aria-live="polite"></span>
-            <span id="noKeyBannerMobile" className="mobile-no-key hidden">No subscription</span>
+            <span id="noKeyBannerMobile" className="mobile-no-key hidden">Beta access</span>
           </header>
 
           {/* Mobile sidebar overlay */}

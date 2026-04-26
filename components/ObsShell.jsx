@@ -69,6 +69,8 @@ export default function ObsShell() {
             <div id="dndAutoDetect" className="app-section">
               <div id="visualizer" style={{ display: 'none' }} />
               <div id="statusText" />
+              <button id="startBtn" type="button" />
+              <button id="stopBtn" type="button" />
               <div id="transcript" />
               <div id="currentSounds" />
               <div id="activityLog" />

@@ -120,8 +120,8 @@ export default function Home() {
             </div>
             <h3>Session Recording</h3>
             <p>
-              Record your entire audio session — all layers mixed — and export
-              it as a single file or individual stems.
+              Record the browser mix from a session and export it as a WebM file
+              for review, editing, or show notes.
             </p>
           </div>
         </div>
@@ -174,10 +174,10 @@ export default function Home() {
         <div className="landing-pricing-grid">
           <div className="landing-pricing-card">
             <h3>Auto Detect</h3>
-            <div className="landing-pricing-price">$10<span>/mo</span></div>
+            <div className="landing-pricing-price">Free<span> beta</span></div>
             <ul className="landing-pricing-features">
               <li>Core auto-detect mode</li>
-              <li>Full 450+ sound library</li>
+              <li>700+ sound library</li>
               <li>Basic scene presets</li>
             </ul>
             <Link href="/dashboard" className="landing-btn-secondary">
@@ -187,7 +187,7 @@ export default function Home() {
           <div className="landing-pricing-card featured">
             <span className="landing-pricing-badge">Most Popular</span>
             <h3>Pro</h3>
-            <div className="landing-pricing-price">$15<span>/mo</span></div>
+            <div className="landing-pricing-price">$15<span>/mo planned</span></div>
             <ul className="landing-pricing-features">
               <li>Everything in Auto Detect</li>
               <li>Story mode &amp; editor</li>
@@ -201,7 +201,7 @@ export default function Home() {
           </div>
           <div className="landing-pricing-card">
             <h3>Table License</h3>
-            <div className="landing-pricing-price">$20<span>/mo</span></div>
+            <div className="landing-pricing-price">Contact<span> us</span></div>
             <ul className="landing-pricing-features">
               <li>Everything in Pro</li>
               <li>Multi-device sync</li>
@@ -209,7 +209,7 @@ export default function Home() {
               <li>Commercial use</li>
             </ul>
             <Link href="/dashboard" className="landing-btn-secondary">
-              Contact Us
+              Open App
             </Link>
           </div>
         </div>

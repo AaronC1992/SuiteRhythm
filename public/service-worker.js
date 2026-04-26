@@ -1,5 +1,5 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v24'; // Bumped: sidechain duck, tension curve, vitest suite, streaming analyze, error reporter, local classifier fallback
+const CACHE_NAME = 'SuiteRhythm-v25'; // Bumped: avoid caching API/auth/media responses
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -9,13 +9,23 @@ const CACHE_NAME = 'SuiteRhythm-v24'; // Bumped: sidechain duck, tension curve, 
 // Audio files are streamed on-demand with Howler.js html5 mode
 
 const urlsToCache = [
-  './',
-  './manifest.json',
-  './saved-sounds.json',
-  './stories.json',
-  './icon.svg',
-  './favicon.svg'
+  '/',
+  '/manifest.json',
+  '/saved-sounds.json',
+  '/stories.json',
+  '/icon.svg',
+  '/favicon.svg'
 ];
+
+function shouldBypassCache(request, url) {
+  if (request.method !== 'GET') return true;
+  if (url.origin !== self.location.origin) return true;
+  return url.pathname.startsWith('/api/') || url.pathname.startsWith('/r2-audio/');
+}
+
+function isStaticAsset(url) {
+  return /\.(?:js|css|json|svg|png|jpg|jpeg|webp|gif|ico|woff2?)$/i.test(url.pathname);
+}
 
 // Install event - cache core files
 self.addEventListener('install', (event) => {
@@ -40,6 +50,11 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
+  if (shouldBypassCache(event.request, url)) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Handle legacy icon paths from older manifests to avoid 404 noise
   if (
     url.origin === self.location.origin &&
@@ -57,7 +72,7 @@ self.addEventListener('fetch', (event) => {
   // This serves cached content immediately while fetching fresh content in background
   const isAppShell = url.origin === self.location.origin && 
     (event.request.mode === 'navigate' ||
-     url.pathname.endsWith('.html') || url.pathname.endsWith('.js') || 
+     url.pathname.endsWith('.html') || url.pathname.endsWith('.js') ||
      url.pathname.endsWith('.css') || url.pathname === '/' || url.pathname.endsWith('/'));
   
   if (isAppShell) {
@@ -99,8 +114,9 @@ self.addEventListener('fetch', (event) => {
         // Clone the response
         const responseToCache = response.clone();
 
-        // Cache URLs from allowed origins
-        if (event.request.url.startsWith(self.location.origin)) {
+        // Cache only known static assets from our own origin. API, auth, and media
+        // proxy requests are bypassed above so fresh state is never replayed.
+        if (url.origin === self.location.origin && isStaticAsset(url)) {
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });

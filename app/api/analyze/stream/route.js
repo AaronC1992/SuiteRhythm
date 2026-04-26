@@ -13,6 +13,8 @@
 import OpenAI from 'openai';
 import { MODE_CONTEXTS, MODE_RULES } from '../../../../lib/modules/ai-director.js';
 import { requireAuth } from '../../../../lib/api-auth.js';
+import { buildCatalogSummary } from '../../../../lib/server-catalog.js';
+import { checkRateLimit, rateLimitHeaders } from '../../../../lib/rate-limit.js';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -33,6 +35,18 @@ export async function POST(request) {
     const denied = requireAuth(request);
     if (denied) return denied;
 
+    const rate = checkRateLimit(request, {
+        namespace: 'analyze-stream',
+        limit: 10,
+        windowMs: 60_000,
+    });
+    if (!rate.allowed) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded. Try again shortly.' }), {
+            status: 429,
+            headers: { 'content-type': 'application/json', ...rateLimitHeaders(rate) },
+        });
+    }
+
     if (!process.env.OPENAI_API_KEY) {
         return new Response(JSON.stringify({ error: 'OpenAI not configured' }), {
             status: 503,
@@ -47,6 +61,9 @@ export async function POST(request) {
     const { transcript, mode, context } = body || {};
     if (!transcript || typeof transcript !== 'string' || !transcript.trim()) {
         return new Response(JSON.stringify({ error: 'transcript is required' }), { status: 400, headers: { 'content-type': 'application/json' } });
+    }
+    if (transcript.length > 3000) {
+        return new Response(JSON.stringify({ error: 'transcript exceeds maximum length' }), { status: 400, headers: { 'content-type': 'application/json' } });
     }
 
     const encode = sseEncoder();
@@ -65,7 +82,7 @@ export async function POST(request) {
                     stream: true,
                     response_format: { type: 'json_object' },
                     messages: [
-                        { role: 'system', content: BASE_SYSTEM },
+                        { role: 'system', content: BASE_SYSTEM + buildCatalogSummary({ transcript, mode, context }) },
                         { role: 'user', content: user },
                     ],
                 });
@@ -96,6 +113,7 @@ export async function POST(request) {
             'cache-control': 'no-cache, no-transform',
             'connection': 'keep-alive',
             'x-accel-buffering': 'no',
+            'X-RateLimit-Remaining': String(rate.remaining),
         },
     });
 }
