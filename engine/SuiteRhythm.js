@@ -163,7 +163,7 @@ class SuiteRhythm {
         //
         // Scope: `this` refers to the engine instance; handlers also cover the
         // global Howler pool in case older instances were leaked somewhere.
-        const killAllAudio = () => {
+        const killAllAudio = ({ closeContext = true } = {}) => {
             try { this.stopAllAudio?.(); } catch (_) {}
             try {
                 if (typeof Howler !== 'undefined' && Array.isArray(Howler._howls)) {
@@ -172,6 +172,10 @@ class SuiteRhythm {
             } catch (_) {}
             // Also close the engine's AudioContext on true teardown so the OS
             // releases the audio graph (prevents ghost audio on tab restore).
+            // Skip closure on bfcache restore — the engine instance is still
+            // alive and reusing the context, so closing it leaves the graph
+            // dead and produces "context closed" warnings on every later op.
+            if (!closeContext) return;
             try {
                 if (this.audioContext && this.audioContext.state !== 'closed') {
                     this.audioContext.close().catch(() => {});
@@ -181,10 +185,12 @@ class SuiteRhythm {
                 }
             } catch (_) {}
         };
-        this._pageHideHandler = () => killAllAudio();
+        this._pageHideHandler = () => killAllAudio({ closeContext: true });
         this._pageShowHandler = (e) => {
             // event.persisted === true means the page was restored from bfcache.
-            if (e && e.persisted) killAllAudio();
+            // Stop any zombie audio but keep the AudioContext alive so the
+            // running engine instance can still play sounds.
+            if (e && e.persisted) killAllAudio({ closeContext: false });
         };
         window.addEventListener('pagehide', this._pageHideHandler);
         window.addEventListener('pageshow', this._pageShowHandler);
@@ -4409,7 +4415,7 @@ class SuiteRhythm {
     }
 
     _tapHowlHtml5ForRecording(howl) {
-        if (!this.audioContext || !howl?._sounds?.length) return;
+        if (!this.audioContext || this.audioContext.state === 'closed' || !howl?._sounds?.length) return;
         for (const sound of howl._sounds) {
             const node = sound?._node;
             if (!node || node._suiteRhythmMediaSource) continue;
@@ -4485,7 +4491,17 @@ class SuiteRhythm {
     // scale with how loudly the user speaks (e.g. a shouted "BOO!" = louder SFX).
     async _setupMicIntensityAnalyser() {
         try {
+            if (!this.audioContext || this.audioContext.state === 'closed') {
+                debugLog('Mic intensity analyser skipped: audio context unavailable');
+                this.voiceIntensity = 0.7;
+                return;
+            }
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+            if (this.audioContext.state === 'closed') {
+                stream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+                this.voiceIntensity = 0.7;
+                return;
+            }
             const micSource = this.audioContext.createMediaStreamSource(stream);
             this._micAnalyser = this.audioContext.createAnalyser();
             this._micAnalyser.fftSize = 256;
@@ -4774,6 +4790,7 @@ class SuiteRhythm {
             this.recognition.onresult = (event) => this.handleSpeechResult(event);
             this.recognition.onerror = (event) => this.handleSpeechError(event);
             this.recognition.onend = () => {
+                this._recognitionActive = false;
                 if (this.isListening) {
                     // Delay before restart to avoid rapid cycling on unstable connections
                     setTimeout(() => {
@@ -4789,6 +4806,7 @@ class SuiteRhythm {
             };
             
             this.recognition.onstart = () => {
+                this._recognitionActive = true;
                 debugLog('Speech recognition started');
                 this.updateStatus('Listening... Speak clearly!');
             };
@@ -4941,13 +4959,13 @@ class SuiteRhythm {
     }
     
     handleSpeechError(event) {
-        console.error('Speech recognition error:', event.error);
-        
+        // 'no-speech' is a normal idle event — don't log it as an error.
         if (event.error === 'no-speech') {
-            // This is normal - just means no speech in current window
-            // Don't spam the user with messages
+            debugLog('Speech recognition: no-speech (idle window)');
             return;
-        } else if (event.error === 'audio-capture') {
+        }
+        console.error('Speech recognition error:', event.error);
+        if (event.error === 'audio-capture') {
             this.updateStatus('Microphone access denied or not available');
             this.stopListening();
             this._resetDemoListenUI('Microphone not available. Check browser settings, or use Auto Read.');
@@ -7638,10 +7656,14 @@ class SuiteRhythm {
         // Start visualizer
         this.startVisualizer();
         
-        // Start speech recognition
+        // Start speech recognition (guard against double-start)
         try {
-            this.recognition.start();
-            this.updateStatus('Requesting microphone... Please speak!');
+            if (this._recognitionActive) {
+                this.updateStatus('Listening... Speak clearly!');
+            } else {
+                this.recognition.start();
+                this.updateStatus('Requesting microphone... Please speak!');
+            }
             
             // Add helpful tip after 3 seconds if no speech detected
             setTimeout(() => {

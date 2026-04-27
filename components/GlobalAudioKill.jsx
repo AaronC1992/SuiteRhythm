@@ -20,46 +20,34 @@ import { useEffect } from 'react';
 
 export default function GlobalAudioKill() {
   useEffect(() => {
-    const killAll = () => {
-      // 1) Howler — the engine uses it for every playback path.
+    // Stop *zombie* audio only — i.e. Howler instances and raw <audio>/<video>
+    // elements that survived a bfcache restore on a route that has no engine.
+    // Importantly, do NOT close the engine's AudioContext here: when the
+    // dashboard is mounted the engine owns and reuses that context, and
+    // closing it produces a cascade of "Connecting nodes after the context
+    // has been closed" warnings on every subsequent playback.
+    const killZombieAudio = () => {
       try {
         const Howler = window.Howler;
         if (Howler && Array.isArray(Howler._howls)) {
           Howler._howls.forEach((h) => { try { h.stop(); } catch (_) {} });
         }
       } catch (_) {}
-      // 2) Raw <audio> / <video> elements (TTS, preview, MediaRecorder refs).
       try {
         document.querySelectorAll('audio, video').forEach((el) => {
           try { el.pause(); el.currentTime = 0; } catch (_) {}
         });
       } catch (_) {}
-      // 3) Close any surviving AudioContext so the OS releases the graph.
-      try {
-        const ctx = window.__suiterhythmAudioCtx || window.audioContext;
-        if (ctx && typeof ctx.close === 'function' && ctx.state !== 'closed') {
-          ctx.close().catch(() => {});
-        }
-      } catch (_) {}
     };
 
-    const onPageHide = () => killAll();
-    const onPageShow = (e) => { if (e && e.persisted) killAll(); };
-    // Extra: some mobile browsers only fire visibilitychange when backgrounded.
-    const onVisibility = () => { if (document.hidden) killAll(); };
-
-    window.addEventListener('pagehide', onPageHide);
+    // Only act on bfcache restore — true teardown is handled by the engine's
+    // own pagehide handler, and closing the context on visibilitychange or
+    // on mount kills the active engine graph.
+    const onPageShow = (e) => { if (e && e.persisted) killZombieAudio(); };
     window.addEventListener('pageshow', onPageShow);
-    document.addEventListener('visibilitychange', onVisibility);
-
-    // Also kill immediately on mount. If we just reloaded into a fresh
-    // landing-page tree but a prior engine leaked audio, this catches it.
-    killAll();
 
     return () => {
-      window.removeEventListener('pagehide', onPageHide);
       window.removeEventListener('pageshow', onPageShow);
-      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, []);
 
