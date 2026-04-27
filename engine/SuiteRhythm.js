@@ -3141,12 +3141,41 @@ class SuiteRhythm {
             btn.addEventListener('click', (e) => this.selectMode(e.target.dataset.mode));
         });
 
-        // Wire section-specific control buttons (Creator, Table Top, Story Teller, Sing)
+        // Wire section-specific control buttons (Creator, Table Top, Story Teller, Sing).
+        // Each section has its own context input — read from the visible one and
+        // skip the global story-context modal so users don't have to retype it.
+        const SECTION_CONTEXT_MAP = [
+            { sectionId: 'storyTellerSection', inputId: 'storyTellerContextInput' },
+            { sectionId: 'tableTopSection',    inputId: 'tableTopContextInput' },
+            { sectionId: 'creatorSection',     inputId: 'creatorContextInput' },
+            { sectionId: 'singSection',        inputId: null },
+        ];
+        const readVisibleSectionContext = () => {
+            for (const { sectionId, inputId } of SECTION_CONTEXT_MAP) {
+                const sec = document.getElementById(sectionId);
+                if (!sec || sec.classList.contains('hidden')) continue;
+                if (!inputId) return { matched: true, context: '' };
+                const input = document.getElementById(inputId);
+                return { matched: true, context: input ? input.value.trim() : '' };
+            }
+            return { matched: false, context: '' };
+        };
         document.querySelectorAll('.section-start-btn').forEach(btn => {
-            btn.addEventListener('click', () => document.getElementById('startBtn')?.click());
+            btn.addEventListener('click', () => {
+                const { matched, context } = readVisibleSectionContext();
+                if (matched) {
+                    this.storyContext = context;
+                    this.sessionContext = context;
+                    try { localStorage.setItem('SuiteRhythm_session_context', context); } catch (_) {}
+                    if (!this.currentMode) this.selectMode('auto');
+                    this.startListeningWithContext().catch(e => debugLog('Listen start failed:', e?.message || e));
+                    return;
+                }
+                document.getElementById('startBtn')?.click();
+            });
         });
         document.querySelectorAll('.section-stop-btn').forEach(btn => {
-            btn.addEventListener('click', () => document.getElementById('stopBtn')?.click());
+            btn.addEventListener('click', () => this.stopListening());
         });
         document.querySelectorAll('.section-test-mic').forEach(btn => {
             btn.addEventListener('click', () => document.getElementById('testMicBtn')?.click());
@@ -7647,6 +7676,9 @@ class SuiteRhythm {
         
         if (startBtn) startBtn.classList.add('hidden');
         if (stopBtn) stopBtn.classList.remove('hidden');
+        // Mirror state to per-section start/stop buttons (Story Teller, Table Top, Creator, Sing)
+        document.querySelectorAll('.section-start-btn').forEach(b => b.classList.add('hidden'));
+        document.querySelectorAll('.section-stop-btn').forEach(b => b.classList.remove('hidden'));
         if (visualizerSection) visualizerSection.classList.add('listening');
         
         // Show mic indicator
@@ -7793,6 +7825,9 @@ class SuiteRhythm {
         const vizSection = document.querySelector('.visualizer-section');
         if (startBtnEl) startBtnEl.classList.remove('hidden');
         if (stopBtnEl) stopBtnEl.classList.add('hidden');
+        // Mirror state back to per-section start/stop buttons
+        document.querySelectorAll('.section-start-btn').forEach(b => b.classList.remove('hidden'));
+        document.querySelectorAll('.section-stop-btn').forEach(b => b.classList.add('hidden'));
         if (vizSection) vizSection.classList.remove('listening');
         
         // Hide mic indicator
