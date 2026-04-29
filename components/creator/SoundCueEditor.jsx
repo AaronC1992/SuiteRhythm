@@ -12,6 +12,13 @@ const CUE_TYPES = [
   'fade music',
 ];
 
+const DURATION_PRESETS = [
+  { label: 'Full', value: 0 },
+  { label: '1s', value: 1 },
+  { label: '3s', value: 3 },
+  { label: '5s', value: 5 },
+];
+
 function defaultSoundForType(cueType, sounds) {
   const desired = cueType === 'ambience' || cueType === 'stop ambience' ? 'ambience'
     : cueType === 'music' || cueType === 'intro/outro' || cueType === 'fade music' ? 'music'
@@ -77,6 +84,8 @@ export default function SoundCueEditor({ selection, sounds, cueToEdit, onSave, o
   };
 
   const canSave = form.phrase && (form.soundSrc || form.cueType === 'stop ambience' || form.cueType === 'fade music');
+  const isControlCue = form.cueType === 'stop ambience' || form.cueType === 'fade music';
+  const selectionLength = Math.max(0, Number(form.endTime || 0) - Number(form.startTime || 0));
 
   return (
     <section className="studio-panel studio-cue-editor-panel">
@@ -84,51 +93,97 @@ export default function SoundCueEditor({ selection, sounds, cueToEdit, onSave, o
         <span className="studio-step">Step 4</span>
         <h3>Sound Cues</h3>
       </div>
-      <div className="cue-editor-grid">
-        <label>
-          <span>Cue name/label</span>
-          <input value={form.label} onChange={(event) => handleChange('label', event.target.value)} />
-        </label>
-        <label>
-          <span>Selected word/phrase</span>
-          <input value={form.phrase} onChange={(event) => handleChange('phrase', event.target.value)} />
-        </label>
-        <label>
-          <span>Timestamp/start time</span>
-          <input type="number" min="0" step="0.1" value={form.startTime} onChange={(event) => handleChange('startTime', Number(event.target.value))} />
-        </label>
-        <label>
-          <span>Sound type</span>
-          <select value={form.cueType} onChange={(event) => handleChange('cueType', event.target.value)}>
-            {CUE_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
-          </select>
-        </label>
-        <label className="cue-editor-wide">
-          <span>Selected sound</span>
-          <select value={form.soundId} onChange={(event) => handleSoundChange(event.target.value)} disabled={!filteredSounds.length || form.cueType === 'stop ambience' || form.cueType === 'fade music'}>
-            {!filteredSounds.length && <option value="">No sounds loaded</option>}
-            {filteredSounds.map((sound) => (
-              <option key={sound.id} value={sound.id}>{sound.name} ({sound.type})</option>
+      <div className="cue-editor-sections">
+        <fieldset className="cue-editor-section">
+          <legend>Basics</legend>
+          <div className="cue-editor-grid">
+            <label>
+              <span>Cue label</span>
+              <input value={form.label} onChange={(event) => handleChange('label', event.target.value)} />
+            </label>
+            <label>
+              <span>Cue Words</span>
+              <input value={form.phrase} onChange={(event) => handleChange('phrase', event.target.value)} />
+            </label>
+            <label>
+              <span>Sound type</span>
+              <select value={form.cueType} onChange={(event) => handleChange('cueType', event.target.value)}>
+                {CUE_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
+              </select>
+            </label>
+            <label>
+              <span>Selected sound</span>
+              <select value={form.soundId} onChange={(event) => handleSoundChange(event.target.value)} disabled={!filteredSounds.length || isControlCue}>
+                {!filteredSounds.length && <option value="">No sounds loaded</option>}
+                {filteredSounds.map((sound) => (
+                  <option key={sound.id} value={sound.id}>{sound.name} ({sound.type})</option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset className="cue-editor-section">
+          <legend>Timing</legend>
+          <div className="cue-editor-grid">
+            <label>
+              <span>Trigger time</span>
+              <input type="number" min="0" step="0.1" value={form.startTime} onChange={(event) => handleChange('startTime', Number(event.target.value))} />
+            </label>
+            <label>
+              <span>Delay/offset</span>
+              <input type="number" step="0.1" value={form.offset} onChange={(event) => handleChange('offset', Number(event.target.value))} />
+            </label>
+            <label>
+              <span>Sound start</span>
+              <input type="number" min="0" step="0.1" value={form.trimStart} onChange={(event) => handleChange('trimStart', Number(event.target.value))} disabled={isControlCue} />
+            </label>
+            <label>
+              <span>Play length</span>
+              <input type="number" min="0" step="0.1" value={form.duration} onChange={(event) => handleChange('duration', Number(event.target.value))} disabled={isControlCue} />
+            </label>
+            <label>
+              <span>End behavior</span>
+              <select value={form.repeatMode} onChange={(event) => handleChange('repeatMode', event.target.value)} disabled={isControlCue}>
+                <option value="once">Play once</option>
+                <option value="loop">Loop for play length</option>
+              </select>
+            </label>
+            <label>
+              <span>Playback speed</span>
+              <input type="number" min="0.5" max="2" step="0.05" value={form.playbackRate} onChange={(event) => handleChange('playbackRate', Number(event.target.value))} disabled={isControlCue} />
+            </label>
+          </div>
+          <div className="cue-preset-row">
+            {DURATION_PRESETS.map((preset) => (
+              <button key={preset.label} type="button" className="studio-mini-button" onClick={() => handleChange('duration', preset.value)} disabled={isControlCue}>
+                {preset.label}
+              </button>
             ))}
-          </select>
-        </label>
-        <label>
-          <span>Volume</span>
-          <input type="range" min="0" max="1" step="0.05" value={form.volume} onChange={(event) => handleChange('volume', Number(event.target.value))} />
-          <small>{Math.round(form.volume * 100)}%</small>
-        </label>
-        <label>
-          <span>Delay/offset</span>
-          <input type="number" step="0.1" value={form.offset} onChange={(event) => handleChange('offset', Number(event.target.value))} />
-        </label>
-        <label>
-          <span>Fade in</span>
-          <input type="number" min="0" step="0.1" value={form.fadeIn} onChange={(event) => handleChange('fadeIn', Number(event.target.value))} />
-        </label>
-        <label>
-          <span>Fade out</span>
-          <input type="number" min="0" step="0.1" value={form.fadeOut} onChange={(event) => handleChange('fadeOut', Number(event.target.value))} />
-        </label>
+            <button type="button" className="studio-mini-button" onClick={() => handleChange('duration', Number(selectionLength.toFixed(1)))} disabled={isControlCue || !selectionLength}>
+              Selection
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset className="cue-editor-section">
+          <legend>Mix</legend>
+          <div className="cue-editor-grid">
+            <label className="cue-editor-wide">
+              <span>Volume</span>
+              <input type="range" min="0" max="1" step="0.05" value={form.volume} onChange={(event) => handleChange('volume', Number(event.target.value))} disabled={form.cueType === 'stop ambience'} />
+              <small>{Math.round(form.volume * 100)}%</small>
+            </label>
+            <label>
+              <span>Fade in</span>
+              <input type="number" min="0" step="0.1" value={form.fadeIn} onChange={(event) => handleChange('fadeIn', Number(event.target.value))} disabled={isControlCue} />
+            </label>
+            <label>
+              <span>Fade out</span>
+              <input type="number" min="0" step="0.1" value={form.fadeOut} onChange={(event) => handleChange('fadeOut', Number(event.target.value))} disabled={form.cueType === 'stop ambience'} />
+            </label>
+          </div>
+        </fieldset>
       </div>
       <div className="studio-action-row align-right">
         <button type="button" className="btn-secondary" onClick={onCancel}>Cancel</button>
@@ -141,8 +196,7 @@ export default function SoundCueEditor({ selection, sounds, cueToEdit, onSave, o
 }
 
 function createInitialForm(selection, cueToEdit, selectedSound) {
-  if (cueToEdit) return { ...cueToEdit };
-  return {
+  const defaults = {
     phrase: selection?.phrase || '',
     startTime: Number(selection?.startTime || 0).toFixed(1),
     endTime: selection?.endTime || selection?.startTime || 0,
@@ -155,8 +209,14 @@ function createInitialForm(selection, cueToEdit, selectedSound) {
     offset: 0,
     fadeIn: 0,
     fadeOut: 0,
+    duration: 0,
+    trimStart: 0,
+    repeatMode: 'once',
+    playbackRate: 1,
     label: selection?.phrase ? `${selection.phrase} cue` : 'Sound cue',
   };
+  if (cueToEdit) return { ...defaults, ...cueToEdit };
+  return defaults;
 }
 
 function normalizeCue(form, existingId) {
@@ -169,5 +229,9 @@ function normalizeCue(form, existingId) {
     offset: Number(form.offset) || 0,
     fadeIn: Number(form.fadeIn) || 0,
     fadeOut: Number(form.fadeOut) || 0,
+    duration: Math.max(0, Number(form.duration) || 0),
+    trimStart: Math.max(0, Number(form.trimStart) || 0),
+    repeatMode: form.repeatMode === 'loop' ? 'loop' : 'once',
+    playbackRate: Math.max(0.5, Math.min(2, Number(form.playbackRate) || 1)),
   };
 }

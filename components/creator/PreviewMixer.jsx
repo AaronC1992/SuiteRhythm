@@ -117,20 +117,56 @@ export function playCue(cue, activeAudio = []) {
   const src = resolveSoundSource(cue.soundSrc);
   if (!src) return;
   const audio = new Audio(src);
-  const targetVolume = Math.max(0, Math.min(1, Number(cue.volume) || 0.75));
+  const requestedVolume = Number(cue.volume);
+  const targetVolume = Math.max(0, Math.min(1, Number.isFinite(requestedVolume) ? requestedVolume : 0.75));
+  const duration = Math.max(0, Number(cue.duration) || 0);
+  const trimStart = Math.max(0, Number(cue.trimStart) || 0);
+  const playbackRate = Math.max(0.5, Math.min(2, Number(cue.playbackRate) || 1));
+  const shouldLoop = cue.repeatMode === 'loop' && duration > 0;
   audio.volume = cue.fadeIn > 0 ? 0 : targetVolume;
-  const entry = { audio, cueType: cue.cueType };
+  audio.playbackRate = playbackRate;
+  const entry = { audio, cueType: cue.cueType, timers: [], stopped: false };
   activeAudio.push(entry);
-  audio.addEventListener('ended', () => removeAudio(activeAudio, audio), { once: true });
-  audio.addEventListener('loadedmetadata', () => {
-    if (Number.isFinite(audio.duration) && cue.fadeOut > 0) {
-      const delayMs = Math.max(0, (audio.duration - cue.fadeOut) * 1000);
-      window.setTimeout(() => fadeAudio(audio, audio.volume, 0, cue.fadeOut * 1000), delayMs);
+
+  audio.addEventListener('ended', () => {
+    if (shouldLoop && !entry.stopped) {
+      try { audio.currentTime = trimStart; } catch (_) {}
+      audio.play().catch(() => removeAudio(activeAudio, audio));
+      return;
     }
+    removeAudio(activeAudio, audio);
   });
-  audio.play().then(() => {
-    if (cue.fadeIn > 0) fadeAudio(audio, 0, targetVolume, cue.fadeIn * 1000);
-  }).catch(() => removeAudio(activeAudio, audio));
+
+  const startAudio = () => {
+    if (trimStart > 0) {
+      try { audio.currentTime = trimStart; } catch (_) {}
+    }
+    audio.play().then(() => {
+      if (cue.fadeIn > 0) fadeAudio(audio, 0, targetVolume, cue.fadeIn * 1000);
+      scheduleCueStop(cue, audio, entry, activeAudio, duration, trimStart, playbackRate);
+    }).catch(() => removeAudio(activeAudio, audio));
+  };
+
+  if (audio.readyState >= 1) startAudio();
+  else audio.addEventListener('loadedmetadata', startAudio, { once: true });
+}
+
+function scheduleCueStop(cue, audio, entry, activeAudio, duration, trimStart, playbackRate) {
+  const fadeOut = Math.max(0, Number(cue.fadeOut) || 0);
+  const naturalDuration = Number.isFinite(audio.duration) ? Math.max(0, (audio.duration - trimStart) / playbackRate) : 0;
+  const playLength = duration || naturalDuration;
+  if (fadeOut > 0 && playLength > 0) {
+    entry.timers.push(window.setTimeout(() => {
+      if (!entry.stopped) fadeAudio(audio, audio.volume, 0, fadeOut * 1000);
+    }, Math.max(0, playLength - fadeOut) * 1000));
+  }
+  if (duration > 0) {
+    entry.timers.push(window.setTimeout(() => {
+      if (entry.stopped) return;
+      audio.pause();
+      removeAudio(activeAudio, audio);
+    }, duration * 1000));
+  }
 }
 
 function resolveSoundSource(src) {
@@ -143,17 +179,13 @@ function resolveSoundSource(src) {
 }
 
 function stopActiveAudio(activeAudio) {
-  activeAudio.splice(0).forEach(({ audio }) => {
-    audio.pause();
-    audio.currentTime = 0;
-  });
+  activeAudio.splice(0).forEach((entry) => stopEntry(entry));
 }
 
 function stopMatchingAudio(activeAudio, predicate) {
-  activeAudio.filter(predicate).forEach(({ audio }) => {
-    audio.pause();
-    audio.currentTime = 0;
-    removeAudio(activeAudio, audio);
+  activeAudio.filter(predicate).forEach((entry) => {
+    stopEntry(entry);
+    removeAudio(activeAudio, entry.audio);
   });
 }
 
@@ -168,7 +200,18 @@ function fadeMatchingAudio(activeAudio, predicate) {
 
 function removeAudio(activeAudio, audio) {
   const index = activeAudio.findIndex((item) => item.audio === audio);
-  if (index >= 0) activeAudio.splice(index, 1);
+  if (index >= 0) {
+    stopEntry(activeAudio[index]);
+    activeAudio.splice(index, 1);
+  }
+}
+
+function stopEntry(entry) {
+  entry.stopped = true;
+  entry.timers?.forEach((timer) => window.clearTimeout(timer));
+  entry.timers = [];
+  entry.audio.pause();
+  entry.audio.currentTime = 0;
 }
 
 function fadeAudio(audio, from, to, durationMs, onDone) {

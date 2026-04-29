@@ -25,6 +25,10 @@ describe('studio cue map', () => {
         cueType: 'sound effect',
         soundSrc: 'Saved sounds/door-creak.mp3',
         volume: 0.8,
+        duration: 2.5,
+        trimStart: 0.4,
+        repeatMode: 'loop',
+        playbackRate: 1.25,
       }],
       savedAt: '2026-01-01T00:00:00.000Z',
     });
@@ -32,6 +36,10 @@ describe('studio cue map', () => {
     expect(cueMap.version).toBe(CUE_MAP_VERSION);
     expect(cueMap.media.kind).toBe('video');
     expect(cueMap.cues[0].renderTime).toBe(0.75);
+    expect(cueMap.cues[0].duration).toBe(2.5);
+    expect(cueMap.cues[0].trimStart).toBe(0.4);
+    expect(cueMap.cues[0].repeatMode).toBe('loop');
+    expect(cueMap.cues[0].playbackRate).toBe(1.25);
     expect(validateCueMap(cueMap, { requireCues: true }).valid).toBe(true);
     expect(getRenderableCues(cueMap)).toHaveLength(1);
   });

@@ -252,6 +252,7 @@ export default function StudioMode({ active }) {
 
   const deleteCue = (cueId) => setCues((current) => current.filter((cue) => cue.id !== cueId));
   const updateCueOffset = (cueId, offset) => setCues((current) => current.map((cue) => cue.id === cueId ? { ...cue, offset } : cue));
+  const updateCueDuration = (cueId, duration) => setCues((current) => current.map((cue) => cue.id === cueId ? { ...cue, duration: Math.max(0, Number(duration) || 0) } : cue));
   const previewSingleCue = (cue) => {
     stopAudioBucket(singleCueAudioRef.current);
     playCue(cue, singleCueAudioRef.current);
@@ -304,6 +305,7 @@ export default function StudioMode({ active }) {
             onEditCue={setCueToEdit}
             onDeleteCue={deleteCue}
             onOffsetChange={updateCueOffset}
+            onDurationChange={updateCueDuration}
           />
         </div>
 

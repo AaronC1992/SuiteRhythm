@@ -3753,6 +3753,27 @@ kbd {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
 }
+.cue-editor-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.cue-editor-section {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 0;
+    padding: 14px 0 0;
+}
+.cue-editor-section:first-child {
+    border-top: 0;
+    padding-top: 0;
+}
+.cue-editor-section legend {
+    color: var(--text);
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 0 8px 0 0;
+}
 .cue-editor-grid label,
 .cue-offset-field {
     display: flex;
@@ -3769,6 +3790,12 @@ kbd {
     color: var(--muted-2);
     font-size: 0.75rem;
 }
+.cue-preset-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
 .cue-editor-wide {
     grid-column: 1 / -1;
 }
@@ -3779,7 +3806,7 @@ kbd {
 }
 .cue-timeline-item {
     display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) 86px auto;
+    grid-template-columns: 64px minmax(0, 1fr) 82px 82px auto;
     gap: 10px;
     align-items: center;
     padding: 10px;
