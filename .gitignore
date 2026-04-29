@@ -10,6 +10,9 @@ out/
 .vercel
 
 # Env files
+.env
+.env.*
+!.env.example
 .env*.local
 
 # Build output

@@ -22,6 +22,7 @@
 
 import { useEffect } from 'react';
 import ErrorBoundary from './ErrorBoundary';
+import BetaTesterWarning from './BetaTesterWarning';
 import { EngineProvider } from '../lib/engine-bridge';
 import Sidebar from './Sidebar';
 import NowPlayingStrip from './NowPlayingStrip';
@@ -45,7 +46,7 @@ import {
   DemoSelectorOverlay,
 } from './modals/Modals';
 
-export default function AppShell() {
+export default function AppShell({ user }) {
   useEffect(() => {
     // Register service worker for offline caching
     if ('serviceWorker' in navigator) {
@@ -144,7 +145,7 @@ export default function AppShell() {
       <div id="appContainer" role="main">
         <div id="platformShell">
           {/* Left sidebar navigation */}
-          <Sidebar />
+          <Sidebar user={user} />
 
           {/* Mobile top bar */}
           <header id="mobileTopbar" className="mobile-topbar">
@@ -218,6 +219,7 @@ export default function AppShell() {
       <StoryContextModal />
       <StoryOverlay />
       <DemoSelectorOverlay />
+      <BetaTesterWarning user={user} />
       </EngineProvider>
     </ErrorBoundary>
   );

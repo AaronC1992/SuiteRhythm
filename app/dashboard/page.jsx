@@ -1,37 +1,19 @@
-'use client';
+import { redirect } from 'next/navigation';
+import DashboardClient from '../../components/DashboardClient';
+import { getAuthState, loginPath, publicUser } from '../../lib/auth.js';
 
-import dynamic from 'next/dynamic';
+export const dynamic = 'force-dynamic';
 
-/**
- * Dashboard page — the main SuiteRhythm application experience.
- *
- * AppShell is loaded with `ssr: false` because the SuiteRhythm audio
- * engine uses browser-only APIs (AudioContext, SpeechRecognition, Howler,
- * localStorage) that can't run during server-side rendering.
- *
- * TODO: Add auth guard here — check session cookie/token and redirect to
- * the landing page if the user isn't authenticated.
- */
-const AppShell = dynamic(() => import('../../components/AppShell'), {
-  ssr: false,
-  loading: () => (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#0a0a0a',
-        color: '#8a2be2',
-        fontFamily: 'sans-serif',
-        fontSize: '1.1rem',
-      }}
-    >
-      Loading SuiteRhythm…
-    </div>
-  ),
-});
+export default async function DashboardPage() {
+  const authState = await getAuthState();
 
-export default function DashboardPage() {
-  return <AppShell />;
+  if (authState.needsRefresh) {
+    redirect('/api/auth/refresh?redirect=/dashboard');
+  }
+
+  if (!authState.user) {
+    redirect(loginPath('/dashboard'));
+  }
+
+  return <DashboardClient user={publicUser(authState.user)} />;
 }

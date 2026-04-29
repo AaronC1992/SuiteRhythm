@@ -7,8 +7,8 @@ export default function Home() {
       <header className="landing-hero">
         <nav className="landing-nav">
           <span className="landing-brand">SuiteRhythm</span>
-          <Link href="/dashboard" className="landing-nav-cta">
-            Open App
+          <Link href="/login?redirect=%2Fdashboard" className="landing-nav-cta">
+            Sign In
           </Link>
         </nav>
         <div className="landing-hero-content">
@@ -20,7 +20,7 @@ export default function Home() {
             effects in real time — no mixing board required.
           </p>
           <div className="landing-hero-actions">
-            <Link href="/dashboard" className="landing-btn-primary">
+            <Link href="/login?redirect=%2Fdashboard" className="landing-btn-primary">
               Launch SuiteRhythm
             </Link>
             <a href="#features" className="landing-btn-secondary">
@@ -180,7 +180,7 @@ export default function Home() {
               <li>700+ sound library</li>
               <li>Basic scene presets</li>
             </ul>
-            <Link href="/dashboard" className="landing-btn-secondary">
+            <Link href="/login?redirect=%2Fdashboard" className="landing-btn-secondary">
               Get Started
             </Link>
           </div>
@@ -195,7 +195,7 @@ export default function Home() {
               <li>Priority AI analysis</li>
               <li>OBS overlay</li>
             </ul>
-            <Link href="/dashboard" className="landing-btn-primary">
+            <Link href="/login?redirect=%2Fdashboard" className="landing-btn-primary">
               Start Free Trial
             </Link>
           </div>
@@ -208,7 +208,7 @@ export default function Home() {
               <li>Shared sessions</li>
               <li>Commercial use</li>
             </ul>
-            <Link href="/dashboard" className="landing-btn-secondary">
+            <Link href="/login?redirect=%2Fdashboard" className="landing-btn-secondary">
               Open App
             </Link>
           </div>
@@ -243,7 +243,7 @@ export default function Home() {
       {/* CTA */}
       <section className="landing-cta">
         <h2>Ready to bring your stories to life?</h2>
-        <Link href="/dashboard" className="landing-btn-primary">
+        <Link href="/login?redirect=%2Fdashboard" className="landing-btn-primary">
           Launch SuiteRhythm — Free
         </Link>
       </section>

@@ -1,6 +1,7 @@
 'use client';
 
 import EngineStatusDot from './EngineStatusDot';
+import AuthStatus from './AuthStatus';
 
 /**
  * Sidebar — platform navigation.
@@ -8,7 +9,7 @@ import EngineStatusDot from './EngineStatusDot';
  * engine's setupEventListeners() which queries the DOM by data-section
  * attributes. React only renders the markup; the engine wires event listeners.
  */
-export default function Sidebar() {
+export default function Sidebar({ user }) {
   return (
     <aside id="platformSidebar" aria-label="Platform navigation">
       <div className="sidebar-brand">
@@ -116,6 +117,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
+        <AuthStatus user={user} />
         <div className="sidebar-api-row">
           <button id="manageSubscriptionBtn" className="sidebar-reset-key">Access</button>
         </div>

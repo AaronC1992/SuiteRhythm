@@ -1,6 +1,8 @@
-'use client';
+import { redirect } from 'next/navigation';
+import ObsClient from '../../components/ObsClient';
+import { getAuthState, loginPath } from '../../lib/auth.js';
 
-import dynamic from 'next/dynamic';
+export const dynamic = 'force-dynamic';
 
 /**
  * OBS Browser Source page — a minimal, transparent-background wrapper
@@ -12,11 +14,16 @@ import dynamic from 'next/dynamic';
  * The page has a transparent background so it can overlay scenes.
  * Only the currently-playing sounds list and status text are shown.
  */
-const ObsShell = dynamic(() => import('../../components/ObsShell'), {
-  ssr: false,
-  loading: () => null,
-});
+export default async function ObsPage() {
+  const authState = await getAuthState();
 
-export default function ObsPage() {
-  return <ObsShell />;
+  if (authState.needsRefresh) {
+    redirect('/api/auth/refresh?redirect=/obs');
+  }
+
+  if (!authState.user) {
+    redirect(loginPath('/obs'));
+  }
+
+  return <ObsClient />;
 }

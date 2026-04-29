@@ -49,9 +49,10 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 
 ## What Still Needs Backend Work
 
-### 1. Auth (TODO)
-- The beta access modal and token input exist in the UI, but there is no user account auth layer.
-- **Next step**: Add NextAuth.js or Clerk. Check session in `app/dashboard/page.jsx` and redirect unauthenticated users to a landing page.
+### 1. Auth (DONE)
+- A temporary shared free tester login now backs the beta flow: username `tester`, password `password`.
+- `/dashboard` and `/obs` require a valid server-verified session cookie and redirect unauthenticated users to `/login`.
+- Tester access can be revoked by setting `BETA_TESTER_ENABLED=false`, changing `BETA_TESTER_PASSWORD`, or rotating `BETA_AUTH_SECRET`/`API_AUTH_SECRET`.
 
 ### 2. Stripe subscription (TODO)
 - Paid checkout is intentionally disabled during beta.
@@ -92,7 +93,7 @@ All sections are **always rendered** in the DOM (hidden via the CSS `hidden` cla
 2. ~~**Add favicon**~~ — Done
 3. **Add `.env.local`**: Copy `.env.example` → `.env.local` and set `NEXT_PUBLIC_BACKEND_URL`.
 4. ~~**Service worker**~~ — Done
-5. **Auth layer**: Add NextAuth.js or Clerk. Gate the dashboard behind session check.
+5. ~~**Auth layer**~~ — Done. Configure the temporary tester login now; replace it with subscription-aware login before launch.
 6. **Stripe**: Build the subscription checkout flow when paid plans are ready.
 7. **Database**: Connect Supabase. Migrate localStorage data (stories, boards, custom sounds) to the DB.
 8. **Production auth**: Enforce account/subscription access around paid API routes.

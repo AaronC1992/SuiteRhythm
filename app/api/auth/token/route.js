@@ -1,11 +1,12 @@
 /**
  * GET /api/auth/token
  * Issues a short-lived HMAC-signed token for authenticating API calls.
- * The client fetches this on page load and sends it as a Bearer token.
+ * Requires a signed-in beta account session.
  */
 
 import { NextResponse } from 'next/server';
 import { generateToken } from '../../../../lib/api-auth.js';
+import { getAuthState } from '../../../../lib/auth.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../../lib/rate-limit.js';
 
 export async function GET(request) {
@@ -21,14 +22,28 @@ export async function GET(request) {
     );
   }
 
+  const authState = await getAuthState();
+  if (authState.needsRefresh) {
+    return NextResponse.json(
+      { error: 'Session expired. Sign in again.', refreshRequired: true },
+      { status: 401 }
+    );
+  }
+  if (!authState.user) {
+    return NextResponse.json(
+      { error: authState.error || 'Authentication required' },
+      { status: 401 }
+    );
+  }
+
   try {
     const token = generateToken();
     return NextResponse.json({ token, expiresIn: 3600 });
   } catch {
-    // API_AUTH_SECRET not configured — auth is disabled
+    const localDev = process.env.NODE_ENV !== 'production';
     return NextResponse.json(
-      { token: null, expiresIn: 0, message: 'Auth not configured' },
-      { status: 200 }
+      { token: null, expiresIn: 0, error: 'API auth is not configured' },
+      { status: localDev ? 200 : 503 }
     );
   }
 }

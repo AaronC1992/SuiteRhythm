@@ -1,5 +1,52 @@
 /** @type {import('next').NextConfig} */
+const securityHeaders = [
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'X-DNS-Prefetch-Control', value: 'off' },
+  { key: 'Origin-Agent-Cluster', value: '?1' },
+  {
+    key: 'Permissions-Policy',
+    value: [
+      'camera=()',
+      'geolocation=()',
+      'payment=()',
+      'usb=()',
+      'serial=()',
+      'bluetooth=()',
+      'microphone=(self)',
+      'clipboard-read=(self)',
+      'clipboard-write=(self)',
+    ].join(', '),
+  },
+  {
+    key: 'Content-Security-Policy',
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https:",
+      "media-src 'self' blob: https: data:",
+      "connect-src 'self' https://plausible.io https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.elevenlabs.io https://pixabay.com https://pixabay.com/api/ https://*.r2.cloudflarestorage.com https://*.r2.dev https://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv:443",
+      "font-src 'self'",
+      "worker-src 'self' blob:",
+      "frame-src 'self'",
+      "frame-ancestors 'self'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+    ].join('; '),
+  },
+];
+
+const privateRouteHeaders = [
+  { key: 'Cache-Control', value: 'no-store, max-age=0' },
+  { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
+];
+
 const nextConfig = {
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
   serverExternalPackages: ['ffmpeg-static'],
 
   // Allow importing the Howler audio library which uses browser globals
@@ -33,24 +80,19 @@ const nextConfig = {
     return [
       {
         source: '/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https:",
-              "media-src 'self' blob: https: data:",
-              "connect-src 'self' https://plausible.io https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.elevenlabs.io https://pixabay.com https://pixabay.com/api/ https://*.r2.cloudflarestorage.com https://*.r2.dev https://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv wss://irc-ws.chat.twitch.tv:443",
-              "font-src 'self'",
-              "worker-src 'self' blob:",
-              "frame-src 'self'",
-            ].join('; '),
-          },
-        ],
+        headers: securityHeaders,
+      },
+      {
+        source: '/login',
+        headers: privateRouteHeaders,
+      },
+      {
+        source: '/dashboard',
+        headers: privateRouteHeaders,
+      },
+      {
+        source: '/obs',
+        headers: privateRouteHeaders,
       },
     ];
   },

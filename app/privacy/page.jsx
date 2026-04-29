@@ -20,8 +20,9 @@ export default function PrivacyPage() {
           language model. Not stored permanently &mdash; used only for the duration of the request.
         </li>
         <li>
-          <strong>Account data:</strong> Email address and access status if you create an account
-          or join a future paid plan.
+          <strong>Account and access data:</strong> Tester username, session status, and access
+          status during beta. Email address and subscription status may be collected if you create
+          an account or join a future paid plan.
         </li>
         <li>
           <strong>Local storage:</strong> Preferences, scene presets, and custom sounds are stored
@@ -62,8 +63,22 @@ export default function PrivacyPage() {
         API keys are stored server-side only. All communication uses HTTPS. We follow industry
         best practices to protect your data.
       </p>
+      <p>
+        Tester access does not authorize anyone to probe, scan, scrape, reverse-engineer, or attempt
+        to access private source code, secrets, server files, API keys, private repositories, internal
+        systems, or another person&rsquo;s data. We may use logs and security telemetry to detect misuse,
+        protect the Service, investigate abuse, and revoke access when necessary.
+      </p>
 
-      <h2>7. Contact</h2>
+      <h2>7. Confidential Beta Materials</h2>
+      <p>
+        Private beta features, implementation details, non-public APIs, unreleased workflows, and
+        internal technical materials are confidential. Privacy-related requests are welcome, but beta
+        access does not grant permission to copy, extract, publish, or redistribute source code,
+        assets, internal documentation, prompts, API behavior, or private technical information.
+      </p>
+
+      <h2>8. Contact</h2>
       <p>
         Privacy questions? Email <a href="mailto:aaroncue92@gmail.com" style={{ color: '#bb86fc' }}>aaroncue92@gmail.com</a>.
       </p>
