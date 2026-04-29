@@ -1,11 +1,21 @@
 import { NextResponse } from 'next/server';
+import { File } from 'buffer';
+import { spawn } from 'child_process';
+import fs from 'fs/promises';
 import OpenAI from 'openai';
+import os from 'os';
+import path from 'path';
 import { requireAuth } from '../../../lib/api-auth.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
+import { deleteFile, downloadFileBuffer } from '../../../lib/r2.js';
+import { getFfmpegBinaryPath } from '../../../lib/studio/render.js';
 
 export const runtime = 'nodejs';
 
-const MAX_FILE_SIZE = 25 * 1024 * 1024;
+const MB = 1024 * 1024;
+const OPENAI_MAX_FILE_SIZE = Number(process.env.OPENAI_TRANSCRIBE_MAX_FILE_MB || 25) * MB;
+const MAX_SOURCE_FILE_SIZE = Number(process.env.STUDIO_TRANSCRIBE_UPLOAD_MAX_FILE_MB || 100) * MB;
+const TRANSCRIBE_BITRATE = process.env.STUDIO_TRANSCRIBE_AUDIO_BITRATE || '64k';
 const ALLOWED_EXTENSIONS = /\.(mp3|mp4|mpeg|mpga|m4a|wav|webm|ogg)$/i;
 
 let openai;
@@ -33,28 +43,13 @@ export async function POST(request) {
     );
   }
 
-  let formData;
+  let source;
   try {
-    formData = await request.formData();
-  } catch {
-    return NextResponse.json({ error: 'Expected multipart form data' }, { status: 400 });
-  }
-
-  const file = formData.get('file');
-  const duration = Number(formData.get('duration')) || 0;
-  if (!file || typeof file.arrayBuffer !== 'function') {
-    return NextResponse.json({ error: 'file is required' }, { status: 400 });
-  }
-  if (file.size > MAX_FILE_SIZE) {
-    return NextResponse.json({ error: 'file exceeds 25 MB limit' }, { status: 413 });
-  }
-  if (!file.type?.startsWith('audio/') && !file.type?.startsWith('video/') && !ALLOWED_EXTENSIONS.test(file.name || '')) {
-    return NextResponse.json({ error: 'unsupported media type' }, { status: 415 });
-  }
-
-  try {
-    const transcription = await createTranscription(file);
-    const normalized = normalizeTranscription(transcription, duration);
+    source = await readTranscriptionSource(request);
+    validateTranscriptionFile(source.file);
+    const fileForOpenAI = await prepareFileForTranscription(source.file);
+    const transcription = await createTranscription(fileForOpenAI);
+    const normalized = normalizeTranscription(transcription, source.duration);
     const res = NextResponse.json(normalized);
     res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     return res;
@@ -64,7 +59,114 @@ export async function POST(request) {
       { error: err?.message || 'Transcription failed' },
       { status: err?.status || 500, headers: rateLimitHeaders(rate) }
     );
+  } finally {
+    await source?.cleanup?.();
   }
+}
+
+async function readTranscriptionSource(request) {
+  const contentType = request.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      throw new HttpError('Expected valid JSON body', 400);
+    }
+
+    const uploadKey = String(body?.uploadKey || '').trim();
+    if (!uploadKey.startsWith('studio-transcribe/')) {
+      throw new HttpError('Invalid staged upload key', 400);
+    }
+
+    const buffer = await downloadFileBuffer(uploadKey);
+    const file = new File([buffer], String(body?.fileName || 'studio-media'), {
+      type: String(body?.contentType || 'application/octet-stream'),
+    });
+
+    return {
+      file,
+      duration: Number(body?.duration) || 0,
+      cleanup: () => deleteFile(uploadKey).catch((err) => console.warn('Temporary transcription upload cleanup failed:', err?.message || err)),
+    };
+  }
+
+  let formData;
+  try {
+    formData = await request.formData();
+  } catch {
+    throw new HttpError('Expected multipart form data', 400);
+  }
+
+  const file = formData.get('file');
+  if (!file || typeof file.arrayBuffer !== 'function') {
+    throw new HttpError('file is required', 400);
+  }
+  return { file, duration: Number(formData.get('duration')) || 0 };
+}
+
+function validateTranscriptionFile(file) {
+  if (file.size > MAX_SOURCE_FILE_SIZE) {
+    throw new HttpError(`file exceeds ${Math.round(MAX_SOURCE_FILE_SIZE / MB)} MB transcription upload limit`, 413);
+  }
+  if (!file.type?.startsWith('audio/') && !file.type?.startsWith('video/') && !ALLOWED_EXTENSIONS.test(file.name || '')) {
+    throw new HttpError('unsupported media type', 415);
+  }
+}
+
+async function prepareFileForTranscription(file) {
+  if (file.size <= OPENAI_MAX_FILE_SIZE && !isVideoMedia(file)) return file;
+
+  const converted = await transcodeToOpenAIAudio(file);
+  if (converted.size > OPENAI_MAX_FILE_SIZE) {
+    throw new HttpError(`audio is still larger than ${Math.round(OPENAI_MAX_FILE_SIZE / MB)} MB after compression`, 413);
+  }
+  return converted;
+}
+
+function isVideoMedia(file) {
+  return file.type?.startsWith('video/') || (!file.type?.startsWith('audio/') && /\.(mp4|webm)$/i.test(file.name || ''));
+}
+
+async function transcodeToOpenAIAudio(file) {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'suiterhythm-transcribe-'));
+  try {
+    const inputPath = path.join(tempDir, `source${extensionFromName(file.name) || extensionFromType(file.type) || '.media'}`);
+    const outputPath = path.join(tempDir, 'transcribe.mp3');
+    await fs.writeFile(inputPath, Buffer.from(await file.arrayBuffer()));
+    await runFfmpeg([
+      '-y',
+      '-i', inputPath,
+      '-vn',
+      '-ac', '1',
+      '-ar', '16000',
+      '-b:a', TRANSCRIBE_BITRATE,
+      outputPath,
+    ]);
+    const buffer = await fs.readFile(outputPath);
+    return new File([buffer], `${sanitizeBaseName(file.name || 'studio-media')}.mp3`, { type: 'audio/mpeg' });
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+function runFfmpeg(args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(getFfmpegBinaryPath(), args, { windowsHide: true });
+    let stderr = '';
+    child.stderr.on('data', (chunk) => {
+      stderr += chunk.toString();
+      if (stderr.length > 6000) stderr = stderr.slice(-6000);
+    });
+    child.on('error', (err) => reject(new HttpError(`ffmpeg could not start: ${err.message}`, 500)));
+    child.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+      reject(new HttpError(`Could not prepare audio for transcription.${stderr ? ` ${stderr}` : ''}`, 500));
+    });
+  });
 }
 
 async function createTranscription(file) {
@@ -169,4 +271,40 @@ function estimateDuration(text) {
 
 function roundTime(value) {
   return Number((Number(value) || 0).toFixed(2));
+}
+
+function extensionFromName(name = '') {
+  const ext = path.extname(String(name).split('?')[0]).toLowerCase();
+  return ext && ext.length <= 8 ? ext : '';
+}
+
+function extensionFromType(type = '') {
+  const normalized = type.split(';')[0].trim().toLowerCase();
+  const map = {
+    'audio/mpeg': '.mp3',
+    'audio/mp3': '.mp3',
+    'audio/wav': '.wav',
+    'audio/x-wav': '.wav',
+    'audio/webm': '.webm',
+    'audio/ogg': '.ogg',
+    'audio/mp4': '.m4a',
+    'video/mp4': '.mp4',
+    'video/webm': '.webm',
+  };
+  return map[normalized] || '';
+}
+
+function sanitizeBaseName(name) {
+  return String(name)
+    .replace(/\.[^.]+$/, '')
+    .replace(/[^a-z0-9-_]+/gi, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 80) || 'studio-media';
+}
+
+class HttpError extends Error {
+  constructor(message, status = 500) {
+    super(message);
+    this.status = status;
+  }
 }

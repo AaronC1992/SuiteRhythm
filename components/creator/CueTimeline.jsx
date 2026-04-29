@@ -1,5 +1,7 @@
 'use client';
 
+import { getCueRenderTime } from '../../lib/studio/cue-map';
+
 export default function CueTimeline({ cues, onPreviewCue, onEditCue, onDeleteCue, onOffsetChange }) {
   const sortedCues = [...cues].sort((a, b) => getCueTime(a) - getCueTime(b));
 
@@ -39,7 +41,7 @@ export default function CueTimeline({ cues, onPreviewCue, onEditCue, onDeleteCue
 }
 
 export function getCueTime(cue) {
-  return Math.max(0, (Number(cue.startTime) || 0) + (Number(cue.offset) || 0));
+  return getCueRenderTime(cue);
 }
 
 function formatTime(seconds) {

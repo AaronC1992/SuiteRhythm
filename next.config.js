@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ['ffmpeg-static'],
+
   // Allow importing the Howler audio library which uses browser globals
   // eslint-disable-next-line no-unused-vars
   webpack(config, { isServer }) {
