@@ -42,6 +42,11 @@ const STOPWORDS = new Set([
     'loop', 'looping',
 ]);
 
+const PROTECTED_KEYWORDS = new Set([
+    'fantasy', 'horror', 'tavern', 'christmas', 'halloween', 'scifi',
+    'combat', 'nature', 'weather', 'ambience', 'ambient',
+]);
+
 // Synonym / related-term map. Keys are lower-case triggers found anywhere
 // in a name or existing keyword set; values are extra tags to add.
 // Keep conservative — we're adding signal, not spam.
@@ -84,9 +89,9 @@ const SYNONYMS = {
     charge:     ['combat', 'attack'],
 
     // Magic
-    spell:      ['magic', 'arcane'],
+    spell:      ['magic', 'arcane', 'cast', 'casting'],
     magic:      ['spell', 'arcane'],
-    magical:    ['magic', 'arcane'],
+    magical:    ['magic', 'arcane', 'spell'],
     fireball:   ['fire', 'spell', 'magic', 'evocation'],
     lightning:  ['electric', 'thunder', 'spell', 'magic'],
     healing:    ['heal', 'cleric', 'divine', 'holy'],
@@ -95,7 +100,7 @@ const SYNONYMS = {
     cursed:     ['curse', 'dark', 'magic'],
     poison:     ['toxic', 'dark'],
     charm:      ['enchantment', 'magic'],
-    summon:     ['magic', 'ritual'],
+    summon:     ['magic', 'ritual', 'conjure'],
     summoning:  ['summon', 'magic', 'ritual'],
     ritual:     ['magic', 'ceremonial'],
     portal:     ['magic', 'teleport', 'arcane'],
@@ -298,6 +303,10 @@ const SYNONYMS = {
     aggressive: ['intense', 'violent'],
     violent:    ['aggressive', 'intense'],
 
+    // Event / impact cues
+    explosion:  ['blast', 'boom', 'detonation', 'impact'],
+    missile:    ['projectile', 'spell', 'cast', 'arcane'],
+
     // Character / role cues
     rogue:      ['thief', 'stealth'],
     thief:      ['rogue', 'stealth'],
@@ -322,13 +331,28 @@ const SYNONYMS = {
     boots:      ['footsteps', 'walking'],
     gravel:     ['footsteps', 'ground', 'outdoor'],
     hardwood:   ['footsteps', 'floor', 'indoor'],
-    pencil:     ['writing', 'paper', 'foley'],
+    pencil:     ['writing', 'paper', 'foley', 'scribble', 'desk'],
     writing:    ['pencil', 'paper', 'foley'],
     paper:      ['writing', 'foley'],
     car:        ['vehicle', 'modern'],
     engine:     ['motor', 'vehicle'],
     vehicle:    ['modern', 'engine'],
+    celebration:['joyful', 'festive', 'party'],
+    curiosity:  ['mystery', 'intrigue', 'investigation'],
+    retriever:  ['dog', 'canine', 'pet', 'animal'],
+    barks:      ['bark', 'dog', 'animal'],
+    scuba:      ['underwater', 'diving', 'aquatic'],
+    breathing:  ['breath', 'human', 'body'],
 };
+
+const DERIVED_TRIGGER_BLOCKLIST = new Set(
+    [
+        ...Object.values(SYNONYMS).flat(),
+        'axe', 'blast', 'bolt', 'boom', 'breathing', 'knife', 'punch', 'shot', 'staff', 'stream',
+    ]
+        .map(normalizeKeyword)
+        .filter(Boolean)
+);
 
 // Moods we can auto-assign for music/ambience when none is present.
 // Scanned in order; first hit wins.
@@ -378,10 +402,15 @@ function normalizeKeyword(k) {
 
 function isMeaningful(k) {
     if (!k) return false;
+    if (PROTECTED_KEYWORDS.has(k)) return true;
     if (k.length < 2) return false;
     if (STOPWORDS.has(k)) return false;
     if (/^\d+$/.test(k)) return false;
     return true;
+}
+
+function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function tokenizeName(name) {
@@ -393,16 +422,24 @@ function tokenizeName(name) {
         .filter(isMeaningful);
 }
 
-function expandSynonyms(keywords) {
+function expandSynonyms(keywords, sourceKeywords = keywords) {
     const out = new Set(keywords);
-    const haystack = ' ' + keywords.join(' ') + ' ';
+    const sources = [...new Set(sourceKeywords.map(normalizeKeyword).filter(isMeaningful))];
+    const haystack = ' ' + sources.join(' ') + ' ';
+
     for (const [trigger, extras] of Object.entries(SYNONYMS)) {
-        // Match whole-word triggers (handles multi-word keys too).
-        const re = new RegExp(`(?:^|[\\s-])${trigger}(?:[\\s-]|$)`, 'i');
-        if (re.test(haystack) || keywords.includes(trigger)) {
-            for (const e of extras) out.add(e);
+        const normalizedTrigger = normalizeKeyword(trigger);
+        const re = new RegExp(`(?:^|[\\s-])${escapeRegExp(normalizedTrigger)}(?:[\\s-]|$)`, 'i');
+        if (re.test(haystack) || sources.includes(normalizedTrigger)) {
+            for (const extra of extras) {
+                const keyword = normalizeKeyword(extra);
+                if (isMeaningful(keyword) && !out.has(keyword)) {
+                    out.add(keyword);
+                }
+            }
         }
     }
+
     return out;
 }
 
@@ -423,16 +460,20 @@ function enrichEntry(entry, stats) {
     const before = {
         keywords: [...(entry.keywords || [])].map(normalizeKeyword).filter(isMeaningful),
     };
+    const nameTokens = tokenizeName(entry.name);
 
     // Start from existing keywords, normalized.
     const kw = new Set(before.keywords);
 
     // 1. Name tokens.
-    for (const tok of tokenizeName(entry.name)) kw.add(tok);
+    for (const tok of nameTokens) kw.add(tok);
 
     // 2. Synonym expansion (runs against name + existing keywords).
-    const base = new Set([...kw, ...tokenizeName(entry.name)]);
-    const expanded = expandSynonyms([...base]);
+    const sourceKeywords = new Set([
+        ...nameTokens,
+        ...before.keywords.filter((keyword) => !DERIVED_TRIGGER_BLOCKLIST.has(keyword)),
+    ]);
+    const expanded = expandSynonyms([...kw], [...sourceKeywords]);
     for (const e of expanded) kw.add(e);
 
     // 3. For music/ambience, ensure a mood + context tag so the scorer has signal.
@@ -453,10 +494,6 @@ function enrichEntry(entry, stats) {
     // 4. Normalize and cap. Stable order: originals first (for readable diffs),
     //    then newly-added keywords alphabetically. Genre tags emitted by
     //    retag-catalog.js are always preserved so the two scripts converge.
-    const PROTECTED = new Set([
-        'fantasy', 'horror', 'tavern', 'christmas', 'halloween', 'scifi',
-        'combat', 'nature', 'weather', 'ambience', 'ambient',
-    ]);
     const normalized = [...kw].map(normalizeKeyword).filter(isMeaningful);
     const originals = before.keywords.filter(k => normalized.includes(k));
     const added = normalized
@@ -473,11 +510,13 @@ function enrichEntry(entry, stats) {
     // low-volume and highly-signal so they shouldn't be trimmed.
     const CAP = 20;
     if (dedupedOrdered.length > CAP) {
-        const protectedTags = dedupedOrdered.filter(k => PROTECTED.has(k));
-        const unprotected = dedupedOrdered.filter(k => !PROTECTED.has(k));
-        const keep = unprotected.slice(0, CAP - protectedTags.length);
+        const protectedTags = dedupedOrdered.filter(k => PROTECTED_KEYWORDS.has(k));
+        const nameTags = dedupedOrdered.filter(k => nameTokens.includes(k) && !PROTECTED_KEYWORDS.has(k));
+        const unprotected = dedupedOrdered.filter(k => !PROTECTED_KEYWORDS.has(k) && !nameTokens.includes(k));
+        const reserved = [...protectedTags, ...nameTags];
+        const keep = unprotected.slice(0, Math.max(0, CAP - reserved.length));
         // Preserve original relative order.
-        const keepSet = new Set([...protectedTags, ...keep]);
+        const keepSet = new Set([...reserved, ...keep]);
         out.keywords = dedupedOrdered.filter(k => keepSet.has(k));
     } else {
         out.keywords = dedupedOrdered;

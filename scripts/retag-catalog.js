@@ -34,8 +34,8 @@ const CATALOG_PATH = path.resolve(__dirname, '..', 'public', 'saved-sounds.json'
 const AMBIENCE_NAME_RE = new RegExp([
     '\\b(ambience|ambient)\\b',
     '\\broom tone\\b',
-    '\\bfireplace\\b',
-    '\\bcampfire\\b',
+    '\\bfireplace\\s+(ambience|ambient|loop|bed|background)\\b',
+    '\\bcampfire\\s+(ambience|ambient|loop|bed|background)\\b',
     '\\bcrickets?\\b',
     '\\bforest\\s+(day|night|morning|afternoon|evening)\\b',
     '\\btavern\\s+(inside|background|ambien)',
@@ -48,12 +48,12 @@ const GENRE_RULES = [
     { tag: 'fantasy',   re: /\b(medieval|fantasy|rpg|knight|wizard|dragon|sword|castle|dungeon|elf|dwarf|goblin|orc|tavern|bard)\b/i },
     { tag: 'horror',    re: /\b(horror|scary|creepy|haunt|demon|ghost|zombie|evil|sinister|unsettling|monster roar|scream)\b/i },
     { tag: 'tavern',    re: /\b(tavern|inn pub|pub\b|alehouse|barkeep)\b/i },
-    { tag: 'christmas', re: /\b(christmas|santa|sleigh|reindeer|carol|jingle|xmas|holiday)\b/i },
+    { tag: 'christmas', re: /\b(christmas|santa|sleigh|reindeer|carol|xmas|holiday)\b/i },
     { tag: 'halloween', re: /\b(halloween|pumpkin|witch|jack-o|spooky)\b/i },
     { tag: 'scifi',     re: /\b(sci-?fi|space|laser|robot|cyber|synth|alien|spaceship|plasma)\b/i },
-    { tag: 'combat',    re: /\b(combat|battle|fight|sword (clash|swing)|punch|kick|blade)\b/i },
-    { tag: 'nature',    re: /\b(forest|river|stream|waterfall|birds|wildlife|meadow|lake|ocean|waves?)\b/i },
-    { tag: 'weather',   re: /\b(rain|thunder|storm|snow|blizzard|hail|hurricane|tornado)\b/i },
+    { tag: 'combat',    re: /\b(combat|battle|fight|sword (clash|swing)|blade|melee|dagger|shield|bow|crossbow|arrow|pistol|rifle|flintlock|mace|flail)\b/i, exclude: /\b(stapler|hole punch|paper punch|office|anvil|blacksmith|forge|wood chopping|kitchen|vegetables)\b/i },
+    { tag: 'nature',    re: /\b(forest|river|waterfall|birds|wildlife|meadow|lake|ocean|waves?)\b/i },
+    { tag: 'weather',   re: /\b(rain|thunder|storm|snow|blizzard|hail|hurricane|tornado)\b/i, exclude: /\b(spell|magic|arcane|thunderwave)\b/i },
 ];
 
 // -------- logic --------
@@ -89,7 +89,7 @@ function retagEntry(entry, stats) {
     // 2. Genre tag inference against name + existing keywords.
     const haystack = [out.name || '', ...(out.keywords || [])].join(' ').toLowerCase();
     for (const rule of GENRE_RULES) {
-        if (rule.re.test(haystack) && !out.keywords.includes(rule.tag)) {
+        if (rule.re.test(haystack) && !rule.exclude?.test(haystack) && !out.keywords.includes(rule.tag)) {
             out.keywords.push(rule.tag);
             stats.genreAdds[rule.tag] = (stats.genreAdds[rule.tag] || 0) + 1;
         }
