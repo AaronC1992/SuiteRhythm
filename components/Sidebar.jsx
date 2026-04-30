@@ -125,7 +125,7 @@ export default function Sidebar({ user }) {
           <button id="tutorialBtn" className="sidebar-action-btn">How to Use</button>
           <button id="feedbackBtn" className="sidebar-action-btn">Feedback</button>
         </div>
-        <p className="version">v3.0.0 | SuiteRhythm &copy; 2026</p>
+        <p className="version">v3.6.0 | SuiteRhythm &copy; 2026</p>
       </div>
     </aside>
   );

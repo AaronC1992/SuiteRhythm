@@ -1,6 +1,6 @@
 // ===== SuiteRhythm - INTELLIGENT AUDIO COMPANION =====
 // Author: Expert AI Team
-// Version: 3.0.0 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
+// Version: 3.6.0 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
 
 // ===== IMPORT MODULES =====
 import { Howl, Howler } from 'howler';
