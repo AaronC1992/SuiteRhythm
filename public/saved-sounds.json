@@ -16687,6 +16687,1511 @@
         "melee",
         "dnd"
       ]
+    },
+    {
+      "type": "sfx",
+      "name": "human gasp sudden",
+      "file": "Saved sounds/human-gasp-sudden.mp3",
+      "keywords": [
+        "human",
+        "gasp",
+        "sudden",
+        "surprise",
+        "breath",
+        "reaction",
+        "shock",
+        "voice"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "human sigh tired",
+      "file": "Saved sounds/human-sigh-tired.mp3",
+      "keywords": [
+        "human",
+        "sigh",
+        "tired",
+        "exhale",
+        "weary",
+        "breath",
+        "reaction",
+        "voice"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "nervous laugh short",
+      "file": "Saved sounds/nervous-laugh-short.mp3",
+      "keywords": [
+        "nervous",
+        "laugh",
+        "short",
+        "human",
+        "awkward",
+        "reaction",
+        "chuckle",
+        "voice"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "throat clearing single",
+      "file": "Saved sounds/throat-clearing-single.mp3",
+      "keywords": [
+        "throat",
+        "clearing",
+        "clear",
+        "cough",
+        "human",
+        "voice",
+        "attention",
+        "single"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "cough single dry",
+      "file": "Saved sounds/cough-single-dry.mp3",
+      "keywords": [
+        "cough",
+        "single",
+        "dry",
+        "human",
+        "throat",
+        "sick",
+        "reaction",
+        "voice"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "sneeze single close",
+      "file": "Saved sounds/sneeze-single-close.mp3",
+      "keywords": [
+        "sneeze",
+        "single",
+        "human",
+        "close",
+        "reaction",
+        "nose",
+        "voice",
+        "body"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "crying sniffle quiet",
+      "file": "Saved sounds/crying-sniffle-quiet.mp3",
+      "keywords": [
+        "crying",
+        "sniffle",
+        "quiet",
+        "sad",
+        "human",
+        "tears",
+        "sob",
+        "voice"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "heartbeat tense close",
+      "file": "Saved sounds/heartbeat-tense-close.mp3",
+      "keywords": [
+        "heartbeat",
+        "heart",
+        "tense",
+        "pulse",
+        "body",
+        "fear",
+        "close",
+        "suspense"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "breathing heavy running",
+      "file": "Saved sounds/breathing-heavy-running.mp3",
+      "keywords": [
+        "breathing",
+        "heavy",
+        "running",
+        "panting",
+        "human",
+        "exertion",
+        "breath",
+        "chase"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "hand clap single",
+      "file": "Saved sounds/hand-clap-single.mp3",
+      "keywords": [
+        "hand",
+        "clap",
+        "single",
+        "applause",
+        "hands",
+        "slap",
+        "human",
+        "impact"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "applause small room",
+      "file": "Saved sounds/applause-small-room.mp3",
+      "keywords": [
+        "applause",
+        "small",
+        "room",
+        "clapping",
+        "audience",
+        "hands",
+        "people",
+        "indoor"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "body fall onto floor",
+      "file": "Saved sounds/body-fall-onto-floor.mp3",
+      "keywords": [
+        "body",
+        "fall",
+        "floor",
+        "thud",
+        "collapse",
+        "impact",
+        "human",
+        "drop"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "pockets pat down search",
+      "file": "Saved sounds/pockets-pat-down-search.mp3",
+      "keywords": [
+        "pockets",
+        "pat",
+        "down",
+        "search",
+        "clothes",
+        "fabric",
+        "hands",
+        "checking"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "backpack rummage zipper",
+      "file": "Saved sounds/backpack-rummage-zipper.mp3",
+      "keywords": [
+        "backpack",
+        "rummage",
+        "zipper",
+        "bag",
+        "search",
+        "fabric",
+        "pocket",
+        "gear"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "coin purse rummage",
+      "file": "Saved sounds/coin-purse-rummage.mp3",
+      "keywords": [
+        "coin",
+        "purse",
+        "rummage",
+        "coins",
+        "money",
+        "bag",
+        "jingle",
+        "search"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "doorbell chime house",
+      "file": "Saved sounds/doorbell-chime-house.mp3",
+      "keywords": [
+        "doorbell",
+        "chime",
+        "house",
+        "front",
+        "door",
+        "ring",
+        "ding",
+        "home"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "door knock soft indoor",
+      "file": "Saved sounds/door-knock-soft-indoor.mp3",
+      "keywords": [
+        "door",
+        "knock",
+        "soft",
+        "indoor",
+        "wood",
+        "tap",
+        "room",
+        "home"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "door knock urgent indoor",
+      "file": "Saved sounds/door-knock-urgent-indoor.mp3",
+      "keywords": [
+        "door",
+        "knock",
+        "urgent",
+        "indoor",
+        "wood",
+        "pounding",
+        "room",
+        "home"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "doorknob turn open",
+      "file": "Saved sounds/doorknob-turn-open.mp3",
+      "keywords": [
+        "doorknob",
+        "turn",
+        "open",
+        "door",
+        "handle",
+        "latch",
+        "metal",
+        "entry"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "sliding closet door",
+      "file": "Saved sounds/sliding-closet-door.mp3",
+      "keywords": [
+        "sliding",
+        "closet",
+        "door",
+        "track",
+        "open",
+        "close",
+        "room",
+        "home"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "metal lock latch click",
+      "file": "Saved sounds/metal-lock-latch-click.mp3",
+      "keywords": [
+        "metal",
+        "lock",
+        "latch",
+        "click",
+        "bolt",
+        "door",
+        "secure",
+        "mechanism"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "glass breaking small",
+      "file": "Saved sounds/glass-breaking-small.mp3",
+      "keywords": [
+        "glass",
+        "breaking",
+        "break",
+        "small",
+        "shatter",
+        "cup",
+        "impact",
+        "pieces"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "glass bottle set down",
+      "file": "Saved sounds/glass-bottle-set-down.mp3",
+      "keywords": [
+        "glass",
+        "bottle",
+        "set",
+        "down",
+        "table",
+        "clink",
+        "drink",
+        "surface"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "liquid pouring glass",
+      "file": "Saved sounds/liquid-pouring-glass.mp3",
+      "keywords": [
+        "liquid",
+        "pouring",
+        "glass",
+        "water",
+        "drink",
+        "cup",
+        "stream",
+        "fill"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "spoon stirring mug",
+      "file": "Saved sounds/spoon-stirring-mug.mp3",
+      "keywords": [
+        "spoon",
+        "stirring",
+        "mug",
+        "cup",
+        "ceramic",
+        "tea",
+        "coffee",
+        "clink"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "kettle boiling whistle",
+      "file": "Saved sounds/kettle-boiling-whistle.mp3",
+      "keywords": [
+        "kettle",
+        "boiling",
+        "whistle",
+        "tea",
+        "water",
+        "steam",
+        "kitchen",
+        "appliance"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "frying pan sizzle",
+      "file": "Saved sounds/frying-pan-sizzle.mp3",
+      "keywords": [
+        "frying",
+        "pan",
+        "sizzle",
+        "cooking",
+        "food",
+        "kitchen",
+        "oil",
+        "stove"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "chopping vegetables board",
+      "file": "Saved sounds/chopping-vegetables-board.mp3",
+      "keywords": [
+        "chopping",
+        "vegetables",
+        "board",
+        "knife",
+        "cutting",
+        "kitchen",
+        "food",
+        "prep"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "toaster pop toast",
+      "file": "Saved sounds/toaster-pop-toast.mp3",
+      "keywords": [
+        "toaster",
+        "pop",
+        "toast",
+        "kitchen",
+        "appliance",
+        "spring",
+        "breakfast",
+        "click"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "food wrapper crinkle",
+      "file": "Saved sounds/food-wrapper-crinkle.mp3",
+      "keywords": [
+        "food",
+        "wrapper",
+        "crinkle",
+        "plastic",
+        "snack",
+        "package",
+        "crumple",
+        "bag"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "chip bag opening",
+      "file": "Saved sounds/chip-bag-opening.mp3",
+      "keywords": [
+        "chip",
+        "bag",
+        "opening",
+        "snack",
+        "crinkle",
+        "plastic",
+        "rip",
+        "food"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "trash can lid close",
+      "file": "Saved sounds/trash-can-lid-close.mp3",
+      "keywords": [
+        "trash",
+        "can",
+        "lid",
+        "close",
+        "bin",
+        "metal",
+        "garbage",
+        "clank"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "paper towel tear",
+      "file": "Saved sounds/paper-towel-tear.mp3",
+      "keywords": [
+        "paper",
+        "towel",
+        "tear",
+        "rip",
+        "kitchen",
+        "roll",
+        "sheet",
+        "cleaning"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "light bulb buzz flicker",
+      "file": "Saved sounds/light-bulb-buzz-flicker.mp3",
+      "keywords": [
+        "light",
+        "bulb",
+        "buzz",
+        "flicker",
+        "electric",
+        "lamp",
+        "hum",
+        "room"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "ceiling fan hum wobble",
+      "file": "Saved sounds/ceiling-fan-hum-wobble.mp3",
+      "keywords": [
+        "ceiling",
+        "fan",
+        "hum",
+        "wobble",
+        "room",
+        "motor",
+        "air",
+        "indoor"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "printer printing pages",
+      "file": "Saved sounds/printer-printing-pages.mp3",
+      "keywords": [
+        "printer",
+        "printing",
+        "pages",
+        "paper",
+        "office",
+        "machine",
+        "feed",
+        "document"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "scanner pass beep",
+      "file": "Saved sounds/scanner-pass-beep.mp3",
+      "keywords": [
+        "scanner",
+        "scan",
+        "pass",
+        "beep",
+        "office",
+        "machine",
+        "document",
+        "light"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "camera shutter click",
+      "file": "Saved sounds/camera-shutter-click.mp3",
+      "keywords": [
+        "camera",
+        "shutter",
+        "click",
+        "photo",
+        "picture",
+        "snapshot",
+        "lens",
+        "device"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "phone notification ding",
+      "file": "Saved sounds/phone-notification-ding.mp3",
+      "keywords": [
+        "phone",
+        "notification",
+        "ding",
+        "text",
+        "message",
+        "alert",
+        "mobile",
+        "chime"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "laptop lid close",
+      "file": "Saved sounds/laptop-lid-close.mp3",
+      "keywords": [
+        "laptop",
+        "lid",
+        "close",
+        "computer",
+        "shut",
+        "plastic",
+        "office",
+        "device"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "usb plug insert",
+      "file": "Saved sounds/usb-plug-insert.mp3",
+      "keywords": [
+        "usb",
+        "plug",
+        "insert",
+        "cable",
+        "computer",
+        "device",
+        "click",
+        "port"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "power button click startup",
+      "file": "Saved sounds/power-button-click-startup.mp3",
+      "keywords": [
+        "power",
+        "button",
+        "click",
+        "startup",
+        "device",
+        "computer",
+        "electronics",
+        "beep"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "router modem beep",
+      "file": "Saved sounds/router-modem-beep.mp3",
+      "keywords": [
+        "router",
+        "modem",
+        "beep",
+        "internet",
+        "electronics",
+        "device",
+        "network",
+        "status"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "fluorescent light hum",
+      "file": "Saved sounds/fluorescent-light-hum.mp3",
+      "keywords": [
+        "fluorescent",
+        "light",
+        "hum",
+        "electric",
+        "buzz",
+        "office",
+        "ceiling",
+        "lamp"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "projector fan start",
+      "file": "Saved sounds/projector-fan-start.mp3",
+      "keywords": [
+        "projector",
+        "fan",
+        "start",
+        "presentation",
+        "office",
+        "motor",
+        "machine",
+        "hum"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "whiteboard marker writing",
+      "file": "Saved sounds/whiteboard-marker-writing.mp3",
+      "keywords": [
+        "whiteboard",
+        "marker",
+        "writing",
+        "office",
+        "classroom",
+        "squeak",
+        "pen",
+        "board"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "stapler punch paper",
+      "file": "Saved sounds/stapler-punch-paper.mp3",
+      "keywords": [
+        "stapler",
+        "punch",
+        "paper",
+        "office",
+        "staple",
+        "document",
+        "click",
+        "desk"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "hole punch paper",
+      "file": "Saved sounds/hole-punch-paper.mp3",
+      "keywords": [
+        "hole",
+        "punch",
+        "paper",
+        "office",
+        "document",
+        "binder",
+        "click",
+        "desk"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "tape dispenser strip",
+      "file": "Saved sounds/tape-dispenser-strip.mp3",
+      "keywords": [
+        "tape",
+        "dispenser",
+        "strip",
+        "office",
+        "adhesive",
+        "tear",
+        "desk",
+        "package"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "cash register drawer",
+      "file": "Saved sounds/cash-register-drawer.mp3",
+      "keywords": [
+        "cash",
+        "register",
+        "drawer",
+        "money",
+        "shop",
+        "checkout",
+        "bell",
+        "open"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "car door open close",
+      "file": "Saved sounds/car-door-open-close.mp3",
+      "keywords": [
+        "car",
+        "door",
+        "open",
+        "close",
+        "vehicle",
+        "slam",
+        "handle",
+        "street"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "car engine start idle",
+      "file": "Saved sounds/car-engine-start-idle.mp3",
+      "keywords": [
+        "car",
+        "engine",
+        "start",
+        "idle",
+        "vehicle",
+        "ignition",
+        "motor",
+        "street"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "car drive by street",
+      "file": "Saved sounds/car-drive-by-street.mp3",
+      "keywords": [
+        "car",
+        "drive",
+        "by",
+        "street",
+        "vehicle",
+        "pass",
+        "road",
+        "traffic"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "tire screech short",
+      "file": "Saved sounds/tire-screech-short.mp3",
+      "keywords": [
+        "tire",
+        "screech",
+        "short",
+        "car",
+        "brake",
+        "skid",
+        "vehicle",
+        "road"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "car horn double honk",
+      "file": "Saved sounds/car-horn-double-honk.mp3",
+      "keywords": [
+        "car",
+        "horn",
+        "double",
+        "honk",
+        "vehicle",
+        "traffic",
+        "street",
+        "alert"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "truck reverse beeps",
+      "file": "Saved sounds/truck-reverse-beeps.mp3",
+      "keywords": [
+        "truck",
+        "reverse",
+        "beeps",
+        "backup",
+        "vehicle",
+        "construction",
+        "warning",
+        "street"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "bus air brakes stop",
+      "file": "Saved sounds/bus-air-brakes-stop.mp3",
+      "keywords": [
+        "bus",
+        "air",
+        "brakes",
+        "stop",
+        "vehicle",
+        "street",
+        "transit",
+        "hiss"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "subway train arriving",
+      "file": "Saved sounds/subway-train-arriving.mp3",
+      "keywords": [
+        "subway",
+        "train",
+        "arriving",
+        "station",
+        "rail",
+        "transit",
+        "brakes",
+        "urban"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "train horn distant",
+      "file": "Saved sounds/train-horn-distant.mp3",
+      "keywords": [
+        "train",
+        "horn",
+        "distant",
+        "rail",
+        "whistle",
+        "crossing",
+        "transport",
+        "night"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "motorcycle rev pass",
+      "file": "Saved sounds/motorcycle-rev-pass.mp3",
+      "keywords": [
+        "motorcycle",
+        "rev",
+        "pass",
+        "engine",
+        "vehicle",
+        "street",
+        "bike",
+        "road"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "bicycle bell ring",
+      "file": "Saved sounds/bicycle-bell-ring.mp3",
+      "keywords": [
+        "bicycle",
+        "bell",
+        "ring",
+        "bike",
+        "ding",
+        "street",
+        "alert",
+        "cycle"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "elevator ding doors open",
+      "file": "Saved sounds/elevator-ding-doors-open.mp3",
+      "keywords": [
+        "elevator",
+        "ding",
+        "doors",
+        "open",
+        "lift",
+        "building",
+        "metal",
+        "lobby"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "escalator mechanical hum",
+      "file": "Saved sounds/escalator-mechanical-hum.mp3",
+      "keywords": [
+        "escalator",
+        "mechanical",
+        "hum",
+        "steps",
+        "mall",
+        "building",
+        "motor",
+        "movement"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "crosswalk signal beep",
+      "file": "Saved sounds/crosswalk-signal-beep.mp3",
+      "keywords": [
+        "crosswalk",
+        "signal",
+        "beep",
+        "street",
+        "pedestrian",
+        "traffic",
+        "walk",
+        "alert"
+      ]
+    },
+    {
+      "type": "ambience",
+      "name": "city traffic light ambience",
+      "file": "Saved sounds/city-traffic-light-ambience.mp3",
+      "keywords": [
+        "city",
+        "traffic",
+        "light",
+        "ambience",
+        "ambient",
+        "street",
+        "cars",
+        "urban"
+      ],
+      "loop": true
+    },
+    {
+      "type": "sfx",
+      "name": "police siren pass",
+      "file": "Saved sounds/police-siren-pass.mp3",
+      "keywords": [
+        "police",
+        "siren",
+        "pass",
+        "emergency",
+        "vehicle",
+        "street",
+        "wail",
+        "urban"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "ambulance siren pass",
+      "file": "Saved sounds/ambulance-siren-pass.mp3",
+      "keywords": [
+        "ambulance",
+        "siren",
+        "pass",
+        "emergency",
+        "vehicle",
+        "street",
+        "medical",
+        "wail"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "helicopter overhead distant",
+      "file": "Saved sounds/helicopter-overhead-distant.mp3",
+      "keywords": [
+        "helicopter",
+        "overhead",
+        "distant",
+        "rotor",
+        "aircraft",
+        "sky",
+        "pass",
+        "vehicle"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "airplane overhead distant",
+      "file": "Saved sounds/airplane-overhead-distant.mp3",
+      "keywords": [
+        "airplane",
+        "overhead",
+        "distant",
+        "aircraft",
+        "jet",
+        "sky",
+        "pass",
+        "vehicle"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "garage door opening",
+      "file": "Saved sounds/garage-door-opening.mp3",
+      "keywords": [
+        "garage",
+        "door",
+        "opening",
+        "motor",
+        "track",
+        "house",
+        "vehicle",
+        "rumble"
+      ]
+    },
+    {
+      "type": "ambience",
+      "name": "rain on window ambience",
+      "file": "Saved sounds/rain-on-window-ambience.mp3",
+      "keywords": [
+        "rain",
+        "window",
+        "ambience",
+        "ambient",
+        "glass",
+        "weather",
+        "indoor",
+        "drops"
+      ],
+      "loop": true
+    },
+    {
+      "type": "ambience",
+      "name": "heavy rain roof ambience",
+      "file": "Saved sounds/heavy-rain-roof-ambience.mp3",
+      "keywords": [
+        "heavy",
+        "rain",
+        "roof",
+        "ambience",
+        "ambient",
+        "weather",
+        "storm",
+        "house"
+      ],
+      "loop": true
+    },
+    {
+      "type": "sfx",
+      "name": "thunder crack close",
+      "file": "Saved sounds/thunder-crack-close.mp3",
+      "keywords": [
+        "thunder",
+        "crack",
+        "close",
+        "storm",
+        "weather",
+        "boom",
+        "lightning",
+        "sky"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "wind through trees",
+      "file": "Saved sounds/wind-through-trees.mp3",
+      "keywords": [
+        "wind",
+        "through",
+        "trees",
+        "forest",
+        "gust",
+        "leaves",
+        "weather",
+        "nature"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "leaves rustle gust",
+      "file": "Saved sounds/leaves-rustle-gust.mp3",
+      "keywords": [
+        "leaves",
+        "rustle",
+        "gust",
+        "wind",
+        "forest",
+        "foliage",
+        "nature",
+        "outdoor"
+      ]
+    },
+    {
+      "type": "ambience",
+      "name": "river stream gentle ambience",
+      "file": "Saved sounds/river-stream-gentle-ambience.mp3",
+      "keywords": [
+        "river",
+        "stream",
+        "gentle",
+        "ambience",
+        "ambient",
+        "water",
+        "flow",
+        "nature"
+      ],
+      "loop": true
+    },
+    {
+      "type": "sfx",
+      "name": "ocean wave crash shore",
+      "file": "Saved sounds/ocean-wave-crash-shore.mp3",
+      "keywords": [
+        "ocean",
+        "wave",
+        "crash",
+        "shore",
+        "sea",
+        "water",
+        "surf",
+        "beach"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "snow footsteps crunch",
+      "file": "Saved sounds/snow-footsteps-crunch.mp3",
+      "keywords": [
+        "snow",
+        "footsteps",
+        "crunch",
+        "walking",
+        "winter",
+        "boots",
+        "outdoor",
+        "steps"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "mud footsteps squelch",
+      "file": "Saved sounds/mud-footsteps-squelch.mp3",
+      "keywords": [
+        "mud",
+        "footsteps",
+        "squelch",
+        "walking",
+        "wet",
+        "boots",
+        "outdoor",
+        "steps"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "gravel footsteps outdoor",
+      "file": "Saved sounds/gravel-footsteps-outdoor.mp3",
+      "keywords": [
+        "gravel",
+        "footsteps",
+        "outdoor",
+        "walking",
+        "stones",
+        "path",
+        "boots",
+        "steps"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "campfire crackle close",
+      "file": "Saved sounds/campfire-crackle-close.mp3",
+      "keywords": [
+        "campfire",
+        "crackle",
+        "close",
+        "fire",
+        "wood",
+        "flame",
+        "outdoor",
+        "logs"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "torch wall crackle dungeon",
+      "file": "Saved sounds/torch-wall-crackle-dungeon.mp3",
+      "keywords": [
+        "torch",
+        "wall",
+        "crackle",
+        "dungeon",
+        "fire",
+        "flame",
+        "stone",
+        "fantasy"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "puddle splash step",
+      "file": "Saved sounds/puddle-splash-step.mp3",
+      "keywords": [
+        "puddle",
+        "splash",
+        "step",
+        "water",
+        "foot",
+        "walking",
+        "wet",
+        "outdoor"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "branch snap underfoot",
+      "file": "Saved sounds/branch-snap-underfoot.mp3",
+      "keywords": [
+        "branch",
+        "snap",
+        "underfoot",
+        "twig",
+        "forest",
+        "step",
+        "break",
+        "outdoor"
+      ]
+    },
+    {
+      "type": "ambience",
+      "name": "night insects ambience",
+      "file": "Saved sounds/night-insects-ambience.mp3",
+      "keywords": [
+        "night",
+        "insects",
+        "ambience",
+        "ambient",
+        "crickets",
+        "outdoor",
+        "summer",
+        "field"
+      ],
+      "loop": true
+    },
+    {
+      "type": "sfx",
+      "name": "crossbow bolt fire",
+      "file": "Saved sounds/crossbow-bolt-fire.mp3",
+      "keywords": [
+        "crossbow",
+        "bolt",
+        "fire",
+        "shoot",
+        "weapon",
+        "twang",
+        "fantasy",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "arrow hit wooden target",
+      "file": "Saved sounds/arrow-hit-wooden-target.mp3",
+      "keywords": [
+        "arrow",
+        "hit",
+        "wooden",
+        "target",
+        "bow",
+        "thunk",
+        "projectile",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "arrow fly whoosh",
+      "file": "Saved sounds/arrow-fly-whoosh.mp3",
+      "keywords": [
+        "arrow",
+        "fly",
+        "whoosh",
+        "bow",
+        "projectile",
+        "shot",
+        "air",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "dagger draw quick",
+      "file": "Saved sounds/dagger-draw-quick.mp3",
+      "keywords": [
+        "dagger",
+        "draw",
+        "quick",
+        "blade",
+        "knife",
+        "weapon",
+        "unsheath",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "shield bash heavy shove",
+      "file": "Saved sounds/shield-bash-heavy-shove.mp3",
+      "keywords": [
+        "shield",
+        "bash",
+        "heavy",
+        "shove",
+        "impact",
+        "combat",
+        "metal",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "armor strap buckle",
+      "file": "Saved sounds/armor-strap-buckle.mp3",
+      "keywords": [
+        "armor",
+        "strap",
+        "buckle",
+        "leather",
+        "metal",
+        "gear",
+        "equip",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "armor clank movement",
+      "file": "Saved sounds/armor-clank-movement.mp3",
+      "keywords": [
+        "armor",
+        "clank",
+        "movement",
+        "metal",
+        "walking",
+        "plate",
+        "gear",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "chainmail movement rustle",
+      "file": "Saved sounds/chainmail-movement-rustle.mp3",
+      "keywords": [
+        "chainmail",
+        "movement",
+        "rustle",
+        "metal",
+        "armor",
+        "links",
+        "gear",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "lock picking tools",
+      "file": "Saved sounds/lock-picking-tools.mp3",
+      "keywords": [
+        "lock",
+        "picking",
+        "tools",
+        "pick",
+        "thief",
+        "metal",
+        "click",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "magic wand spark",
+      "file": "Saved sounds/magic-wand-spark.mp3",
+      "keywords": [
+        "magic",
+        "wand",
+        "spark",
+        "spell",
+        "arcane",
+        "wizard",
+        "cast",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "spell charge buildup",
+      "file": "Saved sounds/spell-charge-buildup.mp3",
+      "keywords": [
+        "spell",
+        "charge",
+        "buildup",
+        "magic",
+        "arcane",
+        "energy",
+        "cast",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "poison gas hiss trap",
+      "file": "Saved sounds/poison-gas-hiss-trap.mp3",
+      "keywords": [
+        "poison",
+        "gas",
+        "hiss",
+        "trap",
+        "dungeon",
+        "danger",
+        "cloud",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "boulder trap rolling rumble",
+      "file": "Saved sounds/boulder-trap-rolling-rumble.mp3",
+      "keywords": [
+        "boulder",
+        "trap",
+        "rolling",
+        "rumble",
+        "stone",
+        "dungeon",
+        "chase",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "portcullis slam drop",
+      "file": "Saved sounds/portcullis-slam-drop.mp3",
+      "keywords": [
+        "portcullis",
+        "slam",
+        "drop",
+        "gate",
+        "metal",
+        "castle",
+        "dungeon",
+        "dnd"
+      ]
+    },
+    {
+      "type": "sfx",
+      "name": "treasure coins handful spill",
+      "file": "Saved sounds/treasure-coins-handful-spill.mp3",
+      "keywords": [
+        "treasure",
+        "coins",
+        "handful",
+        "spill",
+        "gold",
+        "loot",
+        "money",
+        "dnd"
+      ]
     }
   ]
 }

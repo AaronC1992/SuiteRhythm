@@ -18,7 +18,9 @@
     "sounds:plan": "node scripts/generate-sounds-batch2.js --dry-run",
     "sounds:generate": "node scripts/generate-sounds-batch2.js",
     "sounds:priority:plan": "node scripts/generate-priority-sounds.js --dry-run",
-    "sounds:priority:generate": "node scripts/generate-priority-sounds.js"
+    "sounds:priority:generate": "node scripts/generate-priority-sounds.js",
+    "sounds:needed:plan": "node scripts/generate-needed-sounds.js --dry-run",
+    "sounds:needed:generate": "node scripts/generate-needed-sounds.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1024.0",
