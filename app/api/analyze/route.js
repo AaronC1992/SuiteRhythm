@@ -83,7 +83,7 @@ RESPONSE FORMAT (strict JSON):
 
 CRITICAL RULES:
 - You MUST pick sounds from the AVAILABLE lists below. Use the EXACT name as the "id". Do NOT invent sound names.
-- "scene" drives ambient bed selection. Use descriptive keywords: forest, cave, tavern, cottage, castle, ocean, rain, battle, etc.
+- "scene" drives ambient bed selection only when the transcript clearly establishes a setting. Use descriptive keywords only when evidenced: forest, cave, tavern, cottage, castle, ocean, rain, battle, etc.
 - "mood.primary" + "mood.intensity" drive the emotional arc. Be consistent — don't flip moods every response.
 - "confidence" reflects how certain you are. Set 0.3-0.5 when transcript is ambiguous.
 - "music" — only change when scene/mood shifts significantly. Use null if current music should keep playing. Pick music that matches the mood and setting.
@@ -98,7 +98,10 @@ VERB TENSE & INTENT (important for not repeating one-shot sounds):
 - If a sound id appears in "recentSounds" (played in the last few turns), only pick it again if the transcript clearly describes a NEW instance of that event.
 
 OTHER RULES:
-- Prioritize atmosphere over action. Ambient context (forest sounds, wind, fire crackling) matters more than one-off SFX.
+- Prioritize accuracy over atmosphere. Do not add ambience just because the line is quiet or neutral.
+- Treat the current Transcript/newSpeech as stronger evidence than scene history for new sound choices.
+- If the transcript describes indoor/object actions without an explicit outdoor setting, never infer forest, birds, wind, footsteps, tavern, cave, or weather ambience.
+- If the AVAILABLE lists only contain weak or nearby matches, prefer null music and an empty sfx array over choosing the closest unrelated sound.
 - Never include sounds that contradict the scene (no crowd noise in a lonely forest, no birds in a dungeon).
 - If no SFX are warranted, return an empty array. Silence is better than wrong sounds.
 - When "sceneStabilityMs" is low (< 10000), be cautious: set sfx confidence 0.5+ only if you are sure, else drop the sfx.

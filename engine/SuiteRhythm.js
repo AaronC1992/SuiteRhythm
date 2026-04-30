@@ -9,7 +9,7 @@ import { LRUCache, MemoryMonitor, CacheManager } from '../lib/modules/memory-man
 import PerformanceMonitor from '../lib/modules/performance-monitor.js';
 import { CircuitBreaker, RetryHandler, OfflineDetector, setupGlobalErrorHandlers } from '../lib/modules/error-handler.js';
 import { initAccessibility, announceToScreenReader } from '../lib/modules/accessibility.js';
-import { buildTriggerMap, ruleBasedDecision, tfidfMatch } from '../lib/modules/trigger-system.js';
+import { buildTriggerMap, ruleBasedDecision, tfidfMatch, shouldTriggerKeyword } from '../lib/modules/trigger-system.js';
 import { computeNormalizationGain as computeNormGain, calculateVolume as calcVolume, getSfxBucket as sfxBucket, getDuckParams as duckParamsCalc, shuffleArray as shuffle } from '../lib/modules/sound-engine.js';
 import { MODE_CONTEXTS, MODE_RULES, MODE_STINGERS, MODE_PRELOAD_SETS, GENERIC_PRELOAD_SET } from '../lib/modules/ai-director.js';
 import { applyGainToVolume as applyLoudnessGain, primeReplayGain } from '../lib/modules/loudness.js';
@@ -2033,7 +2033,7 @@ class SuiteRhythm {
             if (!queries || queries.length === 0) continue;
             const q = queries[Math.floor(Math.random() * queries.length)];
             try {
-                const url = await this.searchAudio(q, 'sfx');
+                const url = await this.searchAudio(q, 'ambience', { allowExternal: false });
                 if (!url) continue;
                 const vol = this._dialogueMode ? this.ambientBedGain * this._dialogueDuckLevel : this.ambientBedGain;
                 await this.playAudio(url, { type: 'sfx', name: `bed:${cat}`, volume: this.calculateVolume(vol), loop: true });
@@ -5073,6 +5073,7 @@ class SuiteRhythm {
                 const regex = new RegExp(`\\b${escapedKw}\\b`, 'i');
                 // Check primary transcript, alternative transcriptions, AND synonym expansions
                 if (regex.test(lowerText) || lowerAlts.some(alt => regex.test(alt)) || expandedHits.has(keyword)) {
+                    if (!shouldTriggerKeyword(keyword, [lowerText, ...lowerAlts].join(' '))) continue;
                     this.instantKeywordCooldowns.set(keyword, now);
                     try { recordKeywordFire(keyword); } catch (_) {}
                     debugLog(`Instant trigger detected: "${keyword}"`);
@@ -5597,11 +5598,6 @@ class SuiteRhythm {
             this.detectSceneTransition(decisions);
             // Scene state machine: update state + potentially force fast music change
             this._updateSceneState(decisions);
-            // Now that we have a real analyzed mood/scene, it's safe to start
-            // procedural ambient beds. Skipped for sing mode inside the method.
-            if (this.isListening && this.currentMode !== 'sing') {
-                this.startProceduralAmbient();
-            }
             // Rolling scene memory: rebuild summary every 3 analyses
             this._analysisCountSinceLastSummary = (this._analysisCountSinceLastSummary || 0) + 1;
             if (this._analysisCountSinceLastSummary >= 3) {
@@ -5634,7 +5630,13 @@ class SuiteRhythm {
             if (/underwater|ocean floor|deep sea|submerge|abyss/i.test(sceneStr)) bedCats.push('underwater');
             if (/mountain|peak|summit|highland|alpine/i.test(sceneStr)) bedCats.push('mountain');
             if (/night|midnight|dusk|moonlit|nocturnal/i.test(sceneStr)) bedCats.push('night');
-            this._updateSceneBed(bedCats).catch(e => debugLog('Scene bed update failed:', e.message));
+            const explicitBedCats = [...new Set(bedCats)];
+            this._ambientContextTags = explicitBedCats;
+            this._updateSceneBed(explicitBedCats).catch(e => debugLog('Scene bed update failed:', e.message));
+            if (this.isListening && this.currentMode !== 'sing') {
+                if (explicitBedCats.length > 0) this.startProceduralAmbient();
+                else this.stopProceduralAmbient();
+            }
 
             // --- Predictive preloading for current scene category ---
             this._preloadForScene(this.sceneState).catch(e => debugLog('Scene preload failed:', e.message));
@@ -6004,6 +6006,9 @@ class SuiteRhythm {
         const primaryTags = moodEntry.primary;
         const secondaryTags = moodEntry.secondary;
         const avgIntensity = recent.reduce((s, m) => s + m.intensity, 0) / recent.length;
+        if (this.currentMode === 'auto' && !this._ambientContextTags?.length) {
+            if (dominant === 'neutral' || avgIntensity < 0.55) return;
+        }
         
         // Score candidates by tag relevance and intensity match
         const candidates = this.soundCatalog
@@ -6166,7 +6171,8 @@ class SuiteRhythm {
             return;
         }
         
-        const soundUrl = await this.searchAudio(sfxData.query, 'sfx');
+        const directUrl = sfxData.directUrl ? encodeURI(String(sfxData.directUrl)) : null;
+        const soundUrl = directUrl || await this.searchAudio(sfxData.query, 'sfx');
         if (soundUrl) {
             const played = await this.playAudio(soundUrl, {
                 type: 'sfx',
@@ -6383,6 +6389,7 @@ class SuiteRhythm {
         if (!query || this.soundCatalog.length === 0) return [];
         const tokens = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
         if (tokens.length === 0) return [];
+        const originalTokens = new Set(tokens);
         
         // Synonym expansion for common audio terms
         const synonyms = {
@@ -6436,19 +6443,32 @@ class SuiteRhythm {
             .map(s => {
                 let score = 0;
                 const id = s.id.toLowerCase();
+                const idWords = new Set(id.split(/[^a-z0-9]+/).filter(Boolean));
                 const tags = (s.tags || []).map(t => t.toLowerCase());
+                let originalStrongHits = 0;
                 
                 for (const token of expanded) {
+                    const original = originalTokens.has(token);
                     // Exact tag match (highest value)
-                    if (tags.includes(token)) score += 3;
+                    if (tags.includes(token)) {
+                        score += original ? 3 : 1.5;
+                        if (original) originalStrongHits++;
+                    }
                     // Partial tag match
-                    else if (tags.some(t => t.includes(token) || token.includes(t))) score += 1.5;
+                    else if (token.length >= 5 && tags.some(t => t.includes(token) || token.includes(t))) {
+                        score += original ? 1.25 : 0.6;
+                    }
                     // ID contains token
-                    if (id.includes(token)) score += 2;
+                    if (idWords.has(token)) {
+                        score += original ? 2 : 1;
+                        if (original) originalStrongHits++;
+                    } else if (token.length >= 5 && id.includes(token)) {
+                        score += original ? 1 : 0.5;
+                    }
                 }
-                return { sound: s, score };
+                return { sound: s, score, originalStrongHits };
             })
-            .filter(r => r.score > 0)
+            .filter(r => r.originalStrongHits > 0 && r.score >= (type === 'music' ? 2.5 : 3))
             .sort((a, b) => b.score - a.score)
             .slice(0, maxResults)
             .map(r => r.sound);
@@ -6518,7 +6538,7 @@ class SuiteRhythm {
     }
 
     // ===== AUDIO SEARCH (Local + Pixabay) =====
-    async searchAudio(query, type) {
+    async searchAudio(query, type, options = {}) {
         // Try local Saved sounds first (primary source)
         if (this.savedSounds?.files?.length > 0) {
             const local = this.searchLocalSaved(query, type);
@@ -6529,6 +6549,8 @@ class SuiteRhythm {
         }
         // Try the server-side Pixabay proxy if configured. The browser never
         // needs to store a user-provided Pixabay key.
+        if (options.allowExternal === false) return null;
+
         const url = await this.searchPixabay(query, type);
         if (url) {
             return url;
@@ -6988,9 +7010,9 @@ class SuiteRhythm {
         if (!this.ambienceEnabled) return;
         // Sing mode is singer-focused (backing music only, no ambient beds/SFX).
         if (this.currentMode === 'sing') return;
-        // Don't start until we have an actually analyzed context — otherwise the
-        // default state ('exploration') + neutral mood spawns forest/birds/wind
-        // before the user has said a single word.
+        // Don't start until the analyzed scene explicitly names an ambient context.
+        // Generic neutral/exploration state is not enough evidence for forest/birds/wind.
+        if (!Array.isArray(this._ambientContextTags) || this._ambientContextTags.length === 0) return;
         if (this.proceduralTimer) return; // Already running
         this.updateProceduralLayers();
         // Re-evaluate layers periodically
@@ -7013,6 +7035,11 @@ class SuiteRhythm {
         const now = Date.now();
         if (now - this.lastProceduralUpdate < 25000) return;
         this.lastProceduralUpdate = now;
+        const explicitAmbientTags = Array.isArray(this._ambientContextTags) ? this._ambientContextTags : [];
+        if (explicitAmbientTags.length === 0) {
+            this.stopProceduralAmbient();
+            return;
+        }
         
         const mood = this.currentMood.primary;
         const intensity = this.currentMood.intensity;
@@ -7106,6 +7133,11 @@ class SuiteRhythm {
         } else {
             // Low intensity: pure scene-state palette (calm/ambient)
             targetPalette = basePalette;
+        }
+        const explicitTagSet = new Set(explicitAmbientTags);
+        targetPalette = targetPalette.filter((layer) => explicitTagSet.has(layer.tag));
+        if (targetPalette.length === 0) {
+            targetPalette = explicitAmbientTags.map((tag) => ({ tag, vol: 0.1 }));
         }
 
         // Scale layer count: low intensity = fewer layers, high = up to maxProceduralLayers
@@ -8167,8 +8199,9 @@ class SuiteRhythm {
 
     // ===== STINGERS =====
     scheduleNextStinger() {
-        if (!this.sfxEnabled || !this.predictionEnabled) return;
         if (this.stingerTimer) clearTimeout(this.stingerTimer);
+        if (!this.sfxEnabled || !this.predictionEnabled) return;
+        if (this.currentMode === 'auto' && !this.creatorMode && !this._ambientContextTags?.length) return;
         // Base cadence: 20-45s random. Duration-scheduler extends the wait if a
         // stinger is still playing so we don't double-book the bus.
         const baseInterval = 20000 + Math.random() * 25000;
