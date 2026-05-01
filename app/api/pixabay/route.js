@@ -16,6 +16,7 @@ import { requireAuth } from '../../../lib/api-auth.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 const PIXABAY_KEY = process.env.PIXABAY_API_KEY;
+const UPSTREAM_UNAVAILABLE_STATUSES = new Set([401, 403, 429]);
 
 export async function GET(request) {
   const denied = requireAuth(request);
@@ -65,15 +66,27 @@ export async function GET(request) {
     });
 
     if (!res.ok) {
-      const status = res.status === 401 ? 503 : res.status;
+      const upstreamStatus = res.status;
+      const providerUnavailable = UPSTREAM_UNAVAILABLE_STATUSES.has(upstreamStatus);
       return NextResponse.json(
-        { error: `Pixabay upstream error (${res.status})` },
-        { status }
+        {
+          error: providerUnavailable
+            ? 'Pixabay provider unavailable'
+            : `Pixabay upstream error (${upstreamStatus})`,
+          upstreamStatus,
+        },
+        {
+          status: providerUnavailable ? 503 : 502,
+          headers: {
+            ...rateLimitHeaders(rate),
+            'X-Pixabay-Upstream-Status': String(upstreamStatus),
+          },
+        }
       );
     }
 
     const data = await res.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data, { headers: rateLimitHeaders(rate) });
   } catch (err) {
     console.error('[/api/pixabay]', err);
     return NextResponse.json({ error: 'Pixabay request failed' }, { status: 502 });

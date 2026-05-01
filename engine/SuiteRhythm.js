@@ -412,6 +412,8 @@ class SuiteRhythm {
     // Cache / recent playback tracking
     this.soundCache = new Map();
     this.recentlyPlayed = new Set(); // track recent URLs to reduce repeats
+    this._pixabayUnavailableUntil = 0;
+    this._pixabayUnavailableWarnedAt = 0;
     // SFX anti-repeat
         this.sfxCooldownMs = 3500; // minimum gap between same-category SFX
         this.sfxCooldowns = new Map(); // bucket -> nextAllowedTime
@@ -6511,6 +6513,9 @@ class SuiteRhythm {
     
     // ===== PIXABAY INTEGRATION =====
     async searchPixabay(query, type) {
+        const now = Date.now();
+        if (this._pixabayUnavailableUntil && now < this._pixabayUnavailableUntil) return null;
+
         try {
             const category = type === 'music' ? 'music' : '';
             const minDuration = type === 'music' ? 30 : 0;
@@ -6533,8 +6538,14 @@ class SuiteRhythm {
 
             const response = await fetch(`/api/pixabay?${params}`, { headers });
             if (!response.ok) {
-                if (response.status === 503) {
-                    debugLog('Pixabay not available (server key missing)');
+                if ([401, 403, 429, 502, 503].includes(response.status)) {
+                    const detail = await response.json().catch(() => ({}));
+                    const upstreamStatus = Number(response.headers.get('X-Pixabay-Upstream-Status') || detail?.upstreamStatus || 0);
+                    this._pixabayUnavailableUntil = Date.now() + (response.status === 429 ? 60_000 : 5 * 60_000);
+                    if (!this._pixabayUnavailableWarnedAt || Date.now() - this._pixabayUnavailableWarnedAt > 60_000) {
+                        this._pixabayUnavailableWarnedAt = Date.now();
+                        debugLog(`Pixabay unavailable${upstreamStatus ? ` (${upstreamStatus})` : ''}; using local sound library only.`);
+                    }
                     return null;
                 }
                 throw new Error(`Pixabay API error: ${response.status}`);
@@ -6567,7 +6578,10 @@ class SuiteRhythm {
             debugLog(`No Pixabay results for: ${query}`);
             return null;
         } catch (error) {
-            console.error('Pixabay search error:', error);
+            if (!this._pixabayUnavailableWarnedAt || Date.now() - this._pixabayUnavailableWarnedAt > 60_000) {
+                this._pixabayUnavailableWarnedAt = Date.now();
+                debugLog('Pixabay search unavailable; using local sound library only.', error?.message || error);
+            }
             return null;
         }
     }
