@@ -561,22 +561,28 @@ class SuiteRhythm {
             // CDN is primary source for relative paths (skip if already prefixed)
             list.push(joinAudioUrlBase(cdnBase, normalized));
         }
-        if (!isSavedSoundsPath(normalized) || !hasCdnPrimary) {
+        const savedSoundsAsset = isSavedSoundsPath(normalized);
+        if (!savedSoundsAsset || !hasCdnPrimary) {
             list.push(normalized); // local fallback for non-R2 assets
         }
-        try {
-            if (/^https?:\/\//i.test(normalized)) {
-                const m = normalized.match(/\/(?:cueai-media\/)?(music|sfx|ambience)\/(.+)$/i);
-                if (m) {
-                    const localPath = `/media/${m[1]}/${m[2]}`;
+        // Saved-sounds assets only live on R2. Don't emit a same-origin or
+        // backend fallback for them — that just produces noisy 404s when the
+        // primary CDN candidate is missing.
+        if (!savedSoundsAsset) {
+            try {
+                if (/^https?:\/\//i.test(normalized)) {
+                    const m = normalized.match(/\/(?:cueai-media\/)?(music|sfx|ambience)\/(.+)$/i);
+                    if (m) {
+                        const localPath = `/media/${m[1]}/${m[2]}`;
+                        const backend = this.getBackendUrl().replace(/\/$/,'');
+                        list.push(`${backend}${localPath}`);
+                    }
+                } else {
                     const backend = this.getBackendUrl().replace(/\/$/,'');
-                    list.push(`${backend}${localPath}`);
+                    if (backend) list.push(`${backend}${normalized.startsWith('/') ? normalized : '/' + normalized}`);
                 }
-            } else {
-                const backend = this.getBackendUrl().replace(/\/$/,'');
-                if (backend) list.push(`${backend}${normalized.startsWith('/') ? normalized : '/' + normalized}`);
-            }
-        } catch (_) {}
+            } catch (_) {}
+        }
         return [...new Set(list)];
     }
     
