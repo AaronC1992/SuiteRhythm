@@ -51,12 +51,21 @@ export default function AppShell({ user }) {
   useEffect(() => {
     // Register service worker for offline caching
     if ('serviceWorker' in navigator) {
+      let refreshing = false;
+      const handleControllerChange = () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      };
+      navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
       navigator.serviceWorker.register('/service-worker.js').then((registration) => {
         registration.update().catch(() => {});
       }).catch((err) => {
         console.warn('[SW] Registration failed:', err);
       });
+      return () => navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
     }
+    return undefined;
   }, []);
   useEffect(() => {
     let engineInstance = null;

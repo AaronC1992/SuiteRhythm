@@ -1,5 +1,5 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v26'; // Bumped: network-first app shell + legacy audio bypass
+const CACHE_NAME = 'SuiteRhythm-v27'; // Bumped: service-worker proxy for legacy audio URLs
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -21,9 +21,17 @@ function shouldBypassCache(request, url) {
   if (request.method !== 'GET') return true;
   if (url.origin !== self.location.origin) return true;
   return url.pathname.startsWith('/api/') ||
-    url.pathname.startsWith('/r2-audio/') ||
-    url.pathname.startsWith('/Saved%20sounds/') ||
-    url.pathname.startsWith('/Saved sounds/');
+    url.pathname.startsWith('/r2-audio/');
+}
+
+function isLegacySavedSoundsPath(url) {
+  return url.origin === self.location.origin &&
+    (url.pathname.startsWith('/Saved%20sounds/') || url.pathname.startsWith('/Saved sounds/'));
+}
+
+function buildR2AudioProxyUrl(url) {
+  const proxyPath = url.pathname.replace(/^\/Saved(?:%20| )sounds\//i, '/r2-audio/Saved%20sounds/');
+  return `${url.origin}${proxyPath}${url.search}`;
 }
 
 function isStaticAsset(url) {
@@ -52,6 +60,11 @@ self.addEventListener('install', (event) => {
 // Fetch event - serve from cache when possible
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
+
+  if (isLegacySavedSoundsPath(url)) {
+    event.respondWith(fetch(buildR2AudioProxyUrl(url)));
+    return;
+  }
 
   if (shouldBypassCache(event.request, url)) {
     event.respondWith(fetch(event.request));
