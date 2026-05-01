@@ -3138,6 +3138,8 @@ class SuiteRhythm {
         document.getElementById('manageSubscriptionBtn')?.addEventListener('click', () => {
             this.navigateToSection('settingsSection');
             document.getElementById('subscriptionMenuContent')?.classList.remove('hidden');
+            document.getElementById('subscriptionMenuToggle')?.classList.add('active');
+            document.getElementById('subscriptionMenuToggle')?.setAttribute('aria-expanded', 'true');
         });
         
         // Legacy mode buttons (if still present)
@@ -3483,14 +3485,6 @@ class SuiteRhythm {
                 this._renderCustomPhrasesList();
             });
         }
-        const customPhrasesToggle = document.getElementById('customPhrasesToggle');
-        if (customPhrasesToggle) {
-            customPhrasesToggle.addEventListener('click', () => {
-                const content = document.getElementById('customPhrasesContent');
-                if (content) content.classList.toggle('hidden');
-            });
-        }
-
         // ===== OBS WebSocket Integration =====
         this._setupObsBridge();
 
@@ -10913,76 +10907,21 @@ class SuiteRhythm {
 
 // ===== COLLAPSIBLE MENU FUNCTIONALITY =====
 function initializeMenuToggles() {
-    const volumeToggle = document.getElementById('volumeMenuToggle');
-    const volumeContent = document.getElementById('volumeMenuContent');
-    const settingsToggle = document.getElementById('settingsMenuToggle');
-    const settingsContent = document.getElementById('settingsMenuContent');
+    document.querySelectorAll('.menu-toggle').forEach(toggle => {
+        if (toggle.dataset.menuToggleBound === 'true') return;
+        const content = toggle.nextElementSibling?.classList?.contains('menu-content')
+            ? toggle.nextElementSibling
+            : toggle.parentElement?.querySelector(':scope > .menu-content');
+        if (!content) return;
 
-    // Volume menu toggle
-    if (volumeToggle && volumeContent) {
-        volumeToggle.addEventListener('click', () => {
-            volumeToggle.classList.toggle('active');
-            volumeContent.classList.toggle('hidden');
+        toggle.dataset.menuToggleBound = 'true';
+        toggle.setAttribute('aria-expanded', String(!content.classList.contains('hidden')));
+        toggle.addEventListener('click', () => {
+            const isOpen = content.classList.toggle('hidden') === false;
+            toggle.classList.toggle('active', isOpen);
+            toggle.setAttribute('aria-expanded', String(isOpen));
         });
-    }
-
-    // Settings menu toggle
-    if (settingsToggle && settingsContent) {
-        settingsToggle.addEventListener('click', () => {
-            settingsToggle.classList.toggle('active');
-            settingsContent.classList.toggle('hidden');
-        });
-    }
-
-    // Trigger Cooldown subsection toggle
-    const triggerCooldownToggle = document.getElementById('triggerCooldownToggle');
-    const triggerCooldownContent = document.getElementById('triggerCooldownContent');
-    if (triggerCooldownToggle && triggerCooldownContent) {
-        triggerCooldownToggle.addEventListener('click', () => {
-            triggerCooldownToggle.classList.toggle('active');
-            triggerCooldownContent.classList.toggle('hidden');
-        });
-    }
-
-    // Scene Presets subsection toggle
-    const scenePresetsToggle = document.getElementById('scenePresetsToggle');
-    const scenePresetsContent = document.getElementById('scenePresetsContent');
-    if (scenePresetsToggle && scenePresetsContent) {
-        scenePresetsToggle.addEventListener('click', () => {
-            scenePresetsToggle.classList.toggle('active');
-            scenePresetsContent.classList.toggle('hidden');
-        });
-    }
-
-    // OBS Integration subsection toggle
-    const obsSettingsToggle = document.getElementById('obsSettingsToggle');
-    const obsSettingsContent = document.getElementById('obsSettingsContent');
-    if (obsSettingsToggle && obsSettingsContent) {
-        obsSettingsToggle.addEventListener('click', () => {
-            obsSettingsToggle.classList.toggle('active');
-            obsSettingsContent.classList.toggle('hidden');
-        });
-    }
-
-    // Audio Source subsection toggle
-    const audioSourceToggle = document.getElementById('audioSourceMenuToggle');
-    const audioSourceContent = document.getElementById('audioSourceMenuContent');
-    if (audioSourceToggle && audioSourceContent) {
-        audioSourceToggle.addEventListener('click', () => {
-            audioSourceToggle.classList.toggle('active');
-            audioSourceContent.classList.toggle('hidden');
-        });
-    }
-
-    // Appearance subsection toggle
-    const appearanceToggle = document.getElementById('appearanceMenuToggle');
-    const appearanceContent = document.getElementById('appearanceMenuContent');
-    if (appearanceToggle && appearanceContent) {
-        appearanceToggle.addEventListener('click', () => {
-            appearanceToggle.classList.toggle('active');
-            appearanceContent.classList.toggle('hidden');
-        });
-    }
+    });
 
     // Theme picker
     const themePicker = document.getElementById('themePicker');
