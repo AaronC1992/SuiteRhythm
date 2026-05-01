@@ -51,7 +51,9 @@ export default function AppShell({ user }) {
   useEffect(() => {
     // Register service worker for offline caching
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').catch((err) => {
+      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+        registration.update().catch(() => {});
+      }).catch((err) => {
         console.warn('[SW] Registration failed:', err);
       });
     }

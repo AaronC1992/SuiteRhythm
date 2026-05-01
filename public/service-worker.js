@@ -1,5 +1,5 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v25'; // Bumped: avoid caching API/auth/media responses
+const CACHE_NAME = 'SuiteRhythm-v26'; // Bumped: network-first app shell + legacy audio bypass
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -20,7 +20,10 @@ const urlsToCache = [
 function shouldBypassCache(request, url) {
   if (request.method !== 'GET') return true;
   if (url.origin !== self.location.origin) return true;
-  return url.pathname.startsWith('/api/') || url.pathname.startsWith('/r2-audio/');
+  return url.pathname.startsWith('/api/') ||
+    url.pathname.startsWith('/r2-audio/') ||
+    url.pathname.startsWith('/Saved%20sounds/') ||
+    url.pathname.startsWith('/Saved sounds/');
 }
 
 function isStaticAsset(url) {
@@ -68,8 +71,8 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Use stale-while-revalidate for app shell files (HTML, JS, CSS) and navigation requests
-  // This serves cached content immediately while fetching fresh content in background
+  // Use network-first for app shell files (HTML, JS, CSS) and navigation requests
+  // so deploys do not keep serving stale chunks while online.
   const isAppShell = url.origin === self.location.origin && 
     (event.request.mode === 'navigate' ||
      url.pathname.endsWith('.html') || url.pathname.endsWith('.js') ||
@@ -79,16 +82,13 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
         return cache.match(event.request).then((cachedResponse) => {
-          const fetchPromise = fetch(event.request).then((networkResponse) => {
+          return fetch(event.request).then((networkResponse) => {
             // Update cache with fresh content
             if (networkResponse && networkResponse.status === 200) {
               cache.put(event.request, networkResponse.clone());
             }
             return networkResponse;
-          }).catch(() => cachedResponse); // Fallback to cache on network error
-          
-          // Return cached version immediately, or wait for network if no cache
-          return cachedResponse || fetchPromise;
+          }).catch(() => cachedResponse || new Response('Offline', { status: 503, statusText: 'Service Unavailable' }));
         });
       })
     );
