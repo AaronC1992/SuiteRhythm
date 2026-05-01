@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '../../../../lib/api-auth.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../../lib/rate-limit.js';
+import { addTimingHeaders, logApiMetric } from '../../../../lib/server-observability.js';
 import { renderStudioMedia } from '../../../../lib/studio/render.js';
 
 export const runtime = 'nodejs';
@@ -10,6 +11,7 @@ const MAX_RENDER_FILE_SIZE = Number(process.env.STUDIO_RENDER_MAX_FILE_MB || 100
 const SUPPORTED_MEDIA_EXTENSIONS = /\.(mp3|mp4|mpeg|mpga|m4a|wav|webm|ogg)$/i;
 
 export async function POST(request) {
+  const startedAt = Date.now();
   const denied = requireAuth(request);
   if (denied) return denied;
 
@@ -59,7 +61,7 @@ export async function POST(request) {
 
   try {
     const rendered = await renderStudioMedia({ mediaFile, cueMap, outputType, outputFormat });
-    return new Response(rendered.buffer, {
+    const response = new Response(rendered.buffer, {
       status: 200,
       headers: {
         'Content-Type': rendered.contentType,
@@ -68,11 +70,15 @@ export async function POST(request) {
         'X-RateLimit-Remaining': String(rate.remaining),
       },
     });
+    logApiMetric('/api/studio/render', startedAt, { status: 200, outputType, outputFormat, sourceBytes: mediaFile.size, outputBytes: rendered.buffer.length, cueCount: cueMap?.cues?.length || 0 });
+    return addTimingHeaders(response, 'studio_render', startedAt);
   } catch (err) {
     console.error('[/api/studio/render]', err);
-    return NextResponse.json(
+    const res = NextResponse.json(
       { error: err?.message || 'Render failed' },
       { status: err?.status || 500, headers: rateLimitHeaders(rate) }
     );
+    logApiMetric('/api/studio/render', startedAt, { status: err?.status || 500, outputType, outputFormat, error: err?.name || 'Error' });
+    return addTimingHeaders(res, 'studio_render', startedAt);
   }
 }

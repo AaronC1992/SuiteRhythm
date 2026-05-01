@@ -8,6 +8,7 @@ import path from 'path';
 import { requireAuth } from '../../../lib/api-auth.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 import { deleteFile, downloadFileBuffer } from '../../../lib/r2.js';
+import { addTimingHeaders, logApiMetric } from '../../../lib/server-observability.js';
 import { getFfmpegBinaryPath } from '../../../lib/studio/render.js';
 
 export const runtime = 'nodejs';
@@ -24,6 +25,7 @@ function getOpenAI() {
 }
 
 export async function POST(request) {
+  const startedAt = Date.now();
   const denied = requireAuth(request);
   if (denied) return denied;
 
@@ -52,13 +54,16 @@ export async function POST(request) {
     const normalized = normalizeTranscription(transcription, source.duration);
     const res = NextResponse.json(normalized);
     res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
-    return res;
+    logApiMetric('/api/transcribe', startedAt, { status: 200, sourceBytes: source.file.size, words: normalized?.items?.length || 0 });
+    return addTimingHeaders(res, 'transcribe', startedAt);
   } catch (err) {
     console.error('[/api/transcribe]', err);
-    return NextResponse.json(
+    const res = NextResponse.json(
       { error: err?.message || 'Transcription failed' },
       { status: err?.status || 500, headers: rateLimitHeaders(rate) }
     );
+    logApiMetric('/api/transcribe', startedAt, { status: err?.status || 500, error: err?.name || 'Error' });
+    return addTimingHeaders(res, 'transcribe', startedAt);
   } finally {
     await source?.cleanup?.();
   }

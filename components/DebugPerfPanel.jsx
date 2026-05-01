@@ -63,8 +63,8 @@ export default function DebugPerfPanel() {
             const active = engine?.activeSounds?.size ?? 0;
             const mode = engine?.currentMode || 'n/a';
 
-            el.innerHTML =
-                `<strong>SuiteRhythm debug</strong>\n` +
+            el.textContent =
+                `SuiteRhythm debug\n` +
                 `fps:     ${String(fps).padStart(3)}\n` +
                 `howls:   ${howls}\n` +
                 `active:  ${active}\n` +

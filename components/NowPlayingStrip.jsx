@@ -8,8 +8,7 @@
  * active sound count, and the most recent trigger (name + the keyword
  * that fired it).
  *
- * Purely presentational — takes zero user input, never mutates engine
- * state. Safe to drop anywhere inside <EngineProvider>.
+ * Includes lightweight per-sound feedback for tuning matcher quality.
  */
 
 import { useEffect, useState } from 'react';
@@ -44,7 +43,7 @@ function formatAgo(ts) {
 }
 
 export default function NowPlayingStrip() {
-    const { state } = useEngine();
+    const { state, dispatch } = useEngine();
     const {
         connected, isListening, currentMood, activeSoundCount,
         lastTriggeredName, lastTriggeredKeyword, lastTriggeredAt,
@@ -61,9 +60,18 @@ export default function NowPlayingStrip() {
 
     // Flash animation on new trigger — ride on the timestamp changing.
     const [flashKey, setFlashKey] = useState(0);
+    const [feedbackSent, setFeedbackSent] = useState('');
     useEffect(() => {
-        if (lastTriggeredAt) setFlashKey((k) => k + 1);
+        if (lastTriggeredAt) {
+            setFlashKey((k) => k + 1);
+            setFeedbackSent('');
+        }
     }, [lastTriggeredAt]);
+
+    const recordFeedback = (rating) => {
+        dispatch({ type: 'recordSoundFeedback', payload: { rating } });
+        setFeedbackSent(rating);
+    };
 
     if (!connected) {
         return (
@@ -145,6 +153,24 @@ export default function NowPlayingStrip() {
                             <span className="np-kw">“{lastTriggeredKeyword}”</span>
                         )}
                         <span className="np-muted np-ago">{formatAgo(lastTriggeredAt)}</span>
+                        <span className="np-feedback" aria-label="Sound feedback">
+                            <button
+                                type="button"
+                                className={`np-feedback-btn${feedbackSent === 'correct' ? ' active' : ''}`}
+                                onClick={() => recordFeedback('correct')}
+                                aria-label="Mark last sound correct"
+                            >
+                                Good
+                            </button>
+                            <button
+                                type="button"
+                                className={`np-feedback-btn${feedbackSent === 'wrong' ? ' active' : ''}`}
+                                onClick={() => recordFeedback('wrong')}
+                                aria-label="Mark last sound wrong"
+                            >
+                                Wrong
+                            </button>
+                        </span>
                     </div>
                 </>
             )}

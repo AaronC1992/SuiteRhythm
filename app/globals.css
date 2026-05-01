@@ -2862,6 +2862,71 @@ kbd {
 }
 .no-key-banner button:hover { background: rgba(255,183,77,0.15); }
 
+.calibration-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 0 18px 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--border, rgba(255,255,255,0.12));
+    border-radius: 8px;
+    background: rgba(255,255,255,0.045);
+}
+
+.calibration-copy {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 180px;
+}
+
+.calibration-copy strong {
+    color: var(--text, #fff);
+    font-size: 0.95rem;
+}
+
+.calibration-copy span,
+.calibration-check small {
+    color: var(--muted-2, rgba(255,255,255,0.64));
+    font-size: 0.78rem;
+}
+
+.calibration-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.calibration-check {
+    min-width: 92px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid var(--border, rgba(255,255,255,0.12));
+    border-radius: 8px;
+    background: rgba(0,0,0,0.18);
+    color: var(--text, #fff);
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.calibration-check.ready {
+    border-color: rgba(76, 175, 80, 0.65);
+}
+
+.calibration-check.blocked {
+    border-color: rgba(255, 183, 77, 0.7);
+}
+
+.calibration-dismiss,
+.calibration-done {
+    min-width: 74px;
+}
+
 /* ===== MOBILE / TABLET POLISH ===== */
 @media (max-width: 768px) {
     .controls { gap: 10px; }
@@ -5111,6 +5176,30 @@ textarea:focus-visible,
 .np-ago {
     font-size: var(--fs-xs);
     margin-left: 2px;
+}
+
+.np-feedback {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 4px;
+}
+
+.np-feedback-btn {
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    color: var(--text, #fff);
+    padding: 3px 7px;
+    font-size: 0.72rem;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.np-feedback-btn:hover,
+.np-feedback-btn.active {
+    border-color: rgba(3, 218, 198, 0.7);
+    background: rgba(3, 218, 198, 0.12);
 }
 
 /* Status dot (listening / idle) */

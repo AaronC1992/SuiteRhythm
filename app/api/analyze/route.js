@@ -12,6 +12,7 @@ import { MODE_CONTEXTS, MODE_RULES } from '../../../lib/modules/ai-director.js';
 import { requireAuth } from '../../../lib/api-auth.js';
 import { classifyLocal } from '../../../lib/modules/local-classifier.js';
 import { buildCatalogSummary } from '../../../lib/server-catalog.js';
+import { addTimingHeaders, logApiMetric } from '../../../lib/server-observability.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
 let _openai;
@@ -152,6 +153,7 @@ function buildUserMessage(transcript, mode, context) {
 }
 
 export async function POST(request) {
+  const startedAt = Date.now();
   // Auth check — reject unauthenticated requests before doing any work
   const denied = requireAuth(request);
   if (denied) return denied;
@@ -197,7 +199,8 @@ export async function POST(request) {
     const res = NextResponse.json(cached);
     res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Cache', 'HIT');
-    return res;
+    logApiMetric('/api/analyze', startedAt, { status: 200, cache: 'HIT', mode, transcriptChars: transcript.length });
+    return addTimingHeaders(res, 'analyze', startedAt);
   }
 
   const userMessage = buildUserMessage(transcript, mode, context);
@@ -224,7 +227,8 @@ export async function POST(request) {
     const res = NextResponse.json(data);
     res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Cache', 'MISS');
-    return res;
+    logApiMetric('/api/analyze', startedAt, { status: 200, cache: 'MISS', mode, transcriptChars: transcript.length, sfxCount: data?.sfx?.length || 0 });
+    return addTimingHeaders(res, 'analyze', startedAt);
   } catch (err) {
     console.error('[/api/analyze]', err);
     // Graceful degrade: instead of a hard 500, return a minimal
@@ -246,6 +250,7 @@ export async function POST(request) {
     const res = NextResponse.json(fallback, { status });
     res.headers.set('X-RateLimit-Remaining', String(rate.remaining));
     res.headers.set('X-Fallback', fallback._reason);
-    return res;
+    logApiMetric('/api/analyze', startedAt, { status, fallback: fallback._reason, mode, transcriptChars: transcript.length });
+    return addTimingHeaders(res, 'analyze', startedAt);
   }
 }

@@ -1,4 +1,5 @@
 import './globals.css';
+import Script from 'next/script';
 import GlobalAudioKill from '../components/GlobalAudioKill';
 import DebugPerfPanel from '../components/DebugPerfPanel';
 
@@ -38,11 +39,7 @@ export default function RootLayout({ children }) {
         {/* Howler.js is loaded as an npm package (see engine/SuiteRhythm.js) */}
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         {/* Apply saved theme before first paint to prevent flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var d=document.documentElement;var t=localStorage.getItem('SuiteRhythm_theme')||'dark';var p=localStorage.getItem('SuiteRhythm_palette');var l=localStorage.getItem('SuiteRhythm_look')||'classic';d.setAttribute('data-theme',t);if(p)d.setAttribute('data-color-palette',p);d.setAttribute('data-look',l)}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.setAttribute('data-look','classic')}}())`,
-          }}
-        />
+        <Script src="/theme-init.js" strategy="beforeInteractive" />
         {/* Plausible Analytics — privacy-friendly, no cookies, no banner needed */}
         <script defer data-domain="suiterhythm.vercel.app" src="https://plausible.io/js/script.js" />
       </head>

@@ -40,6 +40,7 @@ export default function StudioMode({ active }) {
   const [renderStatus, setRenderStatus] = useState('');
   const [renderError, setRenderError] = useState('');
   const [studioStatus, setStudioStatus] = useState(null);
+  const maxImportFileMb = getMaxStudioImportFileMb(studioStatus);
 
   useEffect(() => {
     if (!active || soundCatalog.length) return;
@@ -265,7 +266,13 @@ export default function StudioMode({ active }) {
       </p>
       <div className="studio-grid">
         <div className="studio-main-column">
-          <UploadRecorder ref={mediaRef} media={media} onMediaChange={handleMediaChange} onDurationChange={handleDurationChange} />
+          <UploadRecorder
+            ref={mediaRef}
+            media={media}
+            maxFileMb={maxImportFileMb}
+            onMediaChange={handleMediaChange}
+            onDurationChange={handleDurationChange}
+          />
 
           <section className="studio-panel studio-transcribe-panel">
             <div className="studio-panel-heading">
@@ -439,10 +446,11 @@ async function transcribeViaStagedUpload({ media, token, onStatus }) {
   const uploadInfo = await parseJsonResponse(uploadInit, 'Could not prepare secure upload.');
 
   onStatus('Uploading to secure temporary storage...');
-  const uploadResponse = await fetch(uploadInfo.uploadUrl, {
-    method: 'PUT',
+  const uploadResponse = await uploadFileWithProgress({
+    uploadUrl: uploadInfo.uploadUrl,
     headers: uploadInfo.headers || { 'Content-Type': file.type || 'application/octet-stream' },
-    body: file,
+    file,
+    onProgress: (percent) => onStatus(`Uploading to secure temporary storage... ${percent}%`),
   });
   if (!uploadResponse.ok) {
     throw new Error(`Temporary upload failed (${uploadResponse.status}). Check R2 CORS allows PUT requests from this site.`);
@@ -467,6 +475,21 @@ function authHeaders(token) {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+function uploadFileWithProgress({ uploadUrl, headers, file, onProgress }) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', uploadUrl);
+    Object.entries(headers || {}).forEach(([key, value]) => xhr.setRequestHeader(key, value));
+    xhr.upload.onprogress = (event) => {
+      if (!event.lengthComputable) return;
+      onProgress(Math.min(100, Math.round((event.loaded / event.total) * 100)));
+    };
+    xhr.onload = () => resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status });
+    xhr.onerror = () => reject(new Error('Temporary upload failed. Check your network connection.'));
+    xhr.send(file);
+  });
+}
+
 async function parseJsonResponse(response, fallbackMessage) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data?.error || `${fallbackMessage} (${response.status})`);
@@ -477,6 +500,15 @@ function formatFileSize(bytes) {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 MB';
   if (bytes < MB) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
   return `${(bytes / MB).toFixed(bytes < 10 * MB ? 1 : 0)} MB`;
+}
+
+function getMaxStudioImportFileMb(studioStatus) {
+  if (!studioStatus) return DEFAULT_STAGED_TRANSCRIBE_MAX_MB;
+  const backendLimits = [
+    Number(studioStatus?.transcription?.maxFileMb),
+    Number(studioStatus?.render?.maxFileMb),
+  ].filter((limit) => Number.isFinite(limit) && limit > 0);
+  return backendLimits.length ? Math.max(...backendLimits) : DEFAULT_STAGED_TRANSCRIBE_MAX_MB;
 }
 
 function buildCueMap({ media, transcriptText, transcriptItems, cues, savedAt }) {

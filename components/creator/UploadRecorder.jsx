@@ -3,6 +3,7 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
 const ACCEPTED_MEDIA = 'audio/mpeg,audio/wav,audio/ogg,audio/webm,audio/mp4,video/mp4,video/webm,.mp3,.wav,.ogg,.webm,.m4a,.mp4';
+const MB = 1024 * 1024;
 
 function formatDuration(seconds) {
   if (!Number.isFinite(seconds) || seconds <= 0) return 'Duration pending';
@@ -18,7 +19,7 @@ function getMediaKind(file) {
   return 'audio';
 }
 
-const UploadRecorder = forwardRef(function UploadRecorder({ media, onMediaChange, onDurationChange }, mediaRef) {
+const UploadRecorder = forwardRef(function UploadRecorder({ media, maxFileMb = 100, onMediaChange, onDurationChange }, mediaRef) {
   const inputRef = useRef(null);
   const recorderRef = useRef(null);
   const streamRef = useRef(null);
@@ -41,8 +42,8 @@ const UploadRecorder = forwardRef(function UploadRecorder({ media, onMediaChange
       setError('Choose an audio file, or an MP4/WebM video file.');
       return;
     }
-    if (file.size > 25 * 1024 * 1024) {
-      setError('Choose a file under 25 MB for this Studio Mode MVP.');
+    if (file.size > maxFileMb * MB) {
+      setError(`Choose a file under ${maxFileMb} MB for this Studio workflow.`);
       return;
     }
     setError('');
@@ -114,6 +115,7 @@ const UploadRecorder = forwardRef(function UploadRecorder({ media, onMediaChange
           <div className="studio-media-meta">
             <strong>{media.name}</strong>
             <span>{media.kind === 'video' ? 'Video' : 'Audio'} track</span>
+            <span>{formatFileSize(media.file?.size || 0)}</span>
             <span>{formatDuration(media.duration)}</span>
           </div>
           {media.kind === 'video' ? (
@@ -130,3 +132,9 @@ const UploadRecorder = forwardRef(function UploadRecorder({ media, onMediaChange
 });
 
 export default UploadRecorder;
+
+function formatFileSize(bytes) {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '0 MB';
+  if (bytes < MB) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / MB).toFixed(bytes < 10 * MB ? 1 : 0)} MB`;
+}

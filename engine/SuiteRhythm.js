@@ -32,6 +32,8 @@ import { MusicCrossfader } from '../lib/modules/music-crossfade.js';
 import { ExternalBridge } from '../lib/modules/external-trigger.js';
 import { applyHorrorRestraint } from '../lib/modules/scene-toggles.js';
 import { installErrorReporter } from '../lib/modules/error-reporter.js';
+import { loadSavedSoundsCatalog } from '../lib/modules/saved-sounds-loader.js';
+import { getClientAccessToken, setClientAccessToken } from '../lib/client-token-store.js';
 
 // Expose CONFIG globally for modules that read window.CONFIG (e.g., api.js debugLog)
 try { window.CONFIG = CONFIG; window.Howler = Howler; } catch (_) {}
@@ -89,14 +91,11 @@ const storage = {
 
 // ===== SUBSCRIPTION TOKEN MANAGEMENT =====
 function getAccessToken() {
-    try { return localStorage.getItem('SuiteRhythm_token') || null; } catch (_) { return null; }
+    return getClientAccessToken();
 }
 
 function setAccessToken(token) {
-    try {
-        if (token) { localStorage.setItem('SuiteRhythm_token', token); }
-        else { localStorage.removeItem('SuiteRhythm_token'); }
-    } catch (_) {}
+    setClientAccessToken(token);
 }
 
 // ===== HELPER FUNCTIONS =====
@@ -223,6 +222,7 @@ class SuiteRhythm {
         } catch { this.customSounds = []; }
         // Sound history for playback feedback
         this.soundHistory = [];
+        this.soundFeedback = [];
     // Playback preferences
     try { this.musicEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_music_enabled') ?? 'true'); } catch { this.musicEnabled = true; }
     try { this.sfxEnabled = JSON.parse(localStorage.getItem('SuiteRhythm_sfx_enabled') ?? 'true'); } catch { this.sfxEnabled = true; }
@@ -614,19 +614,9 @@ class SuiteRhythm {
 
     async loadSavedSounds() {
         try {
-            const resp = await fetch('/saved-sounds.json', { cache: 'no-cache' });
-            if (!resp.ok) return;
-            const data = await resp.json();
-            if (Array.isArray(data?.files)) {
-                this.savedSounds.files = data.files.map(f => ({
-                    type: (f.type === 'music' ? 'music' : 'sfx'),
-                    name: String(f.name || '').toLowerCase(),
-                    file: String(f.file || ''),
-                    keywords: Array.isArray(f.keywords) ? f.keywords.map(k=>String(k||'').toLowerCase()) : []
-                }));
-                const host = location.hostname || '';
-                const isLocal = location.protocol === 'file:' || host === 'localhost' || host === '127.0.0.1';
-                const isPages = /github\.io$/i.test(host);
+            const files = await loadSavedSoundsCatalog();
+            if (files.length) {
+                this.savedSounds.files = files;
                 debugLog(`Loaded saved sounds: ${this.savedSounds.files.length}`);
                 
                 // Build expanded trigger map from the loaded catalog
@@ -946,7 +936,9 @@ class SuiteRhythm {
                 this._ttsAbortCtrl = new AbortController();
                 for (const chunk of chunks) {
                     const ttsHeaders = { 'Content-Type': 'application/json' };
-                    const tok = getAccessToken();
+                    const tok = typeof window.getSuiteRhythmAuthToken === 'function'
+                        ? await window.getSuiteRhythmAuthToken()
+                        : getAccessToken();
                     if (tok) ttsHeaders['Authorization'] = `Bearer ${tok}`;
                     const resp = await fetch(ttsUrl, {
                         method: 'POST',
@@ -6132,6 +6124,12 @@ class SuiteRhythm {
         });
         
         if (played) {
+            this._recordTriggeredSound({
+                id: sound.id,
+                name: sound.name || sound.id,
+                keyword: sfxData.intent || sfxData.id || '',
+                source: 'ai',
+            });
             // Start cooldown for this bucket
             this.sfxCooldowns.set(bucket, Date.now() + this.sfxCooldownMs);
             // Per-ID dedup timestamp
@@ -6179,10 +6177,49 @@ class SuiteRhythm {
                 loop: false
             });
             if (played) {
+                this._recordTriggeredSound({
+                    id: sfxData.directUrl || sfxData.query || soundUrl,
+                    name: sfxData.query || 'Sound effect',
+                    keyword: sfxData.query || '',
+                    source: sfxData.directUrl ? 'direct' : 'search',
+                });
                 // Start cooldown for this bucket
                 this.sfxCooldowns.set(bucket, Date.now() + this.sfxCooldownMs);
             }
         }
+    }
+
+    _recordTriggeredSound({ id = '', name = '', keyword = '', source = '' } = {}) {
+        const event = {
+            id: String(id || name || '').trim(),
+            name: String(name || id || 'Sound effect').trim(),
+            keyword: String(keyword || '').trim(),
+            source: String(source || '').trim(),
+            at: Date.now(),
+            mode: this.currentMode || 'auto',
+            mood: this.currentMood?.primary || 'neutral',
+            scene: this.sceneState || '',
+        };
+        this._lastTriggered = event;
+        this.lastTriggeredName = event.name;
+        this.lastTriggeredKeyword = event.keyword;
+        this.lastTriggeredAt = event.at;
+    }
+
+    recordSoundFeedback({ rating = '' } = {}) {
+        const normalizedRating = rating === 'correct' ? 'correct' : rating === 'wrong' ? 'wrong' : '';
+        if (!normalizedRating || !this._lastTriggered) return;
+        const entry = {
+            ...this._lastTriggered,
+            rating: normalizedRating,
+            feedbackAt: Date.now(),
+        };
+        this.soundFeedback.unshift(entry);
+        if (this.soundFeedback.length > 100) this.soundFeedback.length = 100;
+        try {
+            localStorage.setItem('SuiteRhythm_sound_feedback', JSON.stringify(this.soundFeedback));
+        } catch (_) {}
+        this.logActivity(`Feedback: ${normalizedRating} — ${entry.name}`, 'info');
     }
 
     // Normalize and bucket SFX queries so variants like "door creak" and "door slam" share cooldown

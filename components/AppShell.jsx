@@ -26,6 +26,7 @@ import BetaTesterWarning from './BetaTesterWarning';
 import { EngineProvider } from '../lib/engine-bridge';
 import Sidebar from './Sidebar';
 import NowPlayingStrip from './NowPlayingStrip';
+import CalibrationChecklist from './CalibrationChecklist';
 import DashboardSection from './sections/DashboardSection';
 import AutoDetectSection from './sections/AutoDetectSection';
 import StoryEditorSection from './sections/StoryEditorSection';
@@ -107,7 +108,9 @@ export default function AppShell({ user }) {
           const banner = document.createElement('div');
           banner.className = 'no-key-banner';
           banner.style.cssText = 'background:rgba(255,60,60,0.12);border-color:#ff4444;margin:12px;border-radius:8px;padding:12px 16px;';
-          banner.innerHTML = '<strong>Engine failed to start.</strong> Try reloading the page. If the problem persists, clear your browser cache.';
+          const title = document.createElement('strong');
+          title.textContent = 'Engine failed to start.';
+          banner.append(title, document.createTextNode(' Try reloading the page. If the problem persists, clear your browser cache.'));
           app.prepend(banner);
         }
       }
@@ -173,6 +176,7 @@ export default function AppShell({ user }) {
           <main id="platformMain">
             {/* Live engine status bar — reactive via useEngine() */}
             <NowPlayingStrip />
+            <CalibrationChecklist />
 
             {/* Firefox compatibility warning — shown only in Firefox by the engine */}
             <div

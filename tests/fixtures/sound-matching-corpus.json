@@ -1,0 +1,33 @@
+[
+  {
+    "name": "chair movement and newspaper",
+    "transcript": "he pulls a chair up to a table and unfolds a newspaper",
+    "mode": "auto",
+    "summaryContains": ["chair scrape wooden floor", "newspaper unfolding pages", "scroll unfurling open"],
+    "summaryExcludes": ["bird whistling chirping", "footsteps leaves", "forest ambience daytime"]
+  },
+  {
+    "name": "tabletop trap and shield actions",
+    "transcript": "the pressure plate trap clicks and he draws his sword then blocks with a shield",
+    "mode": "dnd",
+    "summaryContains": ["pressure plate trap click", "sword draw clash combo", "shield block heavy impact"]
+  },
+  {
+    "name": "quiet animal noun stays silent",
+    "transcript": "The dog slept beside the chair.",
+    "mode": "auto",
+    "ruleSfxQueries": []
+  },
+  {
+    "name": "clear animal sound action fires",
+    "transcript": "The dog barked loudly at the door.",
+    "mode": "auto",
+    "ruleSfxQueries": ["dog bark"]
+  },
+  {
+    "name": "figurative casting stays silent",
+    "transcript": "The statue cast a long shadow across the room.",
+    "mode": "auto",
+    "ruleSfxQueries": []
+  }
+]
