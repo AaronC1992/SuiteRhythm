@@ -33,6 +33,7 @@ import { ExternalBridge } from '../lib/modules/external-trigger.js';
 import { applyHorrorRestraint } from '../lib/modules/scene-toggles.js';
 import { installErrorReporter } from '../lib/modules/error-reporter.js';
 import { loadSavedSoundsCatalog } from '../lib/modules/saved-sounds-loader.js';
+import { joinAudioUrlBase, normalizeAudioUrl } from '../lib/modules/audio-url.js';
 import { getClientAccessToken, setClientAccessToken } from '../lib/client-token-store.js';
 
 // Expose CONFIG globally for modules that read window.CONFIG (e.g., api.js debugLog)
@@ -547,18 +548,19 @@ class SuiteRhythm {
     }
     
     // Build candidate URL list (primary CDN + local fallback)
-    // Callers MUST pass already-encoded URLs (via encodeURI)
     buildSrcCandidates(u) {
+        const normalized = normalizeAudioUrl(u);
+        if (!normalized) return [];
         const list = [];
         const cdnBase = (typeof window !== 'undefined' && window.__R2_PUBLIC_URL) || '';
-        if (cdnBase && !/^https?:\/\//i.test(u) && !u.startsWith(cdnBase)) {
+        if (cdnBase && !/^https?:\/\//i.test(normalized) && !normalized.startsWith(cdnBase)) {
             // CDN is primary source for relative paths (skip if already prefixed)
-            list.push(`${cdnBase.replace(/\/$/, '')}/${u.replace(/^\//, '')}`);
+            list.push(joinAudioUrlBase(cdnBase, normalized));
         }
-        list.push(u); // local fallback
+        list.push(normalized); // local fallback
         try {
-            if (/^https?:\/\//i.test(u)) {
-                const m = u.match(/\/(?:cueai-media\/)?(music|sfx|ambience)\/(.+)$/i);
+            if (/^https?:\/\//i.test(normalized)) {
+                const m = normalized.match(/\/(?:cueai-media\/)?(music|sfx|ambience)\/(.+)$/i);
                 if (m) {
                     const localPath = `/media/${m[1]}/${m[2]}`;
                     const backend = this.getBackendUrl().replace(/\/$/,'');
@@ -566,10 +568,10 @@ class SuiteRhythm {
                 }
             } else {
                 const backend = this.getBackendUrl().replace(/\/$/,'');
-                if (backend) list.push(`${backend}${u.startsWith('/') ? u : '/' + u}`);
+                if (backend) list.push(`${backend}${normalized.startsWith('/') ? normalized : '/' + normalized}`);
             }
         } catch (_) {}
-        return list;
+        return [...new Set(list)];
     }
     
     async loadSoundCatalog() {
@@ -2695,7 +2697,7 @@ class SuiteRhythm {
         this.updatePreloadProgress(0, toPreload.length);
         const tasks = toPreload.map(([file, { keyword, config }]) => async () => {
             try {
-                const url = encodeURI(file);
+                const url = normalizeAudioUrl(file);
                 const srcs = this.buildSrcCandidates(url);
                 let resp = null;
                 for (const src of srcs) {
@@ -4733,7 +4735,7 @@ class SuiteRhythm {
             if (applause) {
                 // Bypass the sing-mode SFX gate by calling playAudio directly
                 try {
-                    this.playAudio(encodeURI(applause.src), {
+                    this.playAudio(normalizeAudioUrl(applause.src), {
                         type: 'sfx',
                         name: applause.id,
                         volume: 0.85 * this.sfxLevel,
@@ -4767,7 +4769,7 @@ class SuiteRhythm {
         const pool = mids.length ? mids : candidates;
         const pick = pool[Math.floor(Math.random() * pool.length)];
         try {
-            this.playAudio(encodeURI(pick.src), {
+            this.playAudio(normalizeAudioUrl(pick.src), {
                 type: 'sfx',
                 name: pick.id,
                 volume: 0.35 * this.sfxLevel, // quiet — sits under the vocals
@@ -5201,7 +5203,7 @@ class SuiteRhythm {
             
             // If trigger map has a direct file path, use it (skip search)
             if (config.file) {
-                const url = encodeURI(config.file);
+                const url = normalizeAudioUrl(config.file);
                 debugLog(`Playing instant keyword from file: ${keyword} -> ${config.file}`);
                 // Try to play from activeBuffers if already decoded
                 if (this.activeBuffers?.has(url)) {
@@ -5785,7 +5787,7 @@ class SuiteRhythm {
         }
         
         // Build URL (relative paths resolved by browser, buildSrcCandidates adds backend fallback)
-        const soundUrl = encodeURI(sound.src);
+        const soundUrl = normalizeAudioUrl(sound.src);
         
         // Apply volume with mood bias
         const moodMul = 0.85 + this.moodBias * 0.3;
@@ -6103,7 +6105,7 @@ class SuiteRhythm {
         }
         
         // Build URL (relative paths resolved by browser, buildSrcCandidates adds backend fallback)
-        const soundUrl = encodeURI(sound.src);
+        const soundUrl = normalizeAudioUrl(sound.src);
         
         // Apply volume with SFX level, pacing + intensity curve multipliers
         const effectiveVol = Math.max(0, Math.min(1,
@@ -6163,7 +6165,7 @@ class SuiteRhythm {
             return;
         }
         
-        const directUrl = sfxData.directUrl ? encodeURI(String(sfxData.directUrl)) : null;
+        const directUrl = sfxData.directUrl ? normalizeAudioUrl(String(sfxData.directUrl)) : null;
         const soundUrl = directUrl || await this.searchAudio(sfxData.query, 'sfx');
         if (soundUrl) {
             const played = await this.playAudio(soundUrl, {
@@ -6625,12 +6627,7 @@ class SuiteRhythm {
             // Use TF-IDF style matching from trigger system
             const match = tfidfMatch(query, type, this.savedSounds.files);
             if (match) {
-                const encoded = encodeURI(match.file);
-                // Prepend CDN base for relative paths so all consumers get an absolute URL
-                const cdnBase = (typeof window !== 'undefined' && window.__R2_PUBLIC_URL) || '';
-                const url = (cdnBase && !/^https?:\/\//i.test(encoded))
-                    ? `${cdnBase.replace(/\/$/, '')}/${encoded.replace(/^\//, '')}`
-                    : encoded;
+                const url = normalizeAudioUrl(match.file);
                 debugLog(`Found via Saved sounds: ${query} -> ${match.name}`);
                 return url;
             }
@@ -6668,6 +6665,7 @@ class SuiteRhythm {
     }
     
     async playAudio(url, options) {
+        url = normalizeAudioUrl(url);
         if (!url) return null;
         
         // Check muted categories
@@ -6903,7 +6901,7 @@ class SuiteRhythm {
                 // When a music track finishes, rotate to the next one
                 const next = this.getNextMusicInRotation();
                 if (next) {
-                    const nextUrl = encodeURI(next.src);
+                    const nextUrl = normalizeAudioUrl(next.src);
                     this.playMusicElement(nextUrl, {
                         type: 'music',
                         name: next.id,
@@ -7004,7 +7002,7 @@ class SuiteRhythm {
             setTimeout(() => { try { old.stop(); old.unload(); } catch(_){} }, crossfadeMs + 100);
         }
         
-        const url = encodeURI(catalogEntry.src);
+        const url = normalizeAudioUrl(catalogEntry.src);
         const srcs = this.buildSrcCandidates(url);
         const howl = new Howl({
             src: srcs,
@@ -7235,7 +7233,7 @@ class SuiteRhythm {
             if (this._recentProceduralIds.size > maxRecent) {
                 this._recentProceduralIds.delete(this._recentProceduralIds.values().next().value);
             }
-            const url = encodeURI(pick.src);
+            const url = normalizeAudioUrl(pick.src);
             const srcs = this.buildSrcCandidates(url);
             const targetVol = desired.vol * this.musicLevel * Math.max(0.3, intensity);
             
@@ -8841,7 +8839,7 @@ class SuiteRhythm {
         const fireSound = () => {
             if (fired) return;
             fired = true;
-            this._wyoPreviewHowl = new Howl({ src: this.buildSrcCandidates(encodeURI(targetCue.file)), html5: true, volume: 0.7 });
+            this._wyoPreviewHowl = new Howl({ src: this.buildSrcCandidates(normalizeAudioUrl(targetCue.file)), html5: true, volume: 0.7 });
             this._wyoPreviewHowl.play();
         };
 
@@ -9078,7 +9076,7 @@ class SuiteRhythm {
             previewBtn.innerHTML = '&#9632;';
             previewBtn.classList.add('wyo-cue-playing');
             this._wyoPreviewBtn = previewBtn;
-            this._wyoPreviewHowl = new Howl({ src: this.buildSrcCandidates(encodeURI(file)), html5: true, volume: 0.6 });
+            this._wyoPreviewHowl = new Howl({ src: this.buildSrcCandidates(normalizeAudioUrl(file)), html5: true, volume: 0.6 });
             this._wyoPreviewHowl.on('end', () => {
                 previewBtn.innerHTML = '&#9654;';
                 previewBtn.classList.remove('wyo-cue-playing');
