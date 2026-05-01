@@ -1,6 +1,6 @@
 // ===== SuiteRhythm - INTELLIGENT AUDIO COMPANION =====
 // Author: Expert AI Team
-// Version: 3.6.0 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
+// Version: 3.6.1 - Production release with AI analysis pipeline, Stop Audio fix, and catalog ID validation
 
 // ===== IMPORT MODULES =====
 import { Howl, Howler } from 'howler';
@@ -1982,6 +1982,15 @@ class SuiteRhythm {
         return this._synonymMap.get(word) || word;
     }
 
+    _isStrictMatchingMode() {
+        return !this.creatorMode && !['creator', 'sing'].includes(this.currentMode);
+    }
+
+    _allowsAtmosphericAutomation(decisions = {}) {
+        if (this._isStrictMatchingMode()) return false;
+        return !(typeof decisions.confidence === 'number' && decisions.confidence < 0.75);
+    }
+
     // =====================================================================
     // FEATURE: ADAPTIVE AMBIENT SCENE BED
     // Layers persistent ambient sounds that stack and fade with narrative
@@ -2009,6 +2018,7 @@ class SuiteRhythm {
     };
 
     async _updateSceneBed(detectedCategories) {
+        if (this._isStrictMatchingMode()) return;
         if (!this.ambienceEnabled || !this.sfxEnabled) return;
         const now = Date.now();
         if (now - this._lastSceneBedUpdate < 5000) return; // throttle updates
@@ -2385,6 +2395,7 @@ class SuiteRhythm {
     // =====================================================================
     async _tryBeatSilence() {
         if (this._beatSilencePlaying) return;
+        if (this._isStrictMatchingMode()) return;
         if (!this.sfxEnabled || !this.isListening) return;
 
         // Only during intense scene states or if mood is tense/dark
@@ -5073,7 +5084,7 @@ class SuiteRhythm {
                 const regex = new RegExp(`\\b${escapedKw}\\b`, 'i');
                 // Check primary transcript, alternative transcriptions, AND synonym expansions
                 if (regex.test(lowerText) || lowerAlts.some(alt => regex.test(alt)) || expandedHits.has(keyword)) {
-                    if (!shouldTriggerKeyword(keyword, [lowerText, ...lowerAlts].join(' '))) continue;
+                    if (!shouldTriggerKeyword(keyword, [lowerText, ...lowerAlts].join(' '), config)) continue;
                     this.instantKeywordCooldowns.set(keyword, now);
                     try { recordKeywordFire(keyword); } catch (_) {}
                     debugLog(`Instant trigger detected: "${keyword}"`);
@@ -5326,32 +5337,8 @@ class SuiteRhythm {
             }
 
             if (response) {
-                // Hybrid routing: if AI confidence is low, supplement with rule-based
                 if (typeof response.confidence === 'number' && response.confidence < 0.5) {
-                    try {
-                        const fallback = ruleBasedDecision(recentTranscript, this.currentMode, this.instantKeywords, this.savedSounds);
-                        if (fallback) {
-                            // Merge rule-based SFX with AI SFX (AI takes priority)
-                            const aiSfxIds = new Set((response.sfx || []).map(s => s.id));
-                            if (fallback.sfx?.length) {
-                                const extraSfx = fallback.sfx.map(s => {
-                                    const entry = this.soundCatalog.find(e => e.src === s.file || e.id === s.file);
-                                    return entry && !aiSfxIds.has(entry.id) ? { id: entry.id, when: 'immediate', volume: s.volume } : null;
-                                }).filter(Boolean);
-                                response.sfx = [...(response.sfx || []), ...extraSfx];
-                            }
-                            // Use rule-based music if AI didn't provide one
-                            if (!response.music?.id && fallback.music) {
-                                const musicEntry = this.soundCatalog.find(s => s.src === fallback.music.file || s.id === fallback.music.file);
-                                if (musicEntry) {
-                                    response.music = { id: musicEntry.id, action: 'play_or_continue', volume: fallback.music.volume };
-                                }
-                            }
-                            debugLog('Hybrid merge: AI conf=' + response.confidence + ', added rule-based results');
-                        }
-                    } catch (hybridErr) {
-                        debugLog('Hybrid merge error:', hybridErr);
-                    }
+                    debugLog('Low-confidence AI decision kept unmerged:', response.confidence);
                 }
                 // Horror-restrained mode: user opt-in to softer horror cues.
                 try { response = applyHorrorRestraint(response) || response; } catch {}
@@ -5389,7 +5376,7 @@ class SuiteRhythm {
                     if (fallback.sfx?.length) {
                         decisions.sfx = fallback.sfx.map(s => {
                             const entry = this.soundCatalog.find(e => e.src === s.file || e.id === s.file);
-                            return entry ? { id: entry.id, when: 'immediate', volume: s.volume } : null;
+                            return entry ? { id: entry.id, when: 'immediate', volume: s.volume, confidence: 0.85 } : null;
                         }).filter(Boolean);
                     }
                     if (decisions.music || decisions.sfx?.length) {
@@ -5606,8 +5593,9 @@ class SuiteRhythm {
             }
 
             // --- Adaptive ambient scene bed: derive categories from scene + SFX tags ---
+            const allowAtmosphericAutomation = this._allowsAtmosphericAutomation(decisions);
             const bedCats = [];
-            const sceneStr = (decisions.scene || '').toLowerCase();
+            const sceneStr = allowAtmosphericAutomation ? (decisions.scene || '').toLowerCase() : '';
             if (/forest|wood|grove|clearing|meadow|field/i.test(sceneStr)) bedCats.push('forest');
             if (/jungle|tropic|rainforest/i.test(sceneStr)) bedCats.push('jungle');
             if (/cave|dungeon|underground|crypt|catacomb|tomb/i.test(sceneStr)) bedCats.push('dungeon');
@@ -5632,10 +5620,15 @@ class SuiteRhythm {
             if (/night|midnight|dusk|moonlit|nocturnal/i.test(sceneStr)) bedCats.push('night');
             const explicitBedCats = [...new Set(bedCats)];
             this._ambientContextTags = explicitBedCats;
-            this._updateSceneBed(explicitBedCats).catch(e => debugLog('Scene bed update failed:', e.message));
-            if (this.isListening && this.currentMode !== 'sing') {
-                if (explicitBedCats.length > 0) this.startProceduralAmbient();
-                else this.stopProceduralAmbient();
+            if (allowAtmosphericAutomation) {
+                this._updateSceneBed(explicitBedCats).catch(e => debugLog('Scene bed update failed:', e.message));
+                if (this.isListening && this.currentMode !== 'sing') {
+                    if (explicitBedCats.length > 0) this.startProceduralAmbient();
+                    else this.stopProceduralAmbient();
+                }
+            } else {
+                this._fadeAllSceneBedLayers();
+                if (this.currentMode !== 'sing') this.stopProceduralAmbient();
             }
 
             // --- Predictive preloading for current scene category ---
@@ -5692,12 +5685,16 @@ class SuiteRhythm {
                     continue;
                 }
                 // Scene-stability-aware confidence gate.
-                // Right after a scene change, be pickier (0.6). Once the scene is stable,
-                // the normal 0.4 threshold applies. Creator mode relaxes slightly (0.35 / 0.55).
+                // Strict matching modes require explicit confidence and skip uncertain SFX.
                 const stabilityMs = Date.now() - (this._sceneStartedAt || 0);
                 const unstable = stabilityMs < 10000;
-                const baseThreshold = this.creatorMode ? 0.35 : 0.4;
-                const unstableThreshold = this.creatorMode ? 0.55 : 0.6;
+                const strictMatching = this._isStrictMatchingMode();
+                if (strictMatching && typeof sfx.confidence !== 'number') {
+                    debugLog('Skipping unscored strict-mode SFX:', sfx.id);
+                    continue;
+                }
+                const baseThreshold = strictMatching ? 0.75 : (this.creatorMode ? 0.35 : 0.4);
+                const unstableThreshold = strictMatching ? 0.85 : (this.creatorMode ? 0.55 : 0.6);
                 const confThreshold = unstable ? unstableThreshold : baseThreshold;
                 if (typeof sfx.confidence === 'number' && sfx.confidence < confThreshold) {
                     debugLog('Skipping low-confidence SFX:', sfx.id, sfx.confidence, 'thr=' + confThreshold);
@@ -5975,6 +5972,7 @@ class SuiteRhythm {
     
     // Mood-adaptive music: when mood trajectory shifts, pick matching music
     maybeAdaptMusicToMood() {
+        if (this._isStrictMatchingMode()) return;
         const now = Date.now();
         if (now - this.lastMusicChange < this.musicChangeThreshold) return;
         
@@ -8201,6 +8199,7 @@ class SuiteRhythm {
     scheduleNextStinger() {
         if (this.stingerTimer) clearTimeout(this.stingerTimer);
         if (!this.sfxEnabled || !this.predictionEnabled) return;
+        if (this._isStrictMatchingMode()) return;
         if (this.currentMode === 'auto' && !this.creatorMode && !this._ambientContextTags?.length) return;
         // Base cadence: 20-45s random. Duration-scheduler extends the wait if a
         // stinger is still playing so we don't double-book the bus.

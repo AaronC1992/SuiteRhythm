@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { CONFIG } from '../../lib/config.js';
+
 const LOOK_PRESETS = [
   {
     value: 'classic',
@@ -114,6 +116,9 @@ export default function SettingsSection() {
       </div>
       <div className="section-body">
         <p className="section-intro">Adjust volume, playback options, and performance settings.</p>
+        <p id="settingsAppVersion" className="info-text" style={{ marginTop: -6, marginBottom: 16 }}>
+          Game Version: v{CONFIG.VERSION}
+        </p>
 
         {/* Appearance / Theme */}
         <section className="menu-section">

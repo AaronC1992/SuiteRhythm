@@ -76,7 +76,7 @@ export async function POST(request) {
             let buf = '';
             try {
                 const completion = await getOpenAI().chat.completions.create({
-                    model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+                    model: process.env.OPENAI_MODEL || 'gpt-4.1',
                     max_tokens: 400,
                     temperature: 0.4,
                     stream: true,

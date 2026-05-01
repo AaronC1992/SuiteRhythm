@@ -32,10 +32,50 @@ describe('trigger-system matching precision', () => {
         expect(ruleBasedDecision('He reads a newspaper at the table.', 'auto', triggerMap, savedSounds)).toBeNull();
     });
 
+    it('keeps broad object and scene nouns silent in auto mode', () => {
+        const savedSounds = {
+            files: [
+                { type: 'music', name: 'ambient atmosphere', file: 'ambient.mp3', keywords: ['ambient', 'calm'] },
+            ],
+        };
+
+        const neutralLines = [
+            'The police officer entered the room.',
+            'The door stood open.',
+            'The baby slept quietly.',
+            'The clock sat on the desk.',
+            'The cave entrance was narrow.',
+            'The dice were on the table.',
+        ];
+
+        for (const line of neutralLines) {
+            expect(ruleBasedDecision(line, 'auto', triggerMap, savedSounds)).toBeNull();
+        }
+    });
+
     it('lets clear sound actions through the rule-based fallback', () => {
         const decision = ruleBasedDecision('The dog barked at the door.', 'auto', triggerMap, { files: [] });
 
         expect(decision?.sfx.map((sfx) => sfx.query)).toContain('dog bark');
+    });
+
+    it('does not add companion object sounds to explicit events', () => {
+        const decision = ruleBasedDecision('They heard a knock at the door.', 'auto', triggerMap, { files: [] });
+
+        expect(decision?.sfx.map((sfx) => sfx.query)).toEqual(['door knock']);
+    });
+
+    it('does not start generic auto-mode music just because an SFX matched', () => {
+        const savedSounds = {
+            files: [
+                { type: 'music', name: 'ambient atmosphere', file: 'ambient.mp3', keywords: ['ambient', 'calm'] },
+            ],
+        };
+
+        const decision = ruleBasedDecision('The rain began outside.', 'auto', triggerMap, savedSounds);
+
+        expect(decision?.sfx.map((sfx) => sfx.query)).toContain('rain');
+        expect(decision?.music).toBeNull();
     });
 
     it('can explicitly match ambience without mixing it into normal SFX search', () => {
@@ -46,5 +86,16 @@ describe('trigger-system matching precision', () => {
 
         expect(tfidfMatch('forest birds ambient', 'ambience', files)?.file).toBe('forest.mp3');
         expect(tfidfMatch('forest birds ambient', 'sfx', files)).toBeNull();
+    });
+
+    it('rejects object-only SFX searches even when a related sound exists', () => {
+        const files = [
+            { type: 'sfx', name: 'police siren pass', file: 'police.mp3', keywords: ['police', 'siren'] },
+            { type: 'sfx', name: 'tick tock', file: 'clock.mp3', keywords: ['clock', 'tick', 'tock'] },
+        ];
+
+        expect(tfidfMatch('police officer entered room', 'sfx', files)).toBeNull();
+        expect(tfidfMatch('clock sat desk', 'sfx', files)).toBeNull();
+        expect(tfidfMatch('police siren wails', 'sfx', files)?.file).toBe('police.mp3');
     });
 });

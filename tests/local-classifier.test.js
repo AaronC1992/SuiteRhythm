@@ -36,4 +36,9 @@ describe('local-classifier', () => {
         expect(d.worldState.location).toBe('forest');
         expect(d.worldState.weather).toBe('rain');
     });
+
+    it('does not treat quiet as tense by itself', () => {
+        const d = classifyLocal('Quiet rainy morning in the forest');
+        expect(d.mood.primary).not.toBe('tense');
+    });
 });

@@ -32,7 +32,7 @@ The GM stays in the story. The players stay immersed. The audio just works.
 
 ## How It Works
 
-SuiteRhythm uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4o-mini), and maps the output to a curated library of **700+ sound effects, ambience beds, and music tracks** — all in real time.
+SuiteRhythm uses **speech recognition** to capture live conversation, sends it through an **AI analysis layer** (GPT-4.1), and maps the output to a curated library of **700+ sound effects, ambience beds, and music tracks** — all in real time.
 
 ```
 Voice Input → Speech Recognition → AI Context Analysis → Sound Matching → Playback
@@ -71,7 +71,7 @@ Current alternatives require manual playlist management (Syrinscape, Tabletop Au
 |---|---|
 | **Frontend** | Next.js 15, React 19 |
 | **Audio Engine** | Howler.js — custom engine with layering, fading, preloading |
-| **AI Analysis** | OpenAI GPT-4o-mini (server-side) |
+| **AI Analysis** | OpenAI GPT-4.1 (server-side) |
 | **Speech Recognition** | Web Speech API (native browser) |
 | **Database** | Supabase (PostgreSQL) |
 | **Media Storage** | Cloudflare R2 (700+ audio files via CDN proxy) |
@@ -111,7 +111,7 @@ The app routes `/dashboard` and `/obs` require that signed tester session. The b
           │            │            │
     ┌─────▼─────┐ ┌───▼────┐ ┌───▼────┐
     │  OpenAI   │ │Supabase│ │  R2    │
-    │  GPT-4o   │ │  (DB)  │ │ (CDN)  │
+    │  GPT-4.1  │ │  (DB)  │ │ (CDN)  │
     └───────────┘ └────────┘ └────────┘
 ```
 
