@@ -72,6 +72,14 @@ const nextConfig = {
         source: '/r2-audio/:path*',
         destination: `${r2Base}/:path*`,
       },
+      {
+        source: '/Saved%20sounds/:path*',
+        destination: `${r2Base}/Saved%20sounds/:path*`,
+      },
+      {
+        source: '/Saved sounds/:path*',
+        destination: `${r2Base}/Saved%20sounds/:path*`,
+      },
     ];
   },
 
