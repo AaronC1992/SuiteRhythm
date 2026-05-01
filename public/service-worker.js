@@ -1,5 +1,5 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v27'; // Bumped: service-worker proxy for legacy audio URLs
+const CACHE_NAME = 'SuiteRhythm-v28'; // Bumped: force stale tabs onto fresh app shell
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -46,7 +46,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.info('SW: Opened cache');
+        console.info(`SW: Opened cache ${CACHE_NAME}`);
         // Cache files individually so a single 404 does not abort the whole install
         return Promise.all(
           urlsToCache.map(url =>
@@ -161,10 +161,23 @@ self.addEventListener('activate', (event) => {
       ),
       // Take control of uncontrolled clients right away so the new SW
       // serves the next fetch (including the page the user is on).
-      self.clients.claim(),
+      self.clients.claim().then(() => refreshOpenClients()),
     ])
   );
 });
+
+async function refreshOpenClients() {
+  const windowClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+  await Promise.all(windowClients.map((client) => {
+    try {
+      const url = new URL(client.url);
+      if (url.origin !== self.location.origin || typeof client.navigate !== 'function') return null;
+      return client.navigate(client.url).catch(() => null);
+    } catch (_) {
+      return null;
+    }
+  }));
+}
 
 // Allow the page to force an activation ("reload now") if desired.
 self.addEventListener('message', (event) => {
