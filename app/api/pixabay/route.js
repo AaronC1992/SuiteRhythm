@@ -35,10 +35,7 @@ export async function GET(request) {
   }
 
   if (!PIXABAY_KEY) {
-    return NextResponse.json(
-      { error: 'Pixabay API key not configured on server' },
-      { status: 503 }
-    );
+    return NextResponse.json(emptyProviderResult('missing_key'), { headers: rateLimitHeaders(rate) });
   }
 
   const { searchParams } = new URL(request.url);
@@ -69,14 +66,11 @@ export async function GET(request) {
       const upstreamStatus = res.status;
       const providerUnavailable = UPSTREAM_UNAVAILABLE_STATUSES.has(upstreamStatus);
       return NextResponse.json(
+        providerUnavailable
+          ? emptyProviderResult('upstream_unavailable', upstreamStatus)
+          : { error: `Pixabay upstream error (${upstreamStatus})`, upstreamStatus },
         {
-          error: providerUnavailable
-            ? 'Pixabay provider unavailable'
-            : `Pixabay upstream error (${upstreamStatus})`,
-          upstreamStatus,
-        },
-        {
-          status: providerUnavailable ? 503 : 502,
+          status: providerUnavailable ? 200 : 502,
           headers: {
             ...rateLimitHeaders(rate),
             'X-Pixabay-Upstream-Status': String(upstreamStatus),
@@ -91,4 +85,15 @@ export async function GET(request) {
     console.error('[/api/pixabay]', err);
     return NextResponse.json({ error: 'Pixabay request failed' }, { status: 502 });
   }
+}
+
+function emptyProviderResult(reason, upstreamStatus = 0) {
+  return {
+    total: 0,
+    totalHits: 0,
+    hits: [],
+    providerUnavailable: true,
+    reason,
+    ...(upstreamStatus ? { upstreamStatus } : {}),
+  };
 }

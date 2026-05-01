@@ -2286,7 +2286,7 @@ class SuiteRhythm {
         debugLog(`Preloading sounds for scene: ${sceneCategory}`);
         const tasks = bundle.map(query => async () => {
             try {
-                const url = await this.searchAudio(query, 'sfx');
+                const url = await this.searchAudio(query, 'sfx', { allowExternal: false });
                 if (!url) return;
                 if (this.getFromBufferCache(url)) return; // already cached
                 const resp = await fetch(url);
@@ -2452,7 +2452,7 @@ class SuiteRhythm {
                 // Warm cache similarly to predictivePrefetch
                 const cacheKey = `sfx:${q}`;
                 if (this.soundCache.has(cacheKey)) continue;
-                this.searchAudio(q, 'sfx').then(async (url) => {
+                this.searchAudio(q, 'sfx', { allowExternal: false }).then(async (url) => {
                     if (!url) return;
                     if (!this.activeBuffers.has(url)) {
                         try {
@@ -6552,6 +6552,16 @@ class SuiteRhythm {
             }
             
             const data = await response.json();
+            if (data?.providerUnavailable) {
+                const upstreamStatus = Number(data.upstreamStatus || response.headers.get('X-Pixabay-Upstream-Status') || 0);
+                this._pixabayUnavailableUntil = Date.now() + (upstreamStatus === 429 ? 60_000 : 5 * 60_000);
+                if (!this._pixabayUnavailableWarnedAt || Date.now() - this._pixabayUnavailableWarnedAt > 60_000) {
+                    this._pixabayUnavailableWarnedAt = Date.now();
+                    debugLog(`Pixabay unavailable${upstreamStatus ? ` (${upstreamStatus})` : ''}; using local sound library only.`);
+                }
+                return null;
+            }
+
             if (data.hits && data.hits.length > 0) {
                 // Pick a result that hasn't played recently
                 for (const hit of data.hits) {
@@ -8196,7 +8206,7 @@ class SuiteRhythm {
         Promise.allSettled(toWarm.map(async (q) => {
             const cacheKey = `sfx:${q}`;
             if (this.soundCache.has(cacheKey)) return; // already cached URL
-            const url = await this.searchAudio(q, 'sfx');
+            const url = await this.searchAudio(q, 'sfx', { allowExternal: false });
             if (!url || signal.aborted) return;
             
             // Cache in buffer cache for instant playback
@@ -8232,7 +8242,7 @@ class SuiteRhythm {
         };
         const alts = related[q] || [];
         for (const alt of alts.slice(0,2)) {
-            const url = await this.searchAudio(alt, 'sfx');
+            const url = await this.searchAudio(alt, 'sfx', { allowExternal: false });
             if (url && !this.activeBuffers.has(url)) {
                 if (this.getFromBufferCache(url)) continue; // already in unified cache
                 try {
@@ -8309,7 +8319,7 @@ class SuiteRhythm {
                         return;
                     }
                 }
-                const url = await this.searchAudio(q, 'sfx');
+                const url = await this.searchAudio(q, 'sfx', { allowExternal: false });
                 if (!url) { sfxLoaded++; this.updatePreloadProgress(sfxLoaded, target.length); return; }
                 try {
                     if (!this.activeBuffers.has(url)) {
