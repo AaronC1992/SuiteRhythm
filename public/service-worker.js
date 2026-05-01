@@ -1,5 +1,6 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v28'; // Bumped: force stale tabs onto fresh app shell
+const CACHE_NAME = 'SuiteRhythm-v29'; // Bumped: force cache-busted stale tab refresh
+const REFRESH_PARAM = 'sr-sw';
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -172,7 +173,9 @@ async function refreshOpenClients() {
     try {
       const url = new URL(client.url);
       if (url.origin !== self.location.origin || typeof client.navigate !== 'function') return null;
-      return client.navigate(client.url).catch(() => null);
+      if (url.searchParams.get(REFRESH_PARAM) === CACHE_NAME) return null;
+      url.searchParams.set(REFRESH_PARAM, CACHE_NAME);
+      return client.navigate(url.href).catch(() => null);
     } catch (_) {
       return null;
     }

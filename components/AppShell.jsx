@@ -49,6 +49,12 @@ import {
 
 export default function AppShell({ user }) {
   useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('sr-sw')) {
+      url.searchParams.delete('sr-sw');
+      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}` || '/');
+    }
+
     // Register service worker for offline caching
     if ('serviceWorker' in navigator) {
       let refreshing = false;
