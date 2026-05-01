@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getCueTime } from './CueTimeline';
-import { normalizeAudioUrl } from '../../lib/modules/audio-url.js';
+import { getR2AudioBase, joinAudioUrlBase, normalizeAudioUrl } from '../../lib/modules/audio-url.js';
 
 export default function PreviewMixer({ mediaRef, cues, onPreviewCue }) {
   const [isPreviewing, setIsPreviewing] = useState(false);
@@ -172,11 +172,9 @@ function scheduleCueStop(cue, audio, entry, activeAudio, duration, trimStart, pl
 
 function resolveSoundSource(src) {
   if (!src) return '';
-  if (/^(https?:|blob:|data:)/i.test(src)) return src;
-  const encoded = normalizeAudioUrl(src).replace(/^\/+/, '');
-  const r2Base = typeof window !== 'undefined' ? window.__R2_PUBLIC_URL : '';
-  if (r2Base) return `${r2Base.replace(/\/$/, '')}/${encoded}`;
-  return `/${encoded}`;
+  const normalized = normalizeAudioUrl(src);
+  if (/^(https?:|blob:|data:)/i.test(normalized)) return normalized;
+  return joinAudioUrlBase(getR2AudioBase(), normalized);
 }
 
 function stopActiveAudio(activeAudio) {

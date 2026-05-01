@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { joinAudioUrlBase, normalizeAudioUrl } from '../lib/modules/audio-url.js';
+import {
+  getR2AudioBase,
+  isSavedSoundsPath,
+  joinAudioUrlBase,
+  normalizeAudioUrl,
+} from '../lib/modules/audio-url.js';
 
 describe('audio-url helpers', () => {
   it('encodes raw saved-sound paths once', () => {
@@ -26,5 +31,20 @@ describe('audio-url helpers', () => {
     expect(joinAudioUrlBase('/r2-audio', 'Saved%2520sounds/footsteps_daytime_hike.mp3')).toBe(
       '/r2-audio/Saved%20sounds/footsteps_daytime_hike.mp3',
     );
+  });
+
+  it('defaults client audio to the R2 proxy path', () => {
+    expect(getR2AudioBase()).toBe('/r2-audio');
+  });
+
+  it('does not duplicate the R2 proxy prefix when joining', () => {
+    expect(joinAudioUrlBase('/r2-audio', '/r2-audio/Saved%20sounds/glass-shatter.mp3')).toBe(
+      '/r2-audio/Saved%20sounds/glass-shatter.mp3',
+    );
+  });
+
+  it('recognizes saved sound paths with or without the R2 proxy prefix', () => {
+    expect(isSavedSoundsPath('Saved sounds/door-creak.mp3')).toBe(true);
+    expect(isSavedSoundsPath('/r2-audio/Saved%20sounds/door-creak.mp3')).toBe(true);
   });
 });

@@ -33,7 +33,7 @@ import { ExternalBridge } from '../lib/modules/external-trigger.js';
 import { applyHorrorRestraint } from '../lib/modules/scene-toggles.js';
 import { installErrorReporter } from '../lib/modules/error-reporter.js';
 import { loadSavedSoundsCatalog } from '../lib/modules/saved-sounds-loader.js';
-import { joinAudioUrlBase, normalizeAudioUrl } from '../lib/modules/audio-url.js';
+import { getR2AudioBase, isSavedSoundsPath, joinAudioUrlBase, normalizeAudioUrl } from '../lib/modules/audio-url.js';
 import { getClientAccessToken, setClientAccessToken } from '../lib/client-token-store.js';
 
 // Expose CONFIG globally for modules that read window.CONFIG (e.g., api.js debugLog)
@@ -552,12 +552,18 @@ class SuiteRhythm {
         const normalized = normalizeAudioUrl(u);
         if (!normalized) return [];
         const list = [];
-        const cdnBase = (typeof window !== 'undefined' && window.__R2_PUBLIC_URL) || '';
-        if (cdnBase && !/^https?:\/\//i.test(normalized) && !normalized.startsWith(cdnBase)) {
+        const cdnBase = getR2AudioBase();
+        const cdnPrefix = cdnBase.replace(/\/$/, '');
+        const isRemote = /^(?:https?:|blob:|data:)/i.test(normalized);
+        const alreadyCdn = cdnPrefix && (normalized === cdnPrefix || normalized.startsWith(`${cdnPrefix}/`));
+        const hasCdnPrimary = cdnBase && !isRemote && !alreadyCdn;
+        if (hasCdnPrimary) {
             // CDN is primary source for relative paths (skip if already prefixed)
             list.push(joinAudioUrlBase(cdnBase, normalized));
         }
-        list.push(normalized); // local fallback
+        if (!isSavedSoundsPath(normalized) || !hasCdnPrimary) {
+            list.push(normalized); // local fallback for non-R2 assets
+        }
         try {
             if (/^https?:\/\//i.test(normalized)) {
                 const m = normalized.match(/\/(?:cueai-media\/)?(music|sfx|ambience)\/(.+)$/i);
