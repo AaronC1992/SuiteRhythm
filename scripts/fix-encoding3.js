@@ -1,5 +1,11 @@
 import fs from 'fs';
 
+// Destructive one-shot script with a hardcoded absolute path. Guard tightly.
+if (process.env.SR_ALLOW_DESTRUCTIVE_SCRIPTS !== '1') {
+  console.error('[fix-encoding3] Refusing to run. Set SR_ALLOW_DESTRUCTIVE_SCRIPTS=1 to confirm.');
+  process.exit(1);
+}
+
 const filePath = 'c:/Users/jenna/Desktop/Portfolio projects/SuiteRhythm-next/engine/SuiteRhythm.js';
 let buf = fs.readFileSync(filePath);
 

@@ -1,5 +1,12 @@
 import fs from 'fs';
 
+// Destructive one-shot script: rewrites engine/SuiteRhythm.js in place.
+// Guard so it cannot run by accident from npm/CI.
+if (process.env.SR_ALLOW_DESTRUCTIVE_SCRIPTS !== '1') {
+  console.error('[fix-encoding] Refusing to run. Set SR_ALLOW_DESTRUCTIVE_SCRIPTS=1 to confirm.');
+  process.exit(1);
+}
+
 const filePath = 'engine/SuiteRhythm.js';
 const buf = fs.readFileSync(filePath);
 

@@ -49,29 +49,66 @@ import {
 
 export default function AppShell({ user }) {
   useEffect(() => {
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('sr-sw')) {
-      url.searchParams.delete('sr-sw');
-      window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}` || '/');
-    }
+    // Strip any legacy ?sr-sw=... query param from older SW versions that used to
+    // force-navigate clients on activation.
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.has('sr-sw')) {
+        url.searchParams.delete('sr-sw');
+        window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}` || '/');
+      }
+    } catch (_) { /* ignore */ }
 
-    // Register service worker for offline caching
-    if ('serviceWorker' in navigator) {
-      let refreshing = false;
-      const handleControllerChange = () => {
-        if (refreshing) return;
-        refreshing = true;
+    if (!('serviceWorker' in navigator)) return undefined;
+
+    let banner = null;
+    let pendingReload = false;
+    const showUpdateBanner = () => {
+      if (pendingReload || banner) return;
+      // If the tab isn't visible, just reload silently — no in-flight UX to lose.
+      if (typeof document !== 'undefined' && document.hidden) {
+        pendingReload = true;
         window.location.reload();
-      };
-      navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
-      navigator.serviceWorker.register('/service-worker.js').then((registration) => {
-        registration.update().catch(() => {});
-      }).catch((err) => {
-        console.warn('[SW] Registration failed:', err);
-      });
-      return () => navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
-    }
-    return undefined;
+        return;
+      }
+      try {
+        banner = document.createElement('div');
+        banner.setAttribute('role', 'status');
+        banner.setAttribute('aria-live', 'polite');
+        banner.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9999;background:#1f6feb;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.3);font:14px/1.4 system-ui,sans-serif;display:flex;gap:10px;align-items:center;';
+        const text = document.createElement('span');
+        text.textContent = 'A new version is available.';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = 'Reload';
+        btn.style.cssText = 'background:#fff;color:#1f6feb;border:none;border-radius:6px;padding:6px 12px;font-weight:600;cursor:pointer;';
+        btn.addEventListener('click', () => { pendingReload = true; window.location.reload(); });
+        const dismiss = document.createElement('button');
+        dismiss.type = 'button';
+        dismiss.setAttribute('aria-label', 'Dismiss update notice');
+        dismiss.textContent = '\u00d7';
+        dismiss.style.cssText = 'background:transparent;color:#fff;border:none;font-size:18px;cursor:pointer;line-height:1;';
+        dismiss.addEventListener('click', () => { try { banner?.remove(); } catch (_) {} banner = null; });
+        banner.append(text, btn, dismiss);
+        document.body.appendChild(banner);
+      } catch (_) { /* DOM not ready */ }
+    };
+
+    const handleSwMessage = (event) => {
+      if (event?.data?.type === 'SR_SW_UPDATE_AVAILABLE') showUpdateBanner();
+    };
+    navigator.serviceWorker.addEventListener('message', handleSwMessage);
+
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      registration.update().catch(() => {});
+    }).catch((err) => {
+      console.warn('[SW] Registration failed:', err);
+    });
+
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', handleSwMessage);
+      try { banner?.remove(); } catch (_) {}
+    };
   }, []);
   useEffect(() => {
     let engineInstance = null;

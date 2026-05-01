@@ -12,24 +12,35 @@ import { requireAuth } from '../../../lib/api-auth.js';
 import { getStaticStoriesForApi } from '../../../lib/server-catalog.js';
 import { checkRateLimit, rateLimitHeaders } from '../../../lib/rate-limit.js';
 
-export async function GET() {
+export async function GET(request) {
+  // Parse and clamp pagination params so unauthenticated callers can't pull the
+  // entire stories table in one request.
+  const { searchParams } = new URL(request.url);
+  const rawLimit = parseInt(searchParams.get('limit') || '100', 10);
+  const limit = Number.isFinite(rawLimit) ? Math.max(1, Math.min(200, rawLimit)) : 100;
+  const rawOffset = parseInt(searchParams.get('offset') || '0', 10);
+  const offset = Number.isFinite(rawOffset) ? Math.max(0, rawOffset) : 0;
+
   try {
     const { data, error } = await supabaseAdmin
       .from('stories')
       .select('id, title, theme, description, body, demo')
       .order('demo', { ascending: false }) // demo stories first
-      .order('title', { ascending: true });
+      .order('title', { ascending: true })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
     // Rename `body` → `text` to match the engine's expected shape
     const stories = (data ?? []).map(({ body, ...rest }) => ({ ...rest, text: body }));
 
-    return NextResponse.json({ stories });
+    return NextResponse.json({ stories, limit, offset });
   } catch (err) {
     console.warn('[/api/stories GET] Supabase unavailable, using static stories:', err?.message || err);
     try {
-      return NextResponse.json({ stories: getStaticStoriesForApi(), source: 'static' });
+      const all = getStaticStoriesForApi();
+      const sliced = Array.isArray(all) ? all.slice(offset, offset + limit) : all;
+      return NextResponse.json({ stories: sliced, source: 'static', limit, offset });
     } catch (fallbackErr) {
       console.error('[/api/stories GET] Static fallback failed:', fallbackErr);
       return NextResponse.json({ error: 'Failed to load stories' }, { status: 500 });

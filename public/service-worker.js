@@ -1,6 +1,6 @@
 // SuiteRhythm Service Worker
-const CACHE_NAME = 'SuiteRhythm-v29'; // Bumped: force cache-busted stale tab refresh
-const REFRESH_PARAM = 'sr-sw';
+const CACHE_NAME = 'SuiteRhythm-v30'; // Bumped: cooperative update flow (no forced navigate)
+const UPDATE_MESSAGE = 'SR_SW_UPDATE_AVAILABLE';
 
 // Note: Sound files are served via /r2-audio/* proxy (Cloudflare R2) and NOT cached here
 // because they are:
@@ -93,93 +93,80 @@ self.addEventListener('fetch', (event) => {
      url.pathname.endsWith('.css') || url.pathname === '/' || url.pathname.endsWith('/'));
   
   if (isAppShell) {
-    event.respondWith(
-      caches.open(CACHE_NAME).then((cache) => {
-        return cache.match(event.request).then((cachedResponse) => {
-          return fetch(event.request).then((networkResponse) => {
-            // Update cache with fresh content
-            if (networkResponse && networkResponse.status === 200) {
-              cache.put(event.request, networkResponse.clone());
-            }
-            return networkResponse;
-          }).catch(() => cachedResponse || new Response('Offline', { status: 503, statusText: 'Service Unavailable' }));
-        });
-      })
-    );
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const networkResponse = await fetch(event.request);
+        if (
+          networkResponse &&
+          networkResponse.status === 200 &&
+          (networkResponse.type === 'basic' || networkResponse.type === 'default')
+        ) {
+          const clone = networkResponse.clone();
+          // Ensure the SW does not die before the cache write completes.
+          event.waitUntil(cache.put(event.request, clone).catch(() => {}));
+        }
+        return networkResponse;
+      } catch (_) {
+        const cached = await cache.match(event.request);
+        return cached || new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+      }
+    })());
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Cache hit - return response
-      if (response) {
-        return response;
+  event.respondWith((async () => {
+    const cached = await caches.match(event.request);
+    if (cached) return cached;
+
+    try {
+      const response = await fetch(event.request);
+      if (
+        response &&
+        response.status === 200 &&
+        response.type === 'basic' &&
+        url.origin === self.location.origin &&
+        isStaticAsset(url)
+      ) {
+        const cache = await caches.open(CACHE_NAME);
+        const clone = response.clone();
+        event.waitUntil(cache.put(event.request, clone).catch(() => {}));
       }
-
-      // Clone the request
-      const fetchRequest = event.request.clone();
-
-      return fetch(fetchRequest).then((response) => {
-        // Check if valid response
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-
-        // Clone the response
-        const responseToCache = response.clone();
-
-        // Cache only known static assets from our own origin. API, auth, and media
-        // proxy requests are bypassed above so fresh state is never replayed.
-        if (url.origin === self.location.origin && isStaticAsset(url)) {
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-
-        return response;
-      }).catch(() => {
-        // Network failed and nothing in cache — return a basic offline response
-        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-      });
-    })
-  );
+      return response;
+    } catch (_) {
+      return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+    }
+  })());
 });
 
-// Activate event - cleanup old caches
+// Activate event - cleanup old caches and notify open clients cooperatively
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
-  event.waitUntil(
-    Promise.all([
-      // Drop any cache that isn't the current version.
-      caches.keys().then((cacheNames) =>
-        Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheWhitelist.indexOf(cacheName) === -1) {
-              return caches.delete(cacheName);
-            }
-          })
-        )
-      ),
-      // Take control of uncontrolled clients right away so the new SW
-      // serves the next fetch (including the page the user is on).
-      self.clients.claim().then(() => refreshOpenClients()),
-    ])
-  );
+  event.waitUntil((async () => {
+    const cacheNames = await caches.keys();
+    await Promise.all(
+      cacheNames
+        .filter((name) => cacheWhitelist.indexOf(name) === -1)
+        .map((name) => caches.delete(name))
+    );
+    // Take control of uncontrolled clients right away so the new SW
+    // serves the next fetch (including the page the user is on).
+    await self.clients.claim();
+    // Cooperative update: notify open tabs so the page can decide when to
+    // reload (e.g. silently when hidden, or via a non-blocking banner). This
+    // replaces the old behavior of force-navigating every tab, which would
+    // destroy in-progress recordings, transcripts, and unsaved cues.
+    await notifyClientsOfUpdate();
+  })());
 });
 
-async function refreshOpenClients() {
-  const windowClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-  await Promise.all(windowClients.map((client) => {
-    try {
-      const url = new URL(client.url);
-      if (url.origin !== self.location.origin || typeof client.navigate !== 'function') return null;
-      if (url.searchParams.get(REFRESH_PARAM) === CACHE_NAME) return null;
-      url.searchParams.set(REFRESH_PARAM, CACHE_NAME);
-      return client.navigate(url.href).catch(() => null);
-    } catch (_) {
-      return null;
+async function notifyClientsOfUpdate() {
+  try {
+    const windowClients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const client of windowClients) {
+      try { client.postMessage({ type: UPDATE_MESSAGE, cacheName: CACHE_NAME }); } catch (_) {}
     }
-  }));
+  } catch (_) { /* ignore */ }
 }
 
 // Allow the page to force an activation ("reload now") if desired.

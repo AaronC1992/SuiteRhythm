@@ -10817,6 +10817,23 @@ class SuiteRhythm {
             if (this._pageShowHandler) {
                 window.removeEventListener('pageshow', this._pageShowHandler);
             }
+            if (this._resizeHandler) {
+                window.removeEventListener('resize', this._resizeHandler);
+                this._resizeHandler = null;
+            }
+
+            // Cancel any pending demo timeouts so callbacks don't fire after teardown.
+            if (Array.isArray(this.demoTimeouts)) {
+                for (const id of this.demoTimeouts) { try { clearTimeout(id); } catch (_) {} }
+                this.demoTimeouts.length = 0;
+            }
+
+            // Best-effort drain of remaining tracking maps so callbacks holding `this`
+            // don't keep references alive after Howler.unload().
+            try { this.activeSounds?.clear?.(); } catch (_) {}
+            try { this.activeBuffers?.clear?.(); } catch (_) {}
+            try { this.bufferCache?.clear?.(); } catch (_) {}
+            try { this.instantKeywordBuffers?.clear?.(); } catch (_) {}
 
             debugLog('SuiteRhythm destroyed');
         } catch (e) {
